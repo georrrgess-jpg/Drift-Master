@@ -294,29 +294,47 @@ function placeCloud(i, around, ahead) {
 /* =========================================================================
  * Road themes & textures
  * ========================================================================= */
+/* Road patterns all repeat every 1.5 world units (two 0.75 tiles). Segment
+ * lengths snap to that 0.75 grid and the road is 3.0 wide, so every edge and
+ * corner falls on a tile boundary: squares, dots and tiles are never cut off. */
+const TILE = 0.75;
 const THEMES = [
   { name: 'Meadow', pattern: 'stripes', a: '#a6ea6e', b: '#cdf7a0', side: '#4e9d38', edge: '#7fcf55' },
   { name: 'Glacier', pattern: 'checker', a: '#8bbff0', b: '#d9eafc', side: '#2b4f8c', edge: '#5b86c9' },
-  { name: 'Bubblegum', pattern: 'checker', a: '#f59cad', b: '#fde4e9', side: '#b64c68', edge: '#e07890' },
-  { name: 'Lemonade', pattern: 'stripes', a: '#ffd862', b: '#fff1b5', side: '#c3911a', edge: '#ebbd3c' },
-  { name: 'Lavender', pattern: 'checker', a: '#bba0f4', b: '#eee5ff', side: '#6848a8', edge: '#9878d8' },
-  { name: 'Lagoon', pattern: 'stripes', a: '#68ddc6', b: '#c9fbf0', side: '#1f8e78', edge: '#47bfa5' },
+  { name: 'Bubblegum', pattern: 'dots', a: '#f59cad', b: '#fde4e9', side: '#b64c68', edge: '#e07890' },
+  { name: 'Lemonade', pattern: 'tiles', a: '#e9b93a', b: '#ffe58a', side: '#c3911a', edge: '#ebbd3c' },
+  { name: 'Lavender', pattern: 'fine', a: '#bba0f4', b: '#eee5ff', side: '#6848a8', edge: '#9878d8' },
+  { name: 'Lagoon', pattern: 'plaid', a: '#68ddc6', b: '#c9fbf0', side: '#1f8e78', edge: '#47bfa5' },
   { name: 'Ember', pattern: 'checker', a: '#ffa167', b: '#ffe4cf', side: '#b3552c', edge: '#e07c4a' },
-  { name: 'Slate', pattern: 'stripes', a: '#9aa6c4', b: '#d7deee', side: '#3d4766', edge: '#6b7699' }
+  { name: 'Slate', pattern: 'tiles', a: '#8792b2', b: '#c9d1e6', side: '#3d4766', edge: '#6b7699' },
+  { name: 'Citrus', pattern: 'dots', a: '#ffb347', b: '#fff0c9', side: '#c46a12', edge: '#ee9535' },
+  { name: 'Sakura', pattern: 'stripes', a: '#f7a8c9', b: '#fde6f0', side: '#b45a83', edge: '#e283ad' }
 ];
 function makePatternTexture(th) {
-  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const c = document.createElement('canvas'); c.width = c.height = 128; // 128px = 1.5 units, 64px = one tile
   const g = c.getContext('2d');
   g.fillStyle = th.a; g.fillRect(0, 0, 128, 128);
   g.fillStyle = th.b;
+  const cells = (fn) => { for (let x = 0; x < 128; x += 64) for (let y = 0; y < 128; y += 64) fn(x, y); };
   if (th.pattern === 'stripes') {
     for (let k = -128; k < 256; k += 32) {
       g.beginPath(); g.moveTo(k, 0); g.lineTo(k + 15, 0); g.lineTo(k + 15 - 128, 128); g.lineTo(k - 128, 128); g.closePath(); g.fill();
     }
-  } else {
+  } else if (th.pattern === 'checker') {
     g.fillRect(0, 0, 64, 64); g.fillRect(64, 64, 64, 64);
-    g.globalAlpha = 0.07; g.fillStyle = '#000';
-    g.fillRect(0, 63, 128, 2); g.fillRect(63, 0, 2, 128); g.fillRect(0, 127, 128, 1); g.fillRect(127, 0, 1, 128);
+  } else if (th.pattern === 'fine') {
+    for (let x = 0; x < 4; x++) for (let y = 0; y < 4; y++) if ((x + y) % 2) g.fillRect(x * 32, y * 32, 32, 32);
+  } else if (th.pattern === 'dots') {
+    cells((x, y) => { g.beginPath(); g.arc(x + 32, y + 32, 17, 0, TAU); g.fill(); });
+  } else if (th.pattern === 'tiles') {
+    cells((x, y) => {
+      g.fillStyle = th.b; g.fillRect(x + 4, y + 4, 56, 56);
+      g.fillStyle = 'rgba(255,255,255,.35)'; g.fillRect(x + 4, y + 4, 56, 5);
+      g.fillStyle = 'rgba(0,0,0,.08)'; g.fillRect(x + 4, y + 55, 56, 5);
+    });
+  } else if (th.pattern === 'plaid') {
+    for (let k = 0; k < 128; k += 64) { g.globalAlpha = 0.75; g.fillRect(k + 20, 0, 24, 128); g.fillRect(0, k + 20, 128, 24); }
+    g.globalAlpha = 1;
   }
   const tex = new T.CanvasTexture(c);
   tex.wrapS = tex.wrapT = T.RepeatWrapping;
@@ -332,7 +350,7 @@ THEMES.forEach(th => {
 /* =========================================================================
  * Track
  * ========================================================================= */
-const ROAD_W = 3.0, ROAD_T = 0.85, UV_SCALE = 1 / 1.6;
+const ROAD_W = 3.0, ROAD_T = 0.85, UV_SCALE = 1 / 1.5;
 const DIRS = [{ x: 0, z: -1, ang: HALF_PI }, { x: 1, z: 0, ang: 0 }]; // 0 = release (up-left), 1 = hold (up-right)
 
 class Segment {
@@ -520,10 +538,10 @@ function levelParams(n) {
   return {
     n, seed: n * 7919 + 101,
     len: Math.min(120 + n * 22, 1000),
-    speed: Math.min(12.0, 6.4 + (n - 1) * 0.19),
-    diff: clamp(n / 30, 0, 1),
-    waveP: clamp((n - 2) * 0.045, 0, 0.5),
-    shortP: clamp(0.15 + n * 0.012, 0.15, 0.45),
+    speed: Math.min(12.0, 7.0 + (n - 1) * 0.2),
+    diff: clamp(n / 20, 0, 1),
+    waveP: clamp((n - 1) * 0.05, 0, 0.55),
+    shortP: clamp(0.25 + n * 0.015, 0.25, 0.55),
     theme: (n - 1) % THEMES.length,
     sky: (n - 1) % SKIES.length
   };
@@ -570,7 +588,7 @@ function resetTrack(intro, cfg) {
   track.rng = track.level ? mulberry32(track.level.seed) : Math.random;
   track.themeIdx = track.level ? track.level.theme : 0;
   track.themeLeft = 10 + ((track.rng() * 5) | 0);
-  const first = addSegment(new Segment(0, 0, 0, 0, 11, track.themeIdx, { s0: -4.5 }));
+  const first = addSegment(new Segment(0, 0, 0, 0, 11.25, track.themeIdx, { s0: -4.5 }));
   first.pathStart = 0;
   // build the whole visible road up front, well past the fog line
   for (let i = 0; i < 40 && Math.hypot(lastSeg().ex, lastSeg().ez) < 110; i++) if (!genNext(0)) break;
@@ -597,20 +615,21 @@ function genNext(dist) {
   const lvl = track.mode === 'level' ? track.level : null;
   const pathStart = prev.pathStart + prev.len;
   if (lvl && pathStart >= lvl.len) return makeFinish(prev, pathStart);
-  const d = lvl ? lvl.diff : clamp(dist / 3000, 0, 1);
+  const d = lvl ? lvl.diff : clamp(dist / 1500, 0, 1);
   // size corners for the fastest the car can be going when it reaches them
   const v = lvl ? lvl.speed : speedAt(dist + 120);
   const minLen = minLenFor(v);
-  const maxLen = Math.max(minLen + 2.5, lerp(11, 8.5, d) + 1);
+  const maxLen = Math.max(minLen + 2.5, lerp(9.5, 6.5, d) + 1);
   let len;
   const r = R();
-  if (r < 0.1) len = 11 + R() * 4;
-  else if (r < (lvl ? lvl.shortP : 0.3 + d * 0.2)) len = minLen + R() * 1.6;
+  if (r < 0.06) len = 8 + R() * 4;
+  else if (r < (lvl ? lvl.shortP : 0.35 + d * 0.25)) len = minLen + R() * 1.6;
   else len = minLen + 1.2 + R() * (maxLen - minLen - 1.2);
   // never chain two short segments: the timing study assumes the car has settled
   // onto a segment before its next corner, which needs one comfortable length in between
   const shortLen = minLen + 1.6;
   if (prev.index > 0 && prev.len < shortLen && len < shortLen) len = shortLen + R() * 1.0;
+  len = Math.ceil(len / TILE - 1e-6) * TILE; // snap up to the tile grid (never below the safe minimum)
   track.themeLeft--;
   if (track.themeLeft <= 0) {
     let n; do { n = (R() * THEMES.length) | 0; } while (n === track.themeIdx);
@@ -618,7 +637,7 @@ function genNext(dist) {
   }
   let wave = null;
   const waveRoll = R();
-  if (len >= 7 && (lvl ? waveRoll < lvl.waveP : dist > 220 && waveRoll < 0.22 + d * 0.2)) {
+  if (len >= 7 && (lvl ? waveRoll < lvl.waveP : dist > 120 && waveRoll < 0.25 + d * 0.25)) {
     wave = { n: len > 10 ? 2 : 1, A: (0.45 + R() * 0.4) * (R() < 0.35 ? -1 : 1) };
   }
   const seg = addSegment(new Segment(prev.index + 1, prev.ex, prev.ez, 1 - prev.dir, len, track.themeIdx, { wave }));
@@ -643,7 +662,7 @@ function makeFinish(prev, pathStart) {
   const seg = addSegment(new Segment(prev.index + 1, prev.ex, prev.ez, 1 - prev.dir, 18, track.themeIdx, { last: true }));
   seg.pathStart = pathStart;
   seg.finish = true;
-  seg.finishS = ROAD_W / 2 + 2.6;
+  seg.finishS = ROAD_W / 2 + 3 * TILE;
   track.finishSeg = seg;
   const fs = seg.finishS, hw = ROAD_W / 2;
   // chequered line painted on the road
@@ -1455,6 +1474,7 @@ function mergeMeshes(parent, meshes, material, withColor) {
   geo.setAttribute('position', new T.BufferAttribute(pos, 3));
   geo.setAttribute('normal', new T.BufferAttribute(nor, 3));
   if (col) geo.setAttribute('color', new T.BufferAttribute(col, 3));
+  geo.userData.owned = true;
   const mesh = new T.Mesh(geo, material);
   mesh.castShadow = true;
   meshes.forEach(m => parent.remove(m));
@@ -1470,6 +1490,9 @@ function bakeGroup(parent) {
   }
   if (vc.length > 1) mergeMeshes(parent, vc, carVCMat, true);
   byMat.forEach((list, material) => { if (list.length > 1) mergeMeshes(parent, list, material, false); });
+}
+function disposeCarModel(k) {
+  k.g.traverse(o => { if (o.isMesh && o.geometry.userData.owned) o.geometry.dispose(); });
 }
 function buildCarModel(id) {
   const def = carById(id);
@@ -1491,6 +1514,7 @@ function animateCar(k, dt, c) {
   const baseY = k.hover ? 0.07 + Math.sin(c.t * 2.4) * 0.025 : 0;
   k.body.position.y = baseY + Math.sin(k.bob) * amp + (k.lift || 0);
   k.body.rotation.x = damp(k.body.rotation.x, clamp(c.lean * 0.35 * springy, -0.12, 0.12), 9, dt);
+  k.body.position.y += 0.3 * Math.abs(Math.sin(k.body.rotation.x));
   k.body.rotation.z = damp(k.body.rotation.z, clamp(-c.accel * 0.012 * springy, -0.08, 0.08) + (k.pitchExtra || 0), 7, dt);
   for (const m of k.tails) m.emissiveIntensity = 0.45 + clamp(c.slip * 3.5, 0, 1.6);
   for (const f of k.flash) {
@@ -1509,7 +1533,7 @@ carRoot.add(carTilt);
 scene.add(carRoot);
 let carKit = null;
 function setPlayerCar(id) {
-  if (carKit) carTilt.remove(carKit.g);
+  if (carKit) { carTilt.remove(carKit.g); disposeCarModel(carKit); }
   carKit = buildCarModel(id);
   carTilt.add(carKit.g);
 }
@@ -1536,7 +1560,7 @@ const car = {
 };
 function snapCar() { car.px = car.rx = car.x; car.py = car.ry = car.y; car.pz = car.rz = car.z; car.ppsi = car.rpsi = car.psi; }
 
-const PHYS = { base: 6.3, add: 5.7, k: 1300, turnBase: 3.5, turnK: 0.21, grip: 7.0 };
+const PHYS = { base: 7.4, add: 4.6, k: 650, turnBase: 3.5, turnK: 0.21, grip: 7.0 };
 
 /* =========================================================================
  * Effects: skid marks, smoke, sparkles
@@ -1791,7 +1815,7 @@ function physicsStep(dt, mode) {
   car.segIdx = seg.index;
   const loc = seg.local(car.x, car.z);
   // rest on the wheels: in a dip the bumpers would otherwise sink into the road
-  const along = 0.42 * Math.cos(car.psi - seg.ang);
+  const along = (carKit ? carKit.L : 1.1) * 0.4 * Math.cos(car.psi - seg.ang);
   const hc = seg.height(loc[0]), hf = seg.height(loc[0] + along), hr = seg.height(loc[0] - along);
   car.y = Math.max(hc, (hf + hr) / 2);
   car.slope = Math.atan2(hf - hr, 0.84);
@@ -2344,6 +2368,7 @@ function visualUpdate(dt) {
   const falling = state === 'falling' || state === 'revive' || state === 'gameover';
   if (falling) {
     carTilt.rotation.x = car.tumbleX; carTilt.rotation.z = car.tumbleZ;
+    carTilt.position.y = 0;
   } else {
     const pitch = car.slope;
     const rollTarget = clamp((car.psi - car.phi) * 0.45, -0.16, 0.16);
@@ -2351,6 +2376,9 @@ function visualUpdate(dt) {
     car.pitch = damp(car.pitch, pitch, 14, dt);
     carTilt.rotation.x = car.roll;
     carTilt.rotation.z = car.pitch;
+    // leaning rotates around the centre line, so lift by the amount the low
+    // side would otherwise dip: the outer wheels stay on top of the road
+    carTilt.position.y = 0.32 * Math.abs(Math.sin(car.roll));
   }
   if (carKit) {
     // counter-steer into the slide while drifting, steer into the turn otherwise
@@ -2842,8 +2870,9 @@ function renderGarageGrid() {
     const b = document.createElement('button');
     const eq = save.car === def.id;
     b.className = 'gcar ui' + (owned ? '' : ' locked') + (i === garage.idx ? ' active' : '') + (eq ? ' equipped' : '');
+    b.dataset.i = i;
     b.style.setProperty('--tier', TIERS[def.tier].color);
-    b.innerHTML = (garage.thumbs && garage.thumbs[i] ? `<img alt="" src="${garage.thumbs[i]}">` : '<span class="ph"></span>') +
+    b.innerHTML = (garage.thumbs && garage.thumbs[i] ? `<img alt="" decoding="async" src="${garage.thumbs[i]}">` : '<span class="ph"></span>') +
       `<span class="gc-name">${def.name}</span>` +
       `<span class="gc-price">${eq ? 'Equipped' : owned ? 'Owned' : `${fmt(def.price)} <i class="coin"></i>`}</span>`;
     b.onclick = () => { garage.idx = i; Sound.click(); showGarageCar(false); };
@@ -2854,7 +2883,7 @@ function renderGarageGrid() {
 }
 function showGarageCar(instant) {
   const def = CARS[garage.idx];
-  if (garage.model) garage.holder.remove(garage.model.g);
+  if (garage.model) { garage.holder.remove(garage.model.g); disposeCarModel(garage.model); }
   garage.model = buildCarModel(def.id);
   const L = garage.model.L;
   garage.model.g.scale.setScalar(1.55 / Math.max(1.05, L * 0.95));
@@ -2881,30 +2910,45 @@ function showGarageCar(instant) {
   $('#g-count-bar').style.width = (save.owned.length / CARS.length * 100) + '%';
   renderGarageGrid();
 }
-function buildThumbs() {
-  if (garage.thumbs) return;
-  garage.thumbs = [];
-  let r;
-  try {
-    r = new T.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
-    r.setSize(168, 120); r.setPixelRatio(1);
-    const sc2 = new T.Scene();
-    sc2.add(new T.HemisphereLight(0xffffff, 0x6a6a9a, 0.72));
-    const dl = new T.DirectionalLight(0xffffff, 0.55); dl.position.set(3, 6, 4); sc2.add(dl);
-    const cm = new T.PerspectiveCamera(30, 168 / 120, 0.1, 50);
-    for (const def of CARS) {
-      const k = buildCarModel(def.id);
-      k.g.scale.setScalar(1.2 / Math.max(1.05, k.L * 0.95));
-      k.g.rotation.y = 0.7;
-      sc2.add(k.g);
-      cm.position.set(2.1, 1.35, 2.1); cm.lookAt(0, 0.22, 0);
-      r.render(sc2, cm);
-      garage.thumbs.push(r.domElement.toDataURL());
-      sc2.remove(k.g);
-    }
-  } catch (e) { /* thumbnails are optional */ }
-  if (r) { r.dispose(); if (r.forceContextLoss) r.forceContextLoss(); }
+/* Thumbnails are rendered a few at a time with the main renderer into a small
+ * render target (no second WebGL context), starting quietly in the menu, so
+ * opening the garage never stalls. */
+const thumb = { rt: new T.WebGLRenderTarget(168, 120), scene: new T.Scene(), cam: new T.PerspectiveCamera(30, 168 / 120, 0.1, 50), next: 0, buf: new Uint8Array(168 * 120 * 4), cv: document.createElement('canvas') };
+thumb.cv.width = 168; thumb.cv.height = 120;
+thumb.scene.add(new T.HemisphereLight(0xffffff, 0x6a6a9a, 0.72));
+(() => { const dl = new T.DirectionalLight(0xffffff, 0.55); dl.position.set(3, 6, 4); thumb.scene.add(dl); })();
+thumb.cam.position.set(2.1, 1.35, 2.1); thumb.cam.lookAt(0, 0.22, 0);
+garage.thumbs = new Array(CARS.length).fill(null);
+function renderThumb(i) {
+  const k = buildCarModel(CARS[i].id);
+  k.g.scale.setScalar(1.2 / Math.max(1.05, k.L * 0.95));
+  k.g.rotation.y = 0.7;
+  thumb.scene.add(k.g);
+  const prevAlpha = renderer.getClearAlpha();
+  renderer.setRenderTarget(thumb.rt);
+  renderer.setClearAlpha(0);
+  renderer.clear();
+  renderer.render(thumb.scene, thumb.cam);
+  renderer.readRenderTargetPixels(thumb.rt, 0, 0, 168, 120, thumb.buf);
+  renderer.setRenderTarget(null);
+  renderer.setClearAlpha(prevAlpha);
+  thumb.scene.remove(k.g);
+  disposeCarModel(k);
+  const ctx = thumb.cv.getContext('2d'), img = ctx.createImageData(168, 120);
+  for (let y = 0; y < 120; y++) img.data.set(thumb.buf.subarray((119 - y) * 672, (120 - y) * 672), y * 672); // flip rows
+  ctx.putImageData(img, 0, 0);
+  garage.thumbs[i] = thumb.cv.toDataURL();
+  const el = document.querySelector(`.gcar[data-i="${i}"] .ph`);
+  if (el) el.outerHTML = `<img alt="" decoding="async" src="${garage.thumbs[i]}">`;
 }
+function thumbStep(budgetMs) {
+  const t0 = performance.now();
+  while (thumb.next < CARS.length && performance.now() - t0 < budgetMs) {
+    try { renderThumb(thumb.next); } catch (e) { /* thumbnails are optional */ }
+    thumb.next++;
+  }
+}
+function buildThumbs() { /* thumbnails stream in via thumbStep() */ }
 function garageAction() {
   const def = CARS[garage.idx];
   if (save.car === def.id) return;
@@ -3091,6 +3135,7 @@ function frame(now) {
   const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
   last = now;
   time += dt;
+  if (thumb.next < CARS.length && state !== 'playing' && time > 1.2) thumbStep(garage.active ? 8 : 3);
   if (garage.active) {
     updateGarage(dt);
     renderer.render(garage.scene, garage.cam);
@@ -3113,6 +3158,17 @@ function frame(now) {
 function boot() {
   setPlayerCar(save.car);
   applyQuality();
+  // compile the garage's shader variants now, while the loading screen is up,
+  // instead of stalling the first time the garage opens
+  try {
+    garage.idx = Math.max(0, CARS.findIndex(c => c.id === save.car));
+    garage.model = buildCarModel(CARS[garage.idx].id);
+    garage.holder.add(garage.model.g);
+    renderer.compile(garage.scene, garage.cam);
+    // one real off-screen frame also builds the shadow-pass programs
+    renderer.setRenderTarget(thumb.rt); renderer.render(garage.scene, garage.cam); renderer.setRenderTarget(null);
+    renderThumb(0); thumb.next = 1;
+  } catch (e) { /* warm-up is best effort */ }
   clouds.forEach((c, i) => placeCloud(i, new T.Vector3(0, 0, 0), false));
   enterAttract();
   refreshMenu();
