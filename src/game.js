@@ -18,6 +18,7 @@ const easeOutBounce = t => {
   if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + 0.9375;
   return n * (t -= 2.625 / d) * t + 0.984375;
 };
+const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
 const easeOutBack = t => { const c1 = 1.5, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -33,8 +34,8 @@ const DEFAULT_SAVE = {
   boosters: { double: 0, insurance: 0, coinrush: 0, headstart: 0 },
   active: { double: true, insurance: true, coinrush: true, headstart: true },
   upgrades: { traction: 0, magnet: 0 },
-  settings: { sfx: true, music: true, quality: true, shake: true },
-  lastSpin: 0, tutorial: false,
+  settings: { sfx: true, music: true, gfx: 'medium', shake: true },
+  lastSpin: 0, tutorial: false, dealDay: -1,
   level: 1, levelStars: {}, levelBest: {}
 };
 function loadSave() {
@@ -179,7 +180,11 @@ const Sound = (() => {
   }
   return {
     ensure, apply, engine,
-    coin() { tone(1318.5, 0.08, 'square', 0.07); tone(1975.5, 0.18, 'square', 0.07, null, 0.06); },
+    coin(streak) {
+      const k = Math.pow(2, Math.min((streak || 1) - 1, 12) / 12);
+      tone(1318.5 * k, 0.07, 'square', 0.06); tone(1975.5 * k, 0.17, 'square', 0.06, null, 0.055);
+      if (streak >= 3) tone(2637 * k, 0.22, 'triangle', 0.05, null, 0.1);
+    },
     click() { tone(520, 0.06, 'triangle', 0.12, 760); },
     tick() { tone(1400, 0.03, 'square', 0.05); },
     perfect(n) { const b = 660 * Math.pow(1.06, Math.min(n, 10)); tone(b, 0.1, 'triangle', 0.12); tone(b * 1.5, 0.16, 'triangle', 0.1, null, 0.07); },
@@ -196,9 +201,19 @@ const Sound = (() => {
 /* =========================================================================
  * Renderer, scene, sky, lights
  * ========================================================================= */
+/* Graphics presets. The game is tuned for low-end machines: 'medium' (the
+ * default) renders at 1x resolution with blob shadows; 'low' also turns off
+ * MSAA; 'high' adds real shadow maps and full device resolution. */
+const GFX = {
+  low: { aa: false, ratio: 1, shadows: false, smoke: 0.45 },
+  medium: { aa: true, ratio: 1, shadows: false, smoke: 0.75 },
+  high: { aa: true, ratio: 2, shadows: true, smoke: 1 }
+};
+if (!GFX[save.settings.gfx]) save.settings.gfx = 'medium';
+let gfx = GFX[save.settings.gfx];
 const canvas = $('#scene');
-const renderer = new T.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-renderer.shadowMap.type = T.PCFSoftShadowMap;
+const renderer = new T.WebGLRenderer({ canvas, antialias: gfx.aa, powerPreference: 'high-performance' });
+renderer.shadowMap.type = T.PCFShadowMap;
 const maxAniso = renderer.capabilities.getMaxAnisotropy();
 
 const scene = new T.Scene();
@@ -236,45 +251,44 @@ const hemi = new T.HemisphereLight(0xffffff, 0xc98a6a, 0.58);
 scene.add(hemi);
 const sun = new T.DirectionalLight(0xfff4e6, 0.58);
 sun.castShadow = true;
-sun.shadow.mapSize.set(2048, 2048);
-const sc = sun.shadow.camera; sc.left = -14; sc.right = 14; sc.top = 14; sc.bottom = -14; sc.near = 1; sc.far = 60;
+sun.shadow.mapSize.set(1024, 1024);
+const sc = sun.shadow.camera; sc.left = -11; sc.right = 11; sc.top = 11; sc.bottom = -11; sc.near = 1; sc.far = 60;
 sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.02;
 scene.add(sun, sun.target);
 
 function applyQuality() {
-  const hq = !!save.settings.quality;
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, hq ? 2 : 1.25));
-  renderer.shadowMap.enabled = hq;
-  sun.castShadow = hq;
-  blobShadow.visible = !hq;
+  gfx = GFX[save.settings.gfx] || GFX.medium;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, gfx.ratio));
+  renderer.shadowMap.enabled = gfx.shadows;
+  sun.castShadow = gfx.shadows;
   scene.traverse(o => { if (o.material) [].concat(o.material).forEach(m => { m.needsUpdate = true; }); });
   resize();
 }
 
-/* Floating low-poly clouds below the road */
-const cloudMat = new T.MeshLambertMaterial({ color: 0xffe2c2, flatShading: true, transparent: true, opacity: 0.55, emissive: 0x553322, emissiveIntensity: 0.3, depthWrite: false });
-const cloudGeo = new T.IcosahedronGeometry(1, 0);
+/* Low-poly clouds far below the road: a single instanced draw call. Each cloud
+ * is only re-positioned when it scrolls out of view, never per frame. */
+const cloudMat = new T.MeshLambertMaterial({ color: 0xffe2c2, flatShading: true, transparent: true, opacity: 0.6, emissive: 0x553322, emissiveIntensity: 0.3, depthWrite: false });
+const CLOUDS = 14, PUFFS = 4;
+const cloudMesh = new T.InstancedMesh(new T.IcosahedronGeometry(1, 0), cloudMat, CLOUDS * PUFFS);
+cloudMesh.frustumCulled = false;
+scene.add(cloudMesh);
 const clouds = [];
-function makeCloud() {
-  const g = new T.Group();
-  const n = 3 + ((Math.random() * 3) | 0);
-  for (let i = 0; i < n; i++) {
-    const m = new T.Mesh(cloudGeo, cloudMat);
+for (let i = 0; i < CLOUDS; i++) {
+  const puffs = [];
+  for (let j = 0; j < PUFFS; j++) {
     const s = rand(1.8, 3.4);
-    m.scale.set(s * rand(1, 1.4), s * 0.75, s);
-    m.position.set((i - n / 2) * 2.3 + rand(-0.5, 0.5), rand(-0.4, 0.8), rand(-1, 1));
-    m.rotation.set(rand(0, 3), rand(0, 3), rand(0, 3));
-    g.add(m);
+    puffs.push({ x: (j - PUFFS / 2) * 2.3 + rand(-0.5, 0.5), y: rand(-0.4, 0.8), z: rand(-1, 1), sc: new T.Vector3(s * rand(1, 1.4), s * 0.75, s), q: new T.Quaternion().setFromEuler(new T.Euler(rand(0, 3), rand(0, 3), rand(0, 3))) });
   }
-  g.userData.vx = rand(0.3, 0.9);
-  scene.add(g);
-  return g;
+  clouds.push({ x: 0, y: -30, z: 0, puffs });
 }
-for (let i = 0; i < 14; i++) clouds.push(makeCloud());
-function placeCloud(c, around, ahead) {
+const _m4 = new T.Matrix4(), _v3 = new T.Vector3(), _q4 = new T.Quaternion(), _s3 = new T.Vector3(), _eu = new T.Euler();
+function placeCloud(i, around, ahead) {
+  const c = clouds[i];
   const fwd = ahead ? rand(28, 55) : rand(-25, 55);
   const side = rand(-38, 38);
-  c.position.set(around.x + fwd * 0.707 + side * 0.707, rand(-38, -22), around.z - fwd * 0.707 + side * 0.707);
+  c.x = around.x + fwd * 0.707 + side * 0.707; c.y = rand(-38, -22); c.z = around.z - fwd * 0.707 + side * 0.707;
+  c.puffs.forEach((p, j) => { _v3.set(c.x + p.x, c.y + p.y, c.z + p.z); _m4.compose(_v3, p.q, p.sc); cloudMesh.setMatrixAt(i * PUFFS + j, _m4); });
+  cloudMesh.instanceMatrix.needsUpdate = true;
 }
 
 /* =========================================================================
@@ -338,8 +352,10 @@ class Segment {
       if (b - a > 3) this.wave = { a, b, n: opts.wave.n, A: opts.wave.A };
     }
     this.coins = [];
-    this.state = 'hidden'; this.anim = 0; this.vy = 0; this.delay = 0;
     this.checked = false;
+    // the next segment always attaches to this side of the far corner square
+    this.attachSide = dir === 0 ? 1 : -1;
+    this.hasNext = !opts.last;
   }
   local(x, z) { const dx = x - this.sx, dz = z - this.sz; return [dx * this.ux + dz * this.uz, dx * this.px + dz * this.pz]; }
   contains(x, z) { const l = this.local(x, z); return l[0] >= this.s0 && l[0] <= this.s1 && Math.abs(l[1]) <= ROAD_W / 2; }
@@ -353,40 +369,46 @@ class Segment {
   wz(s, l) { return this.sz + this.uz * s + this.pz * l; }
 }
 
+/* One watertight block per segment. Faces that would be buried inside a
+ * neighbour (the start cap, and the side wall where the next segment joins the
+ * corner) are left out, and the top is split exactly where the next segment's
+ * edge meets it, so adjoining segments share vertices: no cracks, no slivers. */
 function buildSegmentMesh(seg) {
   const th = THEMES[seg.theme];
-  const pos = [], uv = [], col = [];
+  const hw = ROAD_W / 2;
+  const corner = seg.hasNext ? seg.len - hw : null;
   const ss = [];
   if (seg.wave) {
     const n = Math.max(2, Math.ceil((seg.s1 - seg.s0) / 0.2));
     for (let i = 0; i <= n; i++) ss.push(seg.s0 + (seg.s1 - seg.s0) * i / n);
   } else { ss.push(seg.s0, seg.s1); }
-  const hw = ROAD_W / 2;
+  if (corner !== null && corner > seg.s0 + 1e-6 && !ss.some(v => Math.abs(v - corner) < 1e-6)) { ss.push(corner); ss.sort((a, b) => a - b); }
   const white = { r: 1, g: 1, b: 1 };
+  const pos = [], uv = [], col = [];
   const V = (x, y, z, c) => { pos.push(x, y, z); uv.push(x * UV_SCALE, z * UV_SCALE); col.push(c.r, c.g, c.b); };
   const quad = (a, b, c, d, ca, cb, cc, cd) => { V(...a, ca); V(...b, cb); V(...c, cc); V(...a, ca); V(...c, cc); V(...d, cd); };
-  // top
   for (let k = 0; k < ss.length - 1; k++) {
     const sa = ss[k], sb = ss[k + 1], ha = seg.height(sa), hb = seg.height(sb);
     quad([seg.wx(sa, -hw), ha, seg.wz(sa, -hw)], [seg.wx(sb, -hw), hb, seg.wz(sb, -hw)], [seg.wx(sb, hw), hb, seg.wz(sb, hw)], [seg.wx(sa, hw), ha, seg.wz(sa, hw)], white, white, white, white);
   }
   const topCount = pos.length / 3;
-  // sides
   const E = th.edgeC, S = th.sideC, D = th.darkC;
+  const wall = (xa, za, ha, xb, zb, hb) => {
+    quad([xa, ha, za], [xb, hb, zb], [xb, hb - 0.08, zb], [xa, ha - 0.08, za], E, E, E, E); // bright lip
+    quad([xa, ha - 0.08, za], [xb, hb - 0.08, zb], [xb, hb - ROAD_T, zb], [xa, ha - ROAD_T, za], S, S, D, D);
+  };
   for (const l of [-hw, hw]) {
+    const buried = seg.hasNext && Math.sign(l) === seg.attachSide;
     for (let k = 0; k < ss.length - 1; k++) {
-      const sa = ss[k], sb = ss[k + 1], ha = seg.height(sa), hb = seg.height(sb);
-      const xa = seg.wx(sa, l), za = seg.wz(sa, l), xb = seg.wx(sb, l), zb = seg.wz(sb, l);
-      // thin bright lip, then the main wall
-      quad([xa, ha, za], [xb, hb, zb], [xb, hb - 0.08, zb], [xa, ha - 0.08, za], E, E, E, E);
-      quad([xa, ha - 0.08, za], [xb, hb - 0.08, zb], [xb, hb - ROAD_T, zb], [xa, ha - ROAD_T, za], S, S, D, D);
+      const sa = ss[k], sb = ss[k + 1];
+      if (buried && sa >= corner - 1e-6) continue;
+      wall(seg.wx(sa, l), seg.wz(sa, l), seg.height(sa), seg.wx(sb, l), seg.wz(sb, l), seg.height(sb));
     }
   }
-  for (const s of [seg.s0, seg.s1]) {
-    const h = seg.height(s);
-    const xa = seg.wx(s, -hw), za = seg.wz(s, -hw), xb = seg.wx(s, hw), zb = seg.wz(s, hw);
-    quad([xa, h, za], [xb, h, zb], [xb, h - 0.08, zb], [xa, h - 0.08, za], E, E, E, E);
-    quad([xa, h - 0.08, za], [xb, h - 0.08, zb], [xb, h - ROAD_T, zb], [xa, h - ROAD_T, za], S, S, D, D);
+  const caps = seg.s0 < 0 ? [seg.s0, seg.s1] : [seg.s1]; // only the very first segment has an open start
+  for (const sc of caps) {
+    const h = seg.height(sc);
+    wall(seg.wx(sc, -hw), seg.wz(sc, -hw), h, seg.wx(sc, hw), seg.wz(sc, hw), h);
   }
   const geo = new T.BufferGeometry();
   geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3));
@@ -397,6 +419,7 @@ function buildSegmentMesh(seg) {
   geo.computeVertexNormals();
   const mesh = new T.Mesh(geo, [th.top, th.sideMat]);
   mesh.receiveShadow = true;
+  mesh.matrixAutoUpdate = false;
   return mesh;
 }
 
@@ -409,12 +432,74 @@ const coinInnerGeo = new T.CylinderGeometry(0.15, 0.15, 0.085, 4);
 coinInnerGeo.rotateX(HALF_PI);
 const coinMat = new T.MeshLambertMaterial({ color: 0xffc928, emissive: 0xb86a00, emissiveIntensity: 0.45 });
 const coinInnerMat = new T.MeshLambertMaterial({ color: 0xffe377, emissive: 0xd08000, emissiveIntensity: 0.4 });
-function makeCoin() {
-  const g = new T.Group();
-  const a = new T.Mesh(coinGeo, coinMat); a.castShadow = true;
-  const b = new T.Mesh(coinInnerGeo, coinInnerMat);
-  g.add(a, b);
-  return g;
+/* Every coin on the road is one instance of two shared meshes (2 draw calls in
+ * total). Collected coins stay in the list for a short pop-and-spin animation. */
+const COIN_MAX = 320;
+const coinOuter = new T.InstancedMesh(coinGeo, coinMat, COIN_MAX);
+const coinInner = new T.InstancedMesh(coinInnerGeo, coinInnerMat, COIN_MAX);
+for (const m of [coinOuter, coinInner]) { m.frustumCulled = false; m.count = 0; m.instanceMatrix.setUsage(T.DynamicDrawUsage); scene.add(m); }
+coinOuter.castShadow = true;
+const coinList = [];
+function addCoin(seg, x, y, z, phase) {
+  const c = { seg, x, y, z, phase, state: 0, t: 0, rot0: 0 };
+  seg.coins.push(c); coinList.push(c);
+  return c;
+}
+function removeSegCoins(seg) {
+  for (let i = coinList.length - 1; i >= 0; i--) if (coinList[i].seg === seg && coinList[i].state === 0) coinList.splice(i, 1);
+}
+function updateCoins(dt) {
+  let n = 0;
+  for (let i = coinList.length - 1; i >= 0; i--) {
+    const c = coinList[i];
+    let y, rot, sc = 1;
+    if (c.state === 0) {
+      y = c.y + Math.sin(time * 3 + c.phase) * 0.06;
+      rot = time * 3.2 + c.phase;
+    } else {
+      // collected: pop up, spin hard, swell, then shrink into the car
+      c.t += dt;
+      const k = c.t / 0.42;
+      if (k >= 1) { coinList.splice(i, 1); continue; }
+      y = c.y + easeOutCubic(k) * 0.95;
+      rot = c.rot0 + c.t * 28;
+      sc = k < 0.28 ? 1 + 0.5 * (k / 0.28) : 1.5 * (1 - (k - 0.28) / 0.72);
+      c.x = damp(c.x, car.rx, 7, dt); c.z = damp(c.z, car.rz, 7, dt);
+    }
+    if (n >= COIN_MAX) continue;
+    _eu.set(0, rot, 0); _q4.setFromEuler(_eu); _v3.set(c.x, y, c.z); _s3.set(sc, sc, sc);
+    _m4.compose(_v3, _q4, _s3);
+    coinOuter.setMatrixAt(n, _m4); coinInner.setMatrixAt(n, _m4);
+    n++;
+  }
+  coinOuter.count = coinInner.count = n;
+  coinOuter.instanceMatrix.needsUpdate = coinInner.instanceMatrix.needsUpdate = true;
+}
+
+/* Gold shockwave rings for coin pickups (a small reusable pool of billboards) */
+const ringPool = [];
+const ringGeo = new T.RingGeometry(0.72, 1, 28);
+function coinRing(x, y, z) {
+  let r = ringPool.find(o => !o.alive);
+  if (!r) {
+    if (ringPool.length >= 8) return;
+    const m = new T.Mesh(ringGeo, new T.MeshBasicMaterial({ color: 0xffd23f, transparent: true, depthWrite: false, blending: T.AdditiveBlending, side: T.DoubleSide }));
+    scene.add(m);
+    r = { m, alive: false };
+    ringPool.push(r);
+  }
+  r.alive = true; r.t = 0; r.m.visible = true; r.m.position.set(x, y, z);
+}
+function updateRings(dt) {
+  for (const r of ringPool) {
+    if (!r.alive) continue;
+    r.t += dt;
+    const k = r.t / 0.38;
+    if (k >= 1) { r.alive = false; r.m.visible = false; continue; }
+    r.m.quaternion.copy(camera.quaternion);
+    r.m.scale.setScalar(0.25 + easeOutCubic(k) * 0.85);
+    r.m.material.opacity = 0.95 * (1 - k);
+  }
 }
 
 function mulberry32(seed) {
@@ -474,29 +559,26 @@ const finishTex = (() => {
 function disposeSeg(seg) {
   track.group.remove(seg.group);
   seg.mesh.geometry.dispose();
+  removeSegCoins(seg);
 }
 function resetTrack(intro, cfg) {
   cfg = cfg || { mode: 'endless' };
   track.segs.forEach(disposeSeg);
   track.segs = []; track.base = 0;
+  coinList.length = 0;
   track.mode = cfg.mode; track.level = cfg.level || null; track.finishSeg = null; track.coinTotal = 0;
   track.rng = track.level ? mulberry32(track.level.seed) : Math.random;
   track.themeIdx = track.level ? track.level.theme : 0;
   track.themeLeft = 10 + ((track.rng() * 5) | 0);
   const first = addSegment(new Segment(0, 0, 0, 0, 11, track.themeIdx, { s0: -4.5 }));
   first.pathStart = 0;
-  for (let i = 0; i < 14; i++) if (!genNext(0)) break;
-  track.segs.forEach((s, i) => {
-    if (intro) { s.state = 'rising'; s.anim = 0; s.delay = 0.08 + i * 0.07; s.group.visible = true; s.group.position.y = -9; }
-    else { s.state = 'idle'; s.group.visible = true; s.group.position.y = 0; }
-  });
+  // build the whole visible road up front, well past the fog line
+  for (let i = 0; i < 40 && Math.hypot(lastSeg().ex, lastSeg().ez) < 110; i++) if (!genNext(0)) break;
 }
 function addSegment(seg) {
   seg.group = new T.Group();
   seg.mesh = buildSegmentMesh(seg);
   seg.group.add(seg.mesh);
-  seg.group.visible = false;
-  seg.group.position.y = -9;
   track.group.add(seg.group);
   track.segs.push(seg);
   return seg;
@@ -550,11 +632,7 @@ function genNext(dist) {
     for (let i = 0; i < n; i++) {
       const s = mid + (i - (n - 1) / 2) * 0.85;
       if (s < ROAD_W / 2 + 0.3 || s > len - 1.2) continue;
-      const m = makeCoin();
-      const y = seg.height(s) + 0.42;
-      m.position.set(seg.wx(s, lat), y, seg.wz(s, lat));
-      seg.group.add(m);
-      seg.coins.push({ mesh: m, x: m.position.x, y, z: m.position.z, taken: false, phase: i * 0.5 });
+      addCoin(seg, seg.wx(s, lat), seg.height(s) + 0.42, seg.wz(s, lat), i * 0.5);
       track.coinTotal++;
     }
   }
@@ -562,7 +640,7 @@ function genNext(dist) {
 }
 
 function makeFinish(prev, pathStart) {
-  const seg = addSegment(new Segment(prev.index + 1, prev.ex, prev.ez, 1 - prev.dir, 18, track.themeIdx, {}));
+  const seg = addSegment(new Segment(prev.index + 1, prev.ex, prev.ez, 1 - prev.dir, 18, track.themeIdx, { last: true }));
   seg.pathStart = pathStart;
   seg.finish = true;
   seg.finishS = ROAD_W / 2 + 2.6;
@@ -600,6 +678,7 @@ function makeFinish(prev, pathStart) {
  * Car models — an original, procedurally built lineup
  * ========================================================================= */
 const matCache = new Map();
+const plainMats = new Set(); // shared, non-glowing paint: these get merged per car
 const GLASS = '#2f4258';
 const TIRE = '#24232b';
 function mat(color, emissive, ei) {
@@ -613,6 +692,7 @@ function mat(color, emissive, ei) {
       specular: glass ? 0x8aa0b8 : tire ? 0x050505 : 0x2c2c2c
     });
     if (emissive) { m.emissive = new T.Color(emissive); m.emissiveIntensity = ei || 1; }
+    else plainMats.add(m);
     matCache.set(key, m);
   }
   return m;
@@ -641,6 +721,7 @@ function kit(group) {
     const m = new T.Mesh(unitBox, o.m || mat(c, o.e, o.ei));
     m.scale.set(w, h, d); m.position.set(x, y, z);
     if (o.rx) m.rotation.x = o.rx; if (o.ry) m.rotation.y = o.ry; if (o.rz) m.rotation.z = o.rz;
+    if (o.dyn) m.userData.dyn = true;
     m.castShadow = true;
     (o.parent || body).add(m);
     return m;
@@ -1111,7 +1192,7 @@ const CARS = [
       k.box(0.34, 0.08, 0.3, '#d8dbe4', 0.22, d.top + 0.04, 0);
       const pistons = [];
       for (let i = 0; i < 3; i++) for (const s of [-1, 1]) {
-        const p = k.box(0.05, 0.08, 0.06, '#f2f2f6', 0.12 + i * 0.1, d.top + 0.1, s * 0.07);
+        const p = k.box(0.05, 0.08, 0.06, '#f2f2f6', 0.12 + i * 0.1, d.top + 0.1, s * 0.07, { dyn: true });
         pistons.push({ p, ph: i * 2.1 + (s > 0 ? PI : 0) });
       }
       for (const s of [-1, 1]) k.cyl(0.025, 0.025, 0.5, '#d8dbe4', 0.0, d.y0 + 0.02, s * (d.W / 2 + 0.03), { axis: 'x', seg: 8 });
@@ -1139,7 +1220,7 @@ const CARS = [
       k.box(0.12, 0.08, 0.36, '#3d3d46', -0.44, 0.28, 0);
       const flag = k.group(-0.36, 0.6, 0.18);
       k.box(0.01, 0.4, 0.01, '#f2f2f6', 0, 0.2, 0, { parent: flag });
-      const cloth = k.box(0.12, 0.07, 0.008, '#ff4f81', -0.06, 0.37, 0, { parent: flag });
+      const cloth = k.box(0.12, 0.07, 0.008, '#ff4f81', -0.06, 0.37, 0, { parent: flag, dyn: true });
       for (let i = 0; i < 2; i++) k.cyl(0.04, 0.04, 0.02, '#fff7c2', 0.04, 0.62, -0.08 + i * 0.16, { axis: 'x', seg: 8, e: '#ffe066', ei: 0.9 });
       k.tail(0.02, 0.04, 0.08, -0.5, 0.26, 0.14); k.tail(0.02, 0.04, 0.08, -0.5, 0.26, -0.14);
       k.pipe(-0.5, 0.18, 0);
@@ -1347,11 +1428,56 @@ const TIERS = [
 CARS.sort((a, b) => a.price - b.price);
 const carById = id => CARS.find(c => c.id === id) || CARS[0];
 
+/* Merging: a car is built from ~40-80 small parts. Static parts that share
+ * the plain paint materials are merged into one vertex-coloured mesh per
+ * group, and other repeated materials are merged per material, so a whole car
+ * draws in a handful of calls instead of dozens. Animated parts live in their
+ * own groups (or are flagged dyn) and are left alone. */
+const carVCMat = new T.MeshPhongMaterial({ vertexColors: true, flatShading: true, shininess: 42, specular: 0x2c2c2c });
+function mergeMeshes(parent, meshes, material, withColor) {
+  let total = 0;
+  const parts = meshes.map(m => {
+    m.updateMatrix();
+    const g = (m.geometry.index ? m.geometry.toNonIndexed() : m.geometry.clone()).applyMatrix4(m.matrix);
+    total += g.attributes.position.count;
+    return { g, c: m.material.color };
+  });
+  const pos = new Float32Array(total * 3), nor = new Float32Array(total * 3), col = withColor ? new Float32Array(total * 3) : null;
+  let o = 0;
+  for (const { g, c } of parts) {
+    const n = g.attributes.position.count;
+    pos.set(g.attributes.position.array, o * 3);
+    nor.set(g.attributes.normal.array, o * 3);
+    if (col) for (let i = 0; i < n; i++) { col[(o + i) * 3] = c.r; col[(o + i) * 3 + 1] = c.g; col[(o + i) * 3 + 2] = c.b; }
+    o += n; g.dispose();
+  }
+  const geo = new T.BufferGeometry();
+  geo.setAttribute('position', new T.BufferAttribute(pos, 3));
+  geo.setAttribute('normal', new T.BufferAttribute(nor, 3));
+  if (col) geo.setAttribute('color', new T.BufferAttribute(col, 3));
+  const mesh = new T.Mesh(geo, material);
+  mesh.castShadow = true;
+  meshes.forEach(m => parent.remove(m));
+  parent.add(mesh);
+}
+function bakeGroup(parent) {
+  const vc = [], byMat = new Map();
+  for (const m of parent.children.slice()) {
+    if (m.isGroup) { bakeGroup(m); continue; }
+    if (!m.isMesh || m.userData.dyn) continue;
+    if (plainMats.has(m.material)) vc.push(m);
+    else { if (!byMat.has(m.material)) byMat.set(m.material, []); byMat.get(m.material).push(m); }
+  }
+  if (vc.length > 1) mergeMeshes(parent, vc, carVCMat, true);
+  byMat.forEach((list, material) => { if (list.length > 1) mergeMeshes(parent, list, material, false); });
+}
 function buildCarModel(id) {
   const def = carById(id);
   const g = new T.Group();
   const k = kit(g);
   def.build(k);
+  bakeGroup(k.body);
+  k.wheels.forEach(w => bakeGroup(w.spin));
   return k;
 }
 
@@ -1404,8 +1530,11 @@ scene.add(blobShadow);
 const car = {
   x: 0, y: 0, z: 0, psi: HALF_PI, phi: HALF_PI, speed: 0, slip: 0,
   segIdx: 0, dist: 0, vx: 0, vy: 0, vz: 0, lockAng: HALF_PI, wheelSpeed: 0, prevSpeed: 0, spawnT: 1,
-  roll: 0, pitch: 0, tumbleX: 0, tumbleZ: 0, fallT: 0
+  roll: 0, pitch: 0, tumbleX: 0, tumbleZ: 0, fallT: 0, slope: 0,
+  // previous physics step and interpolated render pose (smooth at any frame rate)
+  px: 0, py: 0, pz: 0, ppsi: HALF_PI, rx: 0, ry: 0, rz: 0, rpsi: HALF_PI
 };
+function snapCar() { car.px = car.rx = car.x; car.py = car.ry = car.y; car.pz = car.rz = car.z; car.ppsi = car.rpsi = car.psi; }
 
 const PHYS = { base: 6.3, add: 5.7, k: 1300, turnBase: 3.5, turnK: 0.21, grip: 7.0 };
 
@@ -1413,29 +1542,32 @@ const PHYS = { base: 6.3, add: 5.7, k: 1300, turnBase: 3.5, turnK: 0.21, grip: 7
  * Effects: skid marks, smoke, sparkles
  * ========================================================================= */
 const Skids = (() => {
+  // Each quad stores its birth time; the shader fades it, so nothing is
+  // rewritten per frame. Only freshly added quads are uploaded to the GPU.
   const MAX = 1400;
-  const pos = new Float32Array(MAX * 4 * 3);
-  const colr = new Float32Array(MAX * 4 * 4);
+  const pos = new Float32Array(MAX * 12), born = new Float32Array(MAX * 4).fill(-1e9), str = new Float32Array(MAX * 4);
   const idx = new Uint32Array(MAX * 6);
-  const born = new Float32Array(MAX).fill(-1e9);
-  const str = new Float32Array(MAX);
   const cx = new Float32Array(MAX), cz = new Float32Array(MAX);
-  for (let i = 0; i < MAX; i++) {
-    const v = i * 4;
-    idx.set([v, v + 1, v + 2, v, v + 2, v + 3], i * 6);
-    for (let j = 0; j < 4; j++) colr.set([0.12, 0.1, 0.12, 0], (v + j) * 4);
-  }
+  for (let i = 0; i < MAX; i++) { const v = i * 4; idx.set([v, v + 1, v + 2, v, v + 2, v + 3], i * 6); }
   const geo = new T.BufferGeometry();
-  const pAttr = new T.BufferAttribute(pos, 3); pAttr.setUsage(T.DynamicDrawUsage);
-  const cAttr = new T.BufferAttribute(colr, 4); cAttr.setUsage(T.DynamicDrawUsage);
-  geo.setAttribute('position', pAttr); geo.setAttribute('color', cAttr);
+  const pAttr = new T.BufferAttribute(pos, 3), bAttr = new T.BufferAttribute(born, 1), sAttr = new T.BufferAttribute(str, 1);
+  [pAttr, bAttr, sAttr].forEach(a => a.setUsage(T.DynamicDrawUsage));
+  geo.setAttribute('position', pAttr); geo.setAttribute('aBorn', bAttr); geo.setAttribute('aStr', sAttr);
   geo.setIndex(new T.BufferAttribute(idx, 1));
+  const uTime = { value: 0 };
   // double-sided: depending on the drift direction a strip's winding can face down
-  const m = new T.MeshBasicMaterial({ vertexColors: true, transparent: true, depthWrite: false, side: T.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  const m = new T.ShaderMaterial({
+    uniforms: { uTime, uColor: { value: new T.Color(0x1d1a24) } },
+    vertexShader: 'attribute float aBorn; attribute float aStr; uniform float uTime; varying float vA;\n' +
+      'void main(){ float age = uTime - aBorn; vA = (0.25 + aStr * 0.55) * clamp(1.0 - (age - 9.0) / 3.0, 0.0, 1.0);\n' +
+      ' gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+    fragmentShader: 'uniform vec3 uColor; varying float vA; void main(){ if (vA < 0.004) discard; gl_FragColor = vec4(uColor, vA); }',
+    transparent: true, depthWrite: false, side: T.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2
+  });
   const mesh = new T.Mesh(geo, m);
   mesh.frustumCulled = false; mesh.renderOrder = 1;
   scene.add(mesh);
-  let head = 0;
+  let head = 0, lo = Infinity, hi = -1, full = false;
   const last = [null, null];
   function add(w, x, y, z, s, now) {
     const l = last[w];
@@ -1450,66 +1582,117 @@ const Skids = (() => {
     pos[p + 3] = l.x - nx; pos[p + 4] = l.y; pos[p + 5] = l.z - nz;
     pos[p + 6] = x - nx; pos[p + 7] = y; pos[p + 8] = z - nz;
     pos[p + 9] = x + nx; pos[p + 10] = y; pos[p + 11] = z + nz;
-    born[i] = now; str[i] = s; cx[i] = (x + l.x) / 2; cz[i] = (z + l.z) / 2;
+    born.fill(now, i * 4, i * 4 + 4); str.fill(s, i * 4, i * 4 + 4);
+    cx[i] = (x + l.x) / 2; cz[i] = (z + l.z) / 2;
     last[w] = { x, y, z };
-    pAttr.needsUpdate = true;
+    lo = Math.min(lo, i); hi = Math.max(hi, i);
   }
   function brk(w) { last[w] = null; }
   function update(now) {
-    for (let i = 0; i < MAX; i++) {
-      const age = now - born[i];
-      const a = age > 12 ? 0 : (0.25 + str[i] * 0.55) * clamp(1 - (age - 9) / 3, 0, 1);
-      const c = i * 16;
-      colr[c + 3] = colr[c + 7] = colr[c + 11] = colr[c + 15] = a;
+    uTime.value = now;
+    if (full) {
+      for (const a of [pAttr, bAttr, sAttr]) { a.updateRange.offset = 0; a.updateRange.count = -1; a.needsUpdate = true; }
+    } else if (hi >= lo) {
+      pAttr.updateRange.offset = lo * 12; pAttr.updateRange.count = (hi - lo + 1) * 12;
+      for (const a of [bAttr, sAttr]) { a.updateRange.offset = lo * 4; a.updateRange.count = (hi - lo + 1) * 4; }
+      pAttr.needsUpdate = bAttr.needsUpdate = sAttr.needsUpdate = true;
     }
-    cAttr.needsUpdate = true;
+    full = false; lo = Infinity; hi = -1;
   }
   function clearRect(seg) {
-    for (let i = 0; i < MAX; i++) if (born[i] > -1e8) {
+    for (let i = 0; i < MAX; i++) if (born[i * 4] > -1e8) {
       const l = seg.local(cx[i], cz[i]);
-      if (l[0] >= seg.s0 - 0.05 && l[0] <= seg.s1 + 0.05 && Math.abs(l[1]) <= ROAD_W / 2 + 0.05) born[i] = -1e9;
+      if (l[0] >= seg.s0 - 0.05 && l[0] <= seg.s1 + 0.05 && Math.abs(l[1]) <= ROAD_W / 2 + 0.05) { born.fill(-1e9, i * 4, i * 4 + 4); full = true; }
     }
   }
-  function reset() { born.fill(-1e9); last[0] = last[1] = null; }
-  return { add, brk, update, reset, clearRect, debug: () => { let n = 0, maxA = 0; for (let i = 0; i < MAX; i++) { const al = colr[i * 16 + 3]; if (al > 0) n++; maxA = Math.max(maxA, al); } return { n, maxA, head, sampleY: pos[1] }; } };
+  function reset() { born.fill(-1e9); last[0] = last[1] = null; full = true; }
+  return { add, brk, update, reset, clearRect, debug: () => { let n = 0; for (let i = 0; i < MAX; i++) if (uTime.value - born[i * 4] < 12) n++; return { n, head }; } };
 })();
 
-const Particles = (() => {
-  const smokeGeo = new T.IcosahedronGeometry(0.2, 0);
-  const sparkGeo = new T.OctahedronGeometry(0.07, 0);
-  const pool = [];
-  function spawn(kind, x, y, z, vx, vy, vz, life, s0, s1, color) {
-    let p = pool.find(q => !q.alive && q.kind === kind);
-    if (!p) {
-      if (pool.length > 220) return;
-      const m = new T.Mesh(kind === 'smoke' ? smokeGeo : sparkGeo, new T.MeshLambertMaterial({ color: 0xffffff, transparent: true, flatShading: true, depthWrite: false, emissive: kind === 'spark' ? 0xffaa00 : 0x333333, emissiveIntensity: kind === 'spark' ? 0.8 : 0.35 }));
-      scene.add(m);
-      p = { m, kind };
-      pool.push(p);
-    }
-    p.alive = true; p.t = 0; p.life = life; p.vx = vx; p.vy = vy; p.vz = vz; p.s0 = s0; p.s1 = s1;
-    p.m.visible = true; p.m.position.set(x, y, z);
-    p.m.rotation.set(rand(0, 3), rand(0, 3), rand(0, 3));
-    p.m.material.color.set(color || 0xffffff);
-    p.m.material.opacity = kind === 'smoke' ? 0.75 : 1;
-  }
-  function update(dt) {
-    for (const p of pool) {
-      if (!p.alive) continue;
-      p.t += dt;
-      const k = p.t / p.life;
-      if (k >= 1) { p.alive = false; p.m.visible = false; continue; }
-      p.m.position.x += p.vx * dt; p.m.position.y += p.vy * dt; p.m.position.z += p.vz * dt;
-      if (p.kind === 'smoke') { p.vx *= 0.96; p.vz *= 0.96; p.vy *= 0.97; p.m.material.opacity = 0.75 * (1 - k) * (1 - k); }
-      else { p.vy -= 9 * dt; p.m.material.opacity = 1 - k; }
-      const s = lerp(p.s0, p.s1, Math.sqrt(k));
-      p.m.scale.setScalar(s);
-      p.m.rotation.x += dt * 2; p.m.rotation.y += dt * 1.5;
-    }
-  }
-  function clear() { pool.forEach(p => { p.alive = false; p.m.visible = false; }); }
-  return { spawn, update, clear };
+/* Particles: smoke + crumbs share one point cloud and sparkles another
+ * (additive), so every effect on screen costs two draw calls in total. */
+const pointScale = { value: 600 };
+const softTex = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const g = c.getContext('2d');
+  const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.45, 'rgba(255,255,255,0.75)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+  return new T.CanvasTexture(c);
 })();
+const sparkTex = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const g = c.getContext('2d');
+  const gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.25, 'rgba(255,255,255,0.8)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+  g.globalCompositeOperation = 'lighter'; g.fillStyle = 'rgba(255,255,255,0.9)';
+  g.fillRect(30, 4, 4, 56); g.fillRect(4, 30, 56, 4);
+  return new T.CanvasTexture(c);
+})();
+function pointSystem(max, tex, additive) {
+  const pos = new Float32Array(max * 3), col = new Float32Array(max * 3), size = new Float32Array(max), alpha = new Float32Array(max);
+  const geo = new T.BufferGeometry();
+  const attrs = [['position', pos, 3], ['aColor', col, 3], ['aSize', size, 1], ['aAlpha', alpha, 1]].map(([n, arr, k]) => {
+    const a = new T.BufferAttribute(arr, k); a.setUsage(T.DynamicDrawUsage); geo.setAttribute(n, a); return a;
+  });
+  const mat = new T.ShaderMaterial({
+    uniforms: { map: { value: tex }, scale: pointScale },
+    vertexShader: 'attribute vec3 aColor; attribute float aSize; attribute float aAlpha; uniform float scale; varying vec3 vC; varying float vA;\n' +
+      'void main(){ vC = aColor; vA = aAlpha; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = aAlpha > 0.0 ? aSize * scale / -mv.z : 0.0; gl_Position = projectionMatrix * mv; }',
+    fragmentShader: 'uniform sampler2D map; varying vec3 vC; varying float vA;\n' +
+      'void main(){ vec4 t = texture2D(map, gl_PointCoord); float a = t.a * vA; if (a < 0.01) discard; gl_FragColor = vec4(vC * t.rgb, a); }',
+    transparent: true, depthWrite: false, blending: additive ? T.AdditiveBlending : T.NormalBlending
+  });
+  const pts = new T.Points(geo, mat);
+  pts.frustumCulled = false;
+  scene.add(pts);
+  const P = [];
+  for (let i = 0; i < max; i++) P.push({ alive: false });
+  let cursor = 0, live = 0;
+  const c3 = new T.Color();
+  return {
+    spawn(x, y, z, vx, vy, vz, life, s0, s1, color, a0, grav, drag) {
+      let p = null;
+      for (let n = 0; n < max; n++) { const q = P[(cursor + n) % max]; if (!q.alive) { p = q; cursor = (cursor + n + 1) % max; break; } }
+      if (!p) { p = P[cursor]; cursor = (cursor + 1) % max; }
+      const i = P.indexOf(p);
+      if (!p.alive) live++;
+      Object.assign(p, { alive: true, i, t: 0, life, x, y, z, vx, vy, vz, s0, s1, a0, grav, drag });
+      c3.set(color);
+      col[i * 3] = c3.r; col[i * 3 + 1] = c3.g; col[i * 3 + 2] = c3.b;
+    },
+    update(dt) {
+      if (!live) return;
+      for (const p of P) {
+        if (!p.alive) continue;
+        p.t += dt;
+        const k = p.t / p.life, i = p.i;
+        if (k >= 1) { p.alive = false; live--; alpha[i] = 0; continue; }
+        const dr = Math.exp(-p.drag * dt);
+        p.vx *= dr; p.vz *= dr; p.vy = p.vy * dr - p.grav * dt;
+        p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt;
+        pos[i * 3] = p.x; pos[i * 3 + 1] = p.y; pos[i * 3 + 2] = p.z;
+        size[i] = lerp(p.s0, p.s1, Math.sqrt(k));
+        alpha[i] = p.grav > 0 ? p.a0 * (1 - k) : p.a0 * (1 - k) * (1 - k);
+      }
+      attrs.forEach(a => { a.needsUpdate = true; });
+    },
+    clear() { P.forEach(p => { if (p.alive) alpha[p.i] = 0; p.alive = false; }); live = 0; attrs.forEach(a => { a.needsUpdate = true; }); }
+  };
+}
+const smokeSys = pointSystem(180, softTex, false);
+const sparkSys = pointSystem(220, sparkTex, true);
+const Particles = {
+  // kind: 'smoke' (soft puff), 'spark' (glowing twinkle) or 'crumb' (bit of road)
+  spawn(kind, x, y, z, vx, vy, vz, life, s0, s1, color) {
+    if (kind === 'smoke') smokeSys.spawn(x, y, z, vx, vy, vz, life, 0.55 * s0, 0.55 * s1, color || 0xf4f2f6, 0.75, 0, 2.4);
+    else if (kind === 'crumb') smokeSys.spawn(x, y, z, vx, vy, vz, life, 0.16, 0.12, color, 1, 9, 0.3);
+    else sparkSys.spawn(x, y, z, vx, vy, vz, life, 0.3 * s0, 0.3 * s1, color || 0xffffff, 1, 9, 0.6);
+  },
+  update(dt) { smokeSys.update(dt); sparkSys.update(dt); },
+  clear() { smokeSys.clear(); sparkSys.clear(); }
+};
 
 /* =========================================================================
  * Game state
@@ -1535,8 +1718,10 @@ function resetCar(seg, s) {
   car.speed = 0; car.slip = 0; car.vy = 0; car.roll = car.pitch = 0;
   car.tumbleX = car.tumbleZ = 0; car.fallT = 0;
   carTilt.rotation.set(0, 0, 0);
+  car.slope = 0; car.fallSeg = null;
   apHoldState = seg.dir === 1;
   Skids.brk(0); Skids.brk(1);
+  snapCar();
 }
 
 function findSeg(x, z) {
@@ -1605,7 +1790,11 @@ function physicsStep(dt, mode) {
   if (!seg) return false;
   car.segIdx = seg.index;
   const loc = seg.local(car.x, car.z);
-  car.y = seg.height(loc[0]);
+  // rest on the wheels: in a dip the bumpers would otherwise sink into the road
+  const along = 0.42 * Math.cos(car.psi - seg.ang);
+  const hc = seg.height(loc[0]), hf = seg.height(loc[0] + along), hr = seg.height(loc[0] - along);
+  car.y = Math.max(hc, (hf + hr) / 2);
+  car.slope = Math.atan2(hf - hr, 0.84);
 
   if (mode === 'play') {
     // perfect-corner check halfway down each segment
@@ -1642,11 +1831,12 @@ function driveEffects(dt, onRoad) {
   const rear = -L * 0.32;
   for (let w = 0; w < 2; w++) {
     const [wx, wz] = wheelWorld(rear, w ? 0.25 : -0.25);
-    if (onRoad && intensity > 0.02) Skids.add(w, wx, car.y + 0.012, wz, intensity, time);
+    const sg = onRoad && intensity > 0.02 ? findSeg(wx, wz) : null;
+    if (sg) Skids.add(w, wx, sg.height(sg.local(wx, wz)[0]) + 0.012, wz, intensity, time);
     else Skids.brk(w);
   }
   if (onRoad && intensity > 0.25) {
-    smokeAcc += dt * (save.settings.quality ? 34 : 16) * intensity;
+    smokeAcc += dt * 30 * gfx.smoke * intensity;
     while (smokeAcc > 1) {
       smokeAcc--;
       const [wx, wz] = wheelWorld(rear - 0.05, Math.random() < 0.5 ? -0.25 : 0.25);
@@ -1661,7 +1851,7 @@ function driveEffects(dt, onRoad) {
 const cam = { pos: new T.Vector3(-6, 10, 6), look: new T.Vector3(), shake: 0, anchor: null, orbit: 0 };
 const OFFSET = new T.Vector3(-6.3, 9.6, 6.3);
 function updateCamera(dt, snap) {
-  let tx = car.x, ty = car.y, tz = car.z;
+  let tx = car.rx, ty = car.ry, tz = car.rz;
   if (cam.anchor) { tx = cam.anchor.x; ty = cam.anchor.y; tz = cam.anchor.z; }
   const ahead = 1.4 + car.speed * 0.06;
   const lx = tx + ahead * 0.707, lz = tz - ahead * 0.707;
@@ -1700,10 +1890,11 @@ const STEP = 1 / 120;
 let acc = 0;
 
 function fixedUpdate(dt) {
+  car.px = car.x; car.py = car.y; car.pz = car.z; car.ppsi = car.psi;
   if (state === 'menu') {
     const ok = physicsStep(dt, 'attract');
     driveEffects(dt, ok);
-    if (!ok) { resetTrack(false, { mode: 'endless' }); resetCar(track.segs[0], -1.5); car.dist = 0; }
+    if (!ok) { resetTrack(false, { mode: 'endless' }); resetCar(track.segs[0], -1.5); car.dist = 0; Skids.reset(); }
     maintainTrack();
     return;
   }
@@ -1750,6 +1941,18 @@ function fixedUpdate(dt) {
     // tip over the edge first, then tumble freely
     const tip = Math.min(1, 0.35 + car.fallT * 2.2);
     car.tumbleX += car.rollRate * tip * dt; car.tumbleZ += car.pitchRate * tip * dt;
+    // while part of the car still rests on the road it pivots on the edge
+    // instead of sinking through it
+    const fs = car.fallSeg;
+    if (fs) {
+      const l = fs.local(car.x, car.z);
+      const over = car.fallMode === 'end' ? l[0] - fs.s1 : Math.abs(l[1]) - ROAD_W / 2;
+      const ang = Math.min(HALF_PI, Math.max(Math.abs(car.tumbleX), Math.abs(car.tumbleZ)));
+      if (over < car.fallExt * Math.cos(ang)) {
+        const minY = car.fallRoadY - car.fallExt * Math.sin(ang);
+        if (car.y < minY) { car.y = minY; car.vy = 0; }
+      } else car.fallSeg = null;
+    }
     if (cam.anchor) cam.anchor.y = Math.max(car.y * 0.35, cam.anchor.y0 - 2.5);
     Skids.brk(0); Skids.brk(1);
     if (state === 'falling' && car.fallT > 1.05) afterFall();
@@ -1757,92 +1960,81 @@ function fixedUpdate(dt) {
 }
 
 function maintainTrack() {
-  while (!track.finishSeg && Math.hypot(lastSeg().ex - car.x, lastSeg().ez - car.z) < 95) genNext(car.dist);
-  // drop old segments
-  for (const seg of track.segs) {
-    if (seg.state === 'idle' && seg.index < car.segIdx - 2) {
-      const d = Math.hypot(seg.ex - car.x, seg.ez - car.z);
-      if (d > 13) { seg.state = 'dropping'; seg.vy = 0; Skids.clearRect(seg); }
-    }
-  }
-  while (track.segs.length && track.segs[0].state === 'gone') {
+  while (!track.finishSeg && Math.hypot(lastSeg().ex - car.x, lastSeg().ez - car.z) < 105) genNext(car.dist);
+  // retire segments once they are well behind the camera's view
+  while (track.segs.length > 3) {
+    const seg = track.segs[0];
+    if (seg.index >= car.segIdx - 2 || Math.hypot(seg.ex - car.x, seg.ez - car.z) < 20) break;
+    Skids.clearRect(seg);
     disposeSeg(track.segs.shift()); track.base++;
   }
 }
 
-function animateTrack(dt) {
-  for (const seg of track.segs) {
-    if (seg.state === 'hidden') {
-      const d = Math.hypot(seg.sx - car.x, seg.sz - car.z);
-      if (d < 34) { seg.state = 'rising'; seg.anim = 0; seg.delay = 0; seg.group.visible = true; seg.group.position.y = -9; }
-    } else if (seg.state === 'rising') {
-      if (seg.delay > 0) { seg.delay -= dt; continue; }
-      seg.anim = Math.min(1, seg.anim + dt / 0.6);
-      seg.group.position.y = lerp(-9, 0, easeOutBack(seg.anim));
-      if (seg.anim >= 1) { seg.state = 'idle'; seg.group.position.y = 0; }
-    } else if (seg.state === 'dropping') {
-      seg.vy -= 26 * dt;
-      seg.group.position.y += seg.vy * dt;
-      seg.group.rotation.x = 0;
-      if (seg.group.position.y < -45) { seg.state = 'gone'; seg.group.visible = false; }
-    }
-    for (const c of seg.coins) {
-      if (c.taken) continue;
-      c.mesh.rotation.y = time * 3.2 + c.phase;
-      c.mesh.position.y = c.y + Math.sin(time * 3 + c.phase) * 0.06;
-    }
-  }
-}
-
+let coinStreak = 0, lastCoinT = -9;
 function collectCoins(dt) {
   const r = 0.62 + save.upgrades.magnet * 0.35;
   const pull = save.upgrades.magnet > 0 ? r + 1.2 : 0;
   for (let i = car.segIdx - 1; i <= car.segIdx + 2; i++) {
     const seg = segAt(i);
-    if (!seg || seg.state !== 'idle') continue;
+    if (!seg) continue;
     for (const c of seg.coins) {
-      if (c.taken) continue;
-      const dx = c.mesh.position.x - car.x, dz = c.mesh.position.z - car.z;
+      if (c.state !== 0) continue;
+      const dx = c.x - car.x, dz = c.z - car.z;
       const d = Math.hypot(dx, dz);
       if (pull && d < pull && d > 0.01) {
         const k = Math.min(1, dt * 9);
-        c.mesh.position.x -= dx * k; c.mesh.position.z -= dz * k;
+        c.x -= dx * k; c.z -= dz * k;
       }
-      if (d < r) {
-        c.taken = true;
-        seg.group.remove(c.mesh);
-        runState.coins += runState.coinMult;
-        runState.rawCoins++;
-        save.coins += runState.coinMult; save.totalCoins += runState.coinMult;
-        Sound.coin();
-        for (let j = 0; j < 6; j++) Particles.spawn('spark', c.mesh.position.x, c.y, c.mesh.position.z, rand(-1.5, 1.5), rand(1.5, 3.5), rand(-1.5, 1.5), 0.55, 1, 0.3, 0xffd23f);
-        flyCoin(c.mesh.position.x, c.y, c.mesh.position.z);
-        updateCoinsUI(true);
-      }
+      if (d < r) pickCoin(c);
     }
   }
+}
+function pickCoin(c) {
+  c.state = 1; c.t = 0; c.rot0 = time * 3.2 + c.phase;
+  coinStreak = time - lastCoinT < 0.8 ? coinStreak + 1 : 1;
+  lastCoinT = time;
+  const v = runState.coinMult;
+  runState.coins += v; runState.rawCoins++;
+  save.coins += v; save.totalCoins += v;
+  Sound.coin(coinStreak);
+  coinRing(c.x, c.y + 0.1, c.z);
+  for (let j = 0; j < 10; j++) {
+    const a = j / 10 * TAU;
+    Particles.spawn('spark', c.x, c.y, c.z, Math.cos(a) * rand(1.4, 2.4), rand(1.2, 3.2), Math.sin(a) * rand(1.4, 2.4), rand(0.45, 0.7), 1.1, 0.25, j % 3 ? 0xffd23f : 0xffffff);
+  }
+  flyCoin(c.x, c.y, c.z, v, coinStreak);
+  updateCoinsUI(false);
 }
 
 function startFall() {
   state = 'falling';
   input.hold = false;
   const seg = segAt(car.segIdx);
-  // tumble outward over the edge: roll towards whichever side of the car is past the edge
-  let side = Math.random() < 0.5 ? 1 : -1;
+  // which way is "off the road"? the side it slid over, or the far end
+  let nx = Math.cos(car.phi), nz = -Math.sin(car.phi), mode = 'end', roadY = car.y;
   if (seg) {
-    const l = seg.local(car.x, car.z)[1];
-    const ox = seg.px * l, oz = seg.pz * l;
-    side = Math.sign(ox * Math.sin(car.psi) + oz * Math.cos(car.psi)) || side;
+    const [sl, ll] = seg.local(car.x, car.z);
+    if (Math.abs(ll) > ROAD_W / 2) { const sg = Math.sign(ll); nx = seg.px * sg; nz = seg.pz * sg; mode = 'side'; }
+    else if (sl > seg.s1) { nx = seg.ux; nz = seg.uz; }
+    else { nx = -seg.ux; nz = -seg.uz; }
+    roadY = seg.height(clamp(sl, seg.s0, seg.s1));
   }
-  car.rollRate = rand(3.0, 4.2) * side;
-  car.pitchRate = rand(-2.6, -1.2);
-  car.vy = 0.8;
+  // express that direction in the car's frame (+X nose, +Z right side)
+  const side = nx * Math.sin(car.psi) + nz * Math.cos(car.psi);
+  const fwd = nx * Math.cos(car.psi) - nz * Math.sin(car.psi);
+  const spin = rand(3.4, 4.4);
+  car.rollRate = spin * side + rand(-0.3, 0.3);   // positive roll lowers the +Z side
+  car.pitchRate = -spin * fwd * 0.9;               // nose dips when it goes over the end
+  car.fallSeg = seg; car.fallMode = mode; car.fallRoadY = roadY;
+  car.fallExt = 0.3 * Math.abs(side) + 0.55 * Math.abs(fwd);
+  car.vx += nx * 0.9; car.vz += nz * 0.9;
+  car.vy = 0;
   runState.fell = true;
   cam.anchor = { x: car.x, y: car.y, z: car.z, y0: car.y };
   cam.shake = 0.3;
   // crumbs of road and dust kicked up at the edge
   const th = seg ? THEMES[seg.theme] : THEMES[0];
-  for (let i = 0; i < 10; i++) Particles.spawn('spark', car.x + rand(-0.3, 0.3), car.y + 0.05, car.z + rand(-0.3, 0.3), car.vx * 0.3 + rand(-1.5, 1.5), rand(1, 3), car.vz * 0.3 + rand(-1.5, 1.5), rand(0.6, 1), 1.6, 0.8, i % 2 ? th.a : th.side);
+  for (let i = 0; i < 12; i++) Particles.spawn('crumb', car.x + rand(-0.3, 0.3), car.y + 0.05, car.z + rand(-0.3, 0.3), nx * rand(0.5, 2) + rand(-1, 1), rand(1, 3), nz * rand(0.5, 2) + rand(-1, 1), rand(0.7, 1.1), 1, 1, i % 2 ? th.a : th.side);
   for (let i = 0; i < 6; i++) Particles.spawn('smoke', car.x + rand(-0.3, 0.3), car.y + 0.1, car.z + rand(-0.3, 0.3), rand(-0.6, 0.6), rand(0.3, 0.8), rand(-0.6, 0.6), rand(0.7, 1.1), 0.6, 2.2);
   Sound.fall();
   Sound.engine(false, 0, 0);
@@ -1867,8 +2059,6 @@ function doRevive() {
   while (segAt(i) && segAt(i).dir !== 0) i++;
   let seg = segAt(i);
   if (!seg) seg = segAt(car.segIdx);
-  // make sure segments around are up
-  for (let j = i - 1; j <= i + 4; j++) { const s = segAt(j); if (s && s.state !== 'idle') { s.state = 'rising'; s.anim = 0; s.delay = 0; s.group.visible = true; } }
   if (track.finishSeg && seg.index >= track.finishSeg.index) seg = segAt(car.segIdx);
   resetCar(seg, ROAD_W / 2 + 0.3);
   car.spawnT = 0;
@@ -2126,16 +2316,21 @@ function updateSky(dt) {
 /* =========================================================================
  * Per-frame visuals
  * ========================================================================= */
-let hudScoreShown = -1;
+let hudScoreShown = -1, lastProgress = -1;
+let renderAlpha = 0;
 function visualUpdate(dt) {
-  animateTrack(dt);
+  // interpolate between the last two physics steps so motion is smooth at any frame rate
+  const a = renderAlpha;
+  car.rx = lerp(car.px, car.x, a); car.ry = lerp(car.py, car.y, a); car.rz = lerp(car.pz, car.z, a); car.rpsi = lerp(car.ppsi, car.psi, a);
+  updateCoins(dt);
+  updateRings(dt);
   Particles.update(dt);
   Skids.update(time);
   updateSky(dt);
 
   // car transform
-  carRoot.position.set(car.x, car.y, car.z);
-  carRoot.rotation.y = car.psi;
+  carRoot.position.set(car.rx, car.ry, car.rz);
+  carRoot.rotation.y = car.rpsi;
   if (car.spawnT < 1) {
     // drop onto the road with a bounce
     const before = car.spawnT;
@@ -2150,13 +2345,7 @@ function visualUpdate(dt) {
   if (falling) {
     carTilt.rotation.x = car.tumbleX; carTilt.rotation.z = car.tumbleZ;
   } else {
-    const seg = segAt(car.segIdx);
-    let pitch = 0;
-    if (seg) {
-      const s = seg.local(car.x, car.z)[0];
-      const dir = Math.cos(car.phi - seg.ang);
-      pitch = Math.atan((seg.height(s + 0.35) - seg.height(s - 0.35)) / 0.7) * dir;
-    }
+    const pitch = car.slope;
     const rollTarget = clamp((car.psi - car.phi) * 0.45, -0.16, 0.16);
     car.roll = damp(car.roll, rollTarget, 10, dt);
     car.pitch = damp(car.pitch, pitch, 14, dt);
@@ -2174,28 +2363,30 @@ function visualUpdate(dt) {
     car.prevSpeed = car.speed;
     animateCar(carKit, dt, { t: time, speed: car.speed, slip: falling ? 0 : car.slip, lean: falling ? 0 : car.psi - car.phi, accel: clamp(accel, -20, 20) });
   }
-  blobShadow.position.set(car.x, car.y + 0.02, car.z);
-  blobShadow.rotation.z = car.psi;
-  blobShadow.visible = !save.settings.quality && !falling;
+  blobShadow.position.set(car.rx, car.ry + 0.02, car.rz);
+  blobShadow.rotation.z = car.rpsi;
+  blobShadow.visible = !gfx.shadows && !falling;
 
   // engine audio
   const driving = state === 'playing';
   Sound.engine(driving, car.speed, clamp((car.slip - 0.04) * 3, 0, 1));
 
-  // clouds
-  for (const c of clouds) {
-    c.position.x += c.userData.vx * dt;
-    const dx = c.position.x - cam.look.x, dz = c.position.z - cam.look.z;
-    if (Math.hypot(dx, dz) > 70 || (dx - dz) < -40) placeCloud(c, cam.look, true);
+  // clouds: recycle the ones that have scrolled out of view
+  for (let i = 0; i < clouds.length; i++) {
+    const dx = clouds[i].x - cam.look.x, dz = clouds[i].z - cam.look.z;
+    if (Math.hypot(dx, dz) > 72 || (dx - dz) < -42) placeCloud(i, cam.look, true);
   }
 
   updateCamera(dt, false);
 
   if (state === 'playing' && currentMode === 'level' && track.level) {
     const end = track.finishSeg ? track.finishSeg.pathStart + track.finishSeg.finishS : track.level.len + 4;
-    const k = clamp(pathPos() / end, 0, 1);
-    $('#hud-level-fill').style.width = (k * 100).toFixed(1) + '%';
-    $('#hud-level-car').style.left = (k * 100).toFixed(1) + '%';
+    const k = Math.round(clamp(pathPos() / end, 0, 1) * 400) / 4;
+    if (k !== lastProgress) {
+      lastProgress = k;
+      $('#hud-level-fill').style.width = k + '%';
+      $('#hud-level-car').style.left = k + '%';
+    }
   }
   if (state === 'playing') {
     updateHud(false);
@@ -2244,21 +2435,41 @@ function toast(big, small) {
   clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 1900);
 }
 const projV = new T.Vector3();
-function flyCoin(x, y, z) {
+let hudCoinRect = null;
+window.addEventListener('resize', () => { hudCoinRect = null; });
+function flyCoin(x, y, z, value, streak) {
   const fx = $('#fx');
-  if (fx.childElementCount > 14) return;
-  projV.set(x, y, z).project(camera);
+  projV.set(x, y + 0.3, z).project(camera);
   const sx = (projV.x * 0.5 + 0.5) * window.innerWidth, sy = (-projV.y * 0.5 + 0.5) * window.innerHeight;
-  const target = $('#hud-coins .coin').getBoundingClientRect();
+  // "+1" pop (with a streak counter for chains of coins)
+  const pop = document.createElement('div');
+  pop.className = 'coin-pop' + (streak >= 3 ? ' hot' : '');
+  pop.innerHTML = '+' + value + (streak >= 3 ? ' <small>x' + streak + '</small>' : '');
+  pop.style.left = sx + 'px'; pop.style.top = sy + 'px';
+  fx.appendChild(pop);
+  setTimeout(() => pop.remove(), 820);
+  if (fx.getElementsByClassName('fly-coin').length > 10 || !Element.prototype.animate) return;
+  if (!hudCoinRect) hudCoinRect = $('#hud-coins .coin').getBoundingClientRect();
+  const tx = hudCoinRect.left + hudCoinRect.width / 2, ty = hudCoinRect.top + hudCoinRect.height / 2;
+  // a curved flight: arcs out and up, then swoops into the counter while flipping
+  const qx = (sx + tx) / 2 + rand(-80, 80), qy = Math.min(sy, ty) - rand(60, 140);
+  const frames = [];
+  for (let i = 0; i <= 12; i++) {
+    const k = i / 12, a = (1 - k) * (1 - k), b = 2 * (1 - k) * k, c = k * k;
+    const px = a * sx + b * qx + c * tx, py = a * sy + b * qy + c * ty;
+    const sc = k < 0.18 ? 0.5 + k * 4.4 : 1.3 - (k - 0.18) * 0.55;
+    frames.push({ transform: `translate(${(px - 13).toFixed(1)}px, ${(py - 13).toFixed(1)}px) scale(${sc.toFixed(3)}) rotateY(${Math.round(k * 900)}deg)`, opacity: k > 0.9 ? 0.7 : 1 });
+  }
   const el = document.createElement('i');
   el.className = 'coin fly-coin';
-  el.style.transform = `translate(${sx - 11}px, ${sy - 11}px) scale(1.2)`;
   fx.appendChild(el);
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    el.style.transform = `translate(${target.left}px, ${target.top}px) scale(.8)`;
-    el.style.opacity = '0.4';
-  }));
-  setTimeout(() => el.remove(), 650);
+  const an = el.animate(frames, { duration: 640, easing: 'cubic-bezier(.45,0,.55,1)' });
+  an.onfinish = () => {
+    el.remove();
+    const p = $('#hud-coins');
+    p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');
+    $$('[data-coins-run]').forEach(e => { e.textContent = fmt(runState.coins); });
+  };
 }
 function confetti() {
   const fx = $('#fx');
@@ -2303,6 +2514,15 @@ function showScreen(name) {
 /* =========================================================================
  * Boosters & upgrades
  * ========================================================================= */
+const ICONS = {
+  double: '<svg viewBox="0 0 24 24"><text x="12" y="17.5" text-anchor="middle" font-size="15" font-family="Lilita One, Arial Black, sans-serif">2&#215;</text></svg>',
+  insurance: '<svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3zm-1.2 14.2L7 12.4l1.4-1.4 2.4 2.4 4.8-4.8L17 10l-6.2 6.2z"/></svg>',
+  coinrush: '<svg viewBox="0 0 24 24"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 9.5c0 1.7 2.7 3 6 3s6-1.3 6-3V12c0 1.7-2.7 3-6 3s-6-1.3-6-3V9.5zm0 5c0 1.7 2.7 3 6 3s6-1.3 6-3V17c0 1.7-2.7 3-6 3s-6-1.3-6-3v-2.5z"/><circle cx="17.5" cy="15.5" r="4.5" opacity=".85"/></svg>',
+  headstart: '<svg viewBox="0 0 24 24"><path d="M13.5 2.5c3.6.3 7.7 4.4 8 8l-6.7 6.7-8-8 6.7-6.7zM15 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5.8 10.6l7.6 7.6-2 2-2.1-.7-1.4 1.4-2.3-2.3 1.4-1.4-.7-2.1-2 .9L3 14l2.8-3.4zM4 17l3 3-3.5 1.5L4 17z"/></svg>',
+  traction: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3.5a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13zm0 3a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM12 1.5l1.2 2.6h-2.4zm0 21l-1.2-2.6h2.4zM1.5 12l2.6-1.2v2.4zm21 0-2.6 1.2v-2.4z"/></svg>',
+  magnet: '<svg viewBox="0 0 24 24"><path d="M4 3h5v8a3 3 0 0 0 6 0V3h5v8a8 8 0 0 1-16 0V3zm1.5 1.5v3h2v-3h-2zm11 0v3h2v-3h-2z"/></svg>',
+  box: '<svg viewBox="0 0 24 24"><path d="M12 2 3 6.5v11L12 22l9-4.5v-11L12 2zm0 2.2 6.6 3.3L12 10.8 5.4 7.5 12 4.2zM5 9.1l6 3v7.6l-6-3V9.1zm14 0v7.6l-6 3v-7.6l6-3z"/></svg>'
+};
 const BOOSTERS = [
   { id: 'double', name: 'Double Score', short: '2x SCORE', price: 60, color: '#ff4f81', icon: '2x', desc: 'Every point counts twice for one run.', apply: r => { r.mult = 2; } },
   { id: 'insurance', name: 'Insurance', short: 'INSURED', price: 80, color: '#3ea0f0', icon: '+1', desc: 'Survive one fall for free.', apply: r => { r.insurance = true; } },
@@ -2310,9 +2530,21 @@ const BOOSTERS = [
   { id: 'headstart', name: 'Head Start', short: 'HEAD START', price: 40, color: '#3cc44a', icon: '>>', desc: 'Autopilot drives the first 300 points.', apply: r => { r.headstart = true; } }
 ];
 const UPGRADES = [
-  { id: 'traction', name: 'Traction', color: '#9b5cff', icon: 'T', desc: 'Tyres grip harder: tighter, more controllable drifts.', costs: [120, 250, 450, 750, 1200] },
-  { id: 'magnet', name: 'Coin Magnet', color: '#e8303d', icon: 'U', desc: 'Pull in nearby coins from further away.', costs: [100, 220, 400, 650, 1000] }
+  { id: 'traction', name: 'Traction', color: '#9b5cff', icon: 'T', desc: 'Tyres grip harder: tighter, more controllable drifts.', costs: [120, 250, 450, 750, 1200], fx: l => l ? `+${l * 9}% grip` : 'Stock grip' },
+  { id: 'magnet', name: 'Coin Magnet', color: '#e8303d', icon: 'U', desc: 'Pull in nearby coins from further away.', costs: [100, 220, 400, 650, 1000], fx: l => l ? `${(1.24 + l * 0.7).toFixed(1)} m reach` : 'Off' }
 ];
+const BUNDLES = [
+  { id: 'starter', name: 'Starter Kit', desc: 'One of every booster to try them all.', items: { double: 1, insurance: 1, coinrush: 1, headstart: 1 }, price: 190 },
+  { id: 'survivor', name: 'Survivor Pack', desc: 'For long runs: 3 Insurance and 3 Head Starts.', items: { insurance: 3, headstart: 3 }, price: 300 },
+  { id: 'mega', name: 'Mega Crate', desc: 'Five of every booster. The best value in the shop.', items: { double: 5, insurance: 5, coinrush: 5, headstart: 5 }, price: 860 }
+];
+const bundleValue = b => Object.entries(b.items).reduce((t, [id, n]) => t + BOOSTERS.find(x => x.id === id).price * n, 0);
+function dailyDeal() {
+  const day = Math.floor(Date.now() / 86400000);
+  const b = BOOSTERS[(day * 7 + 3) % BOOSTERS.length];
+  const qty = 3, full = b.price * qty;
+  return { day, b, qty, full, price: Math.round(full * 0.6 / 5) * 5 };
+}
 
 function renderHudBoosters() {
   const el = $('#hud-boosters');
@@ -2325,7 +2557,7 @@ function renderHudBoosters() {
   list.forEach(b => {
     const c = document.createElement('div');
     c.className = 'hud-chip' + (b.id === 'insurance' && runState.insuranceUsed ? ' used' : '');
-    c.innerHTML = `<i style="background:${b.color}">${b.icon}</i>${b.short}`;
+    c.innerHTML = `<i>${ICONS[b.id]}</i>${b.short}`;
     el.appendChild(c);
   });
 }
@@ -2338,7 +2570,7 @@ function renderMenuBoosters() {
     if (!n) return;
     const c = document.createElement('button');
     c.className = 'b-chip ui' + (save.active[b.id] ? ' on' : '');
-    c.innerHTML = `<i style="background:${b.color}">${b.icon}</i>${b.name}<em>x${n}</em>`;
+    c.innerHTML = `<i>${ICONS[b.id]}</i>${b.name}<em>x${n}</em>`;
     c.title = save.active[b.id] ? 'Will be used next run (tap to keep)' : 'Tap to use next run';
     c.onclick = () => { save.active[b.id] = !save.active[b.id]; persist(); Sound.click(); renderMenuBoosters(); };
     el.appendChild(c);
@@ -2346,49 +2578,76 @@ function renderMenuBoosters() {
 }
 
 let shopTab = 'boosters';
+function spend(cost) {
+  if (save.coins < cost) { Sound.deny(); return false; }
+  save.coins -= cost; persist(); Sound.buy(); updateCoinsUI();
+  return true;
+}
+const priceHTML = n => `${fmt(n)} <i class="coin"></i>`;
 function renderShop() {
   $$('#shop .tab').forEach(t => t.classList.toggle('active', t.dataset.tab === shopTab));
+  // daily deal banner
+  const d = dailyDeal(), claimed = save.dealDay === d.day;
+  const msLeft = (d.day + 1) * 86400000 - Date.now();
+  $('#shop-deal').innerHTML = `<div class="deal-ico">${ICONS[d.b.id]}<em>x${d.qty}</em></div>
+    <div class="deal-body"><small>DAILY DEAL &middot; ends in ${Math.floor(msLeft / 3600000)}h ${Math.floor(msLeft % 3600000 / 60000)}m</small>
+      <b>${d.qty}&times; ${d.b.name}</b><span><s>${fmt(d.full)}</s> 40% off</span></div>
+    <button class="btn ui" ${claimed ? 'disabled' : ''}>${claimed ? 'Claimed' : priceHTML(d.price)}</button>`;
+  const dealBtn = $('#shop-deal button');
+  if (!claimed && save.coins < d.price) dealBtn.classList.add('disabled');
+  dealBtn.onclick = () => {
+    if (claimed || !spend(d.price)) return;
+    save.boosters[d.b.id] += d.qty; save.active[d.b.id] = true; save.dealDay = d.day; persist(); renderShop();
+  };
+
   const body = $('#shop-body');
   body.innerHTML = '';
+  const card = html => { const it = document.createElement('div'); it.className = 'item'; it.innerHTML = html; body.appendChild(it); return it; };
   if (shopTab === 'boosters') {
     BOOSTERS.forEach(b => {
-      const it = document.createElement('div');
-      it.className = 'item';
-      it.innerHTML = `<div class="item-ico" style="background:${b.color}">${b.icon}</div>
+      const five = Math.round(b.price * 5 * 0.85 / 5) * 5;
+      const it = card(`<div class="item-ico">${ICONS[b.id]}</div>
         <div class="item-body"><b>${b.name}</b><p>${b.desc}</p>
-        <div class="item-meta"><span class="owned">Owned: ${save.boosters[b.id]}</span>
-        <label class="use-toggle"><input type="checkbox" class="toggle sm" ${save.active[b.id] ? 'checked' : ''}> Use next run</label></div></div>
-        <button class="btn green ui">${b.price} <i class="coin"></i></button>`;
-      const btn = it.querySelector('button');
-      if (save.coins < b.price) btn.classList.add('disabled');
-      btn.onclick = () => {
-        if (save.coins < b.price) { Sound.deny(); return; }
-        save.coins -= b.price; save.boosters[b.id]++; save.active[b.id] = true; persist();
-        Sound.buy(); updateCoinsUI(); renderShop();
-      };
+          <div class="item-meta"><span class="chip-s">1 run</span><span class="chip-s owned-n">Owned &times;${save.boosters[b.id]}</span>
+          <label class="use-toggle"><input type="checkbox" class="toggle sm" ${save.active[b.id] ? 'checked' : ''}> Use next run</label></div></div>
+        <div class="item-buy"><button class="btn ui" data-q="1">${priceHTML(b.price)}</button><button class="btn small ui" data-q="5"><span class="q">&times;5</span> ${priceHTML(five)}</button></div>`);
+      it.querySelectorAll('button').forEach(btn => {
+        const q = +btn.dataset.q, cost = q === 5 ? five : b.price;
+        if (save.coins < cost) btn.classList.add('disabled');
+        btn.onclick = () => { if (!spend(cost)) return; save.boosters[b.id] += q; save.active[b.id] = true; persist(); renderShop(); };
+      });
       it.querySelector('input').onchange = e => { save.active[b.id] = e.target.checked; persist(); Sound.click(); };
-      body.appendChild(it);
     });
-  } else {
+    $('#shop-note').textContent = 'Boosters switched on are used up automatically at the start of your next run.';
+  } else if (shopTab === 'upgrades') {
     UPGRADES.forEach(u => {
-      const lvl = save.upgrades[u.id];
-      const max = lvl >= u.costs.length;
-      const cost = max ? 0 : u.costs[lvl];
-      const it = document.createElement('div');
-      it.className = 'item';
-      it.innerHTML = `<div class="item-ico" style="background:${u.color}">${u.icon}</div>
-        <div class="item-body"><b>${u.name}</b><p>${u.desc}</p>
-        <div class="item-meta"><div class="pips">${u.costs.map((_, i) => `<i class="${i < lvl ? 'on' : ''}"></i>`).join('')}</div></div></div>
-        <button class="btn green ui">${max ? 'MAX' : cost + ' <i class="coin"></i>'}</button>`;
+      const lvl = save.upgrades[u.id], max = lvl >= u.costs.length, cost = max ? 0 : u.costs[lvl];
+      const it = card(`<div class="item-ico">${ICONS[u.id]}</div>
+        <div class="item-body"><b>${u.name} <span class="lvl-tag">Lv ${lvl}/${u.costs.length}</span></b><p>${u.desc}</p>
+          <div class="item-meta"><div class="pips">${u.costs.map((_, i) => `<i class="${i < lvl ? 'on' : ''}"></i>`).join('')}</div>
+          <span class="fx-line">${u.fx(lvl)}${max ? '' : ` <span class="arrow-r">&rarr;</span> <b>${u.fx(lvl + 1)}</b>`}</span></div></div>
+        <div class="item-buy"><button class="btn ui">${max ? 'MAX' : priceHTML(cost)}</button></div>`);
       const btn = it.querySelector('button');
       if (max || save.coins < cost) btn.classList.add('disabled');
-      btn.onclick = () => {
-        if (max || save.coins < cost) { Sound.deny(); return; }
-        save.coins -= cost; save.upgrades[u.id]++; persist();
-        Sound.buy(); updateCoinsUI(); renderShop();
-      };
-      body.appendChild(it);
+      btn.onclick = () => { if (max || !spend(cost)) return; save.upgrades[u.id]++; persist(); renderShop(); };
     });
+    $('#shop-note').textContent = 'Upgrades are permanent and apply to every car.';
+  } else {
+    BUNDLES.forEach(bd => {
+      const value = bundleValue(bd), save_pct = Math.round((1 - bd.price / value) * 100);
+      const it = card(`<div class="item-ico bundle">${ICONS.box}<em>-${save_pct}%</em></div>
+        <div class="item-body"><b>${bd.name}</b><p>${bd.desc}</p>
+          <div class="item-meta contents">${Object.entries(bd.items).map(([id, n]) => `<span class="chip-s ico">${ICONS[id]}&times;${n}</span>`).join('')}</div></div>
+        <div class="item-buy"><s class="was">${fmt(value)}</s><button class="btn ui">${priceHTML(bd.price)}</button></div>`);
+      const btn = it.querySelector('button');
+      if (save.coins < bd.price) btn.classList.add('disabled');
+      btn.onclick = () => {
+        if (!spend(bd.price)) return;
+        for (const [id, n] of Object.entries(bd.items)) { save.boosters[id] += n; save.active[id] = true; }
+        persist(); renderShop();
+      };
+    });
+    $('#shop-note').textContent = 'Bundles add straight to your booster stock.';
   }
 }
 
@@ -2473,6 +2732,7 @@ function doSpin(paid) {
  * ========================================================================= */
 function renderSettings() {
   $$('[data-setting]').forEach(el => { el.checked = !!save.settings[el.dataset.setting]; });
+  $$('#gfx-seg button').forEach(b => b.classList.toggle('active', b.dataset.gfx === save.settings.gfx));
   $('#stats').innerHTML = `<div><small>BEST</small><b>${fmt(save.best)}</b></div><div><small>RUNS</small><b>${fmt(save.runs)}</b></div><div><small>CARS</small><b>${save.owned.length}/${CARS.length}</b></div>`;
 }
 $$('[data-setting]').forEach(el => {
@@ -2480,10 +2740,18 @@ $$('[data-setting]').forEach(el => {
     save.settings[el.dataset.setting] = el.checked;
     persist();
     $$(`[data-setting="${el.dataset.setting}"]`).forEach(o => { o.checked = el.checked; });
-    if (el.dataset.setting === 'quality') applyQuality();
     Sound.ensure(); Sound.apply(); Sound.click();
   });
 });
+$$('#gfx-seg button').forEach(b => b.addEventListener('click', () => {
+  const next = b.dataset.gfx;
+  if (next === save.settings.gfx) return;
+  const needReload = GFX[next].aa !== GFX[save.settings.gfx].aa; // anti-aliasing is fixed when the page starts
+  save.settings.gfx = next; persist();
+  Sound.click();
+  if (needReload) { location.reload(); return; }
+  applyQuality(); renderSettings();
+}));
 let resetArmed = false;
 $('#btn-reset').addEventListener('click', () => {
   if (!resetArmed) { resetArmed = true; $('#btn-reset').textContent = 'Tap again to confirm'; setTimeout(() => { resetArmed = false; $('#btn-reset').textContent = 'Reset progress'; }, 3000); return; }
@@ -2499,37 +2767,63 @@ $('#btn-reset').addEventListener('click', () => {
 /* =========================================================================
  * Garage
  * ========================================================================= */
-const garage = { scene: new T.Scene(), cam: new T.PerspectiveCamera(34, 1, 0.1, 100), holder: new T.Group(), idx: 0, model: null, active: false, rot: 0, pop: 1, thumbs: null };
+const CAR_TAGS = {
+  rookie: ['Racing stripes'], citrus: ['Roof sign'], patrol: ['Flashing light bar'], tuktuk: ['Swaying fringe', 'Three wheels'],
+  medic: ['Flashing lights'], scoops: ['Spinning cone'], fury: ['Twin exhausts'], ducky: ['Nodding duck'], pizza: ['Spinning sign'],
+  rally: ['Flapping mudflaps', 'Light pod'], trail: ['Open top'], woody: ['Surfboard'], camper: ['Roof luggage'],
+  blaze: ['Ladder', 'Light bar'], scholar: ['Swing-out stop sign'], tow: ['Swinging hook', 'Beacon'], frank: ['Giant hot dog'],
+  plow: ['Twin beacons', 'Plough blade'], bubble: ['Retro curves'], mixer: ['Rotating drum'], velvet: ['Stretched'],
+  kart: ['Leaning driver'], shark: ['Wagging tail', 'Dorsal fin'], sprinter: ['Front & rear wings'], harvest: ['Puffing chimney'],
+  hotrod: ['Pumping pistons', 'Side pipes'], dune: ['Flapping flag', 'Roll cage'], lowrider: ['Hydraulic hops'],
+  stomper: ['Bouncy suspension', 'Giant wheels'], party: ['Disco lights', 'Disco ball'], synth: ['Pulsing underglow'],
+  robo: ['Scanning visor', 'Springy antenna'], wedge: ['Neon trim'], rocket: ['Rocket flame'], hover: ['Hovers', 'Glowing pads'],
+  lava: ['Glowing cracks'], aurum: ['Solid gold'], ghost: ['See-through shell'], prism: ['Colour-shifting paint', 'Underglow']
+};
+const garage = { scene: new T.Scene(), cam: new T.PerspectiveCamera(34, 1, 0.1, 100), holder: new T.Group(), idx: 0, model: null, active: false, rot: 0.6, pop: 1, thumbs: null, filter: 'all', drag: null, dragT: -9 };
 (function buildGarage() {
   const g = garage.scene;
   const bg = document.createElement('canvas'); bg.width = 16; bg.height = 256;
   const ctx = bg.getContext('2d');
   const grd = ctx.createLinearGradient(0, 0, 0, 256);
-  grd.addColorStop(0, '#2a0b78'); grd.addColorStop(0.45, '#9b1fd6'); grd.addColorStop(0.75, '#ff2e9a'); grd.addColorStop(1, '#ff9a2e');
+  grd.addColorStop(0, '#0d1030'); grd.addColorStop(0.55, '#232a5c'); grd.addColorStop(1, '#3a2a4a');
   ctx.fillStyle = grd; ctx.fillRect(0, 0, 16, 256);
   g.background = new T.CanvasTexture(bg);
-  g.add(new T.HemisphereLight(0xffffff, 0x8a4a6a, 0.62));
-  const d = new T.DirectionalLight(0xffffff, 0.6); d.position.set(3, 6, 4); d.castShadow = true;
+  g.add(new T.HemisphereLight(0xffffff, 0x4a4a7a, 0.62));
+  const d = new T.DirectionalLight(0xffffff, 0.62); d.position.set(3, 6, 4); d.castShadow = true;
   d.shadow.mapSize.set(1024, 1024);
   Object.assign(d.shadow.camera, { left: -3, right: 3, top: 3, bottom: -3 });
   g.add(d);
-  const rim = new T.DirectionalLight(0xffb0d0, 0.35); rim.position.set(-4, 3, -4); g.add(rim);
-  const pod = new T.Mesh(new T.CylinderGeometry(1.45, 1.6, 0.22, 48), new T.MeshLambertMaterial({ color: 0x3a2350 }));
+  const rim = new T.DirectionalLight(0xffb070, 0.4); rim.position.set(-4, 3, -4); g.add(rim);
+  const pod = new T.Mesh(new T.CylinderGeometry(1.45, 1.6, 0.22, 48), new T.MeshLambertMaterial({ color: 0x1b1f3d }));
   pod.position.y = -0.11; pod.receiveShadow = true; g.add(pod);
-  const top = new T.Mesh(new T.CylinderGeometry(1.38, 1.38, 0.02, 48), new T.MeshLambertMaterial({ color: 0x51306e }));
+  const top = new T.Mesh(new T.CylinderGeometry(1.38, 1.38, 0.02, 48), new T.MeshLambertMaterial({ color: 0x2a3060 }));
   top.position.y = 0.0; top.receiveShadow = true; g.add(top);
-  const ring = new T.Mesh(new T.TorusGeometry(1.5, 0.03, 8, 64), new T.MeshBasicMaterial({ color: 0xffd23f }));
+  // floor grid lines on the podium
+  for (let i = -3; i <= 3; i++) {
+    const ln = new T.Mesh(new T.PlaneGeometry(0.012, 2.6), new T.MeshBasicMaterial({ color: 0x3d4580 }));
+    ln.rotation.x = -HALF_PI; ln.position.set(i * 0.38, 0.012, 0); g.add(ln);
+  }
+  const ring = new T.Mesh(new T.TorusGeometry(1.5, 0.03, 8, 64), new T.MeshBasicMaterial({ color: 0xff7a1a }));
   ring.rotation.x = HALF_PI; ring.position.y = -0.02; g.add(ring);
   garage.ring = ring;
-  // light beams sweeping behind the podium
-  garage.beams = [];
-  for (let i = 0; i < 5; i++) {
-    const b = new T.Mesh(new T.PlaneGeometry(0.5, 9), new T.MeshBasicMaterial({ color: [0x00d4ff, 0xff2e9a, 0xffd400, 0x7dff3a, 0xb14bff][i], transparent: true, opacity: 0.16, depthWrite: false, side: T.DoubleSide, blending: T.AdditiveBlending }));
-    b.position.set(-3 + i * 1.5, 3, -3.5); b.rotation.y = 0.78;
-    g.add(b); garage.beams.push(b);
-  }
+  // soft rarity-coloured glow under the car
+  const glowC = document.createElement('canvas'); glowC.width = glowC.height = 64;
+  const gg = glowC.getContext('2d'); const gr = gg.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, 'rgba(255,255,255,.55)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); gg.fillStyle = gr; gg.fillRect(0, 0, 64, 64);
+  garage.glow = new T.Mesh(new T.PlaneGeometry(3.2, 3.2), new T.MeshBasicMaterial({ map: new T.CanvasTexture(glowC), transparent: true, depthWrite: false, blending: T.AdditiveBlending }));
+  garage.glow.rotation.x = -HALF_PI; garage.glow.position.y = 0.015; g.add(garage.glow);
   g.add(garage.holder);
 })();
+
+// drag the turntable to rotate the car; it resumes spinning on its own after a moment
+canvas.addEventListener('pointerdown', e => { if (garage.active) { garage.drag = { x: e.clientX, v: 0 }; garage.dragT = time; } });
+window.addEventListener('pointermove', e => {
+  if (!garage.drag) return;
+  const dx = e.clientX - garage.drag.x;
+  garage.drag.x = e.clientX; garage.drag.v = dx;
+  garage.rot += dx * 0.012; garage.dragT = time;
+});
+window.addEventListener('pointerup', () => { if (garage.drag) { garage.spinV = garage.drag.v * 0.7; garage.drag = null; } });
 
 function openGarage() {
   garage.active = true;
@@ -2537,71 +2831,79 @@ function openGarage() {
   buildThumbs();
   showGarageCar(true);
 }
+function renderGarageGrid() {
+  const wrap = $('#g-thumbs');
+  wrap.innerHTML = '';
+  $$('[data-gfilter]').forEach(b => b.classList.toggle('active', b.dataset.gfilter === garage.filter));
+  CARS.forEach((def, i) => {
+    const owned = save.owned.includes(def.id);
+    if (garage.filter === 'owned' && !owned) return;
+    if (garage.filter === 'locked' && owned) return;
+    const b = document.createElement('button');
+    const eq = save.car === def.id;
+    b.className = 'gcar ui' + (owned ? '' : ' locked') + (i === garage.idx ? ' active' : '') + (eq ? ' equipped' : '');
+    b.style.setProperty('--tier', TIERS[def.tier].color);
+    b.innerHTML = (garage.thumbs && garage.thumbs[i] ? `<img alt="" src="${garage.thumbs[i]}">` : '<span class="ph"></span>') +
+      `<span class="gc-name">${def.name}</span>` +
+      `<span class="gc-price">${eq ? 'Equipped' : owned ? 'Owned' : `${fmt(def.price)} <i class="coin"></i>`}</span>`;
+    b.onclick = () => { garage.idx = i; Sound.click(); showGarageCar(false); };
+    wrap.appendChild(b);
+  });
+  const act = wrap.querySelector('.active');
+  if (act) act.scrollIntoView({ block: 'nearest' });
+}
 function showGarageCar(instant) {
   const def = CARS[garage.idx];
   if (garage.model) garage.holder.remove(garage.model.g);
   garage.model = buildCarModel(def.id);
   const L = garage.model.L;
-  const s = 1.55 / Math.max(1.05, L * 0.95);
-  garage.model.g.scale.setScalar(s);
+  garage.model.g.scale.setScalar(1.55 / Math.max(1.05, L * 0.95));
   garage.holder.add(garage.model.g);
   garage.pop = instant ? 1 : 0;
-  const owned = save.owned.includes(def.id);
+  const owned = save.owned.includes(def.id), eq = save.car === def.id;
   const tier = TIERS[def.tier];
-  $('#g-tier').textContent = tier.name; $('#g-tier').style.color = tier.color;
+  const tierEl = $('#g-tier');
+  tierEl.textContent = tier.name; tierEl.style.color = tier.color; tierEl.style.borderColor = tier.color;
+  garage.ring.material.color.set(tier.color);
+  garage.glow.material.color.set(tier.color);
+  $('#g-status').textContent = eq ? 'Equipped' : owned ? 'Owned' : 'Locked';
+  $('#g-status').className = 'g-status ' + (eq ? 'eq' : owned ? 'own' : 'lock');
   $('#g-name').textContent = def.name;
   $('#g-desc').textContent = def.desc;
+  $('#g-tags').innerHTML = (CAR_TAGS[def.id] || []).concat(['Suspension', 'Drift lights']).map(t => `<span class="chip-s">${t}</span>`).join('');
   const btn = $('#g-action');
-  btn.className = 'btn ui';
-  if (save.car === def.id) { btn.innerHTML = 'Equipped'; btn.classList.add('ghost'); }
-  else if (owned) { btn.innerHTML = 'Select'; btn.classList.add('green'); }
-  else { btn.innerHTML = `${def.price} <i class="coin"></i>`; if (save.coins < def.price) btn.classList.add('disabled'); }
-  $('#g-count').textContent = `${save.owned.length} / ${CARS.length} cars unlocked`;
-  $$('#g-thumbs .thumb').forEach((t, i) => {
-    t.classList.toggle('active', i === garage.idx);
-    t.classList.toggle('locked', !save.owned.includes(CARS[i].id));
-    const eq = t.querySelector('.eq'); if (eq) eq.style.display = CARS[i].id === save.car ? 'block' : 'none';
-  });
-  const act = $$('#g-thumbs .thumb')[garage.idx];
-  if (act) { const p = $('#g-thumbs'); p.scrollLeft = act.offsetLeft - p.clientWidth / 2 + act.clientWidth / 2; }
+  btn.className = 'btn big ui';
+  if (eq) { btn.innerHTML = 'Equipped'; btn.classList.add('disabled'); }
+  else if (owned) btn.innerHTML = 'Select';
+  else { btn.innerHTML = `Unlock &middot; ${priceHTML(def.price)}`; if (save.coins < def.price) btn.classList.add('disabled'); }
+  $('#g-need').textContent = !owned && save.coins < def.price ? `You need ${fmt(def.price - save.coins)} more coins` : '';
+  $('#g-count').textContent = `${save.owned.length} / ${CARS.length} cars`;
+  $('#g-count-bar').style.width = (save.owned.length / CARS.length * 100) + '%';
+  renderGarageGrid();
 }
 function buildThumbs() {
-  const wrap = $('#g-thumbs');
-  if (!garage.thumbs) {
-    garage.thumbs = [];
-    let r;
-    try {
-      r = new T.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
-      r.setSize(168, 132); r.setPixelRatio(1);
-      const sc2 = new T.Scene();
-      sc2.add(new T.HemisphereLight(0xffffff, 0x8a4a6a, 0.7));
-      const dl = new T.DirectionalLight(0xffffff, 0.55); dl.position.set(3, 6, 4); sc2.add(dl);
-      const cm = new T.PerspectiveCamera(30, 168 / 132, 0.1, 50);
-      for (const def of CARS) {
-        const k = buildCarModel(def.id);
-        const s = 1.2 / Math.max(1.05, k.L * 0.95);
-        k.g.scale.setScalar(s);
-        k.g.rotation.y = 0.7;
-        sc2.add(k.g);
-        cm.position.set(2.1, 1.45, 2.1); cm.lookAt(0, 0.22, 0);
-        r.render(sc2, cm);
-        garage.thumbs.push(r.domElement.toDataURL());
-        sc2.remove(k.g);
-      }
-    } catch (e) { /* thumbnails are optional */ }
-    if (r) { r.dispose(); if (r.forceContextLoss) r.forceContextLoss(); }
-  }
-  if (wrap.childElementCount !== CARS.length) {
-    wrap.innerHTML = '';
-    CARS.forEach((def, i) => {
-      const b = document.createElement('button');
-      b.className = 'thumb ui';
-      b.title = def.name;
-      b.innerHTML = (garage.thumbs[i] ? `<img alt="${def.name}" src="${garage.thumbs[i]}">` : `<span>${def.name}</span>`) + '<span class="eq"></span>';
-      b.onclick = () => { garage.idx = i; Sound.click(); showGarageCar(false); };
-      wrap.appendChild(b);
-    });
-  }
+  if (garage.thumbs) return;
+  garage.thumbs = [];
+  let r;
+  try {
+    r = new T.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+    r.setSize(168, 120); r.setPixelRatio(1);
+    const sc2 = new T.Scene();
+    sc2.add(new T.HemisphereLight(0xffffff, 0x6a6a9a, 0.72));
+    const dl = new T.DirectionalLight(0xffffff, 0.55); dl.position.set(3, 6, 4); sc2.add(dl);
+    const cm = new T.PerspectiveCamera(30, 168 / 120, 0.1, 50);
+    for (const def of CARS) {
+      const k = buildCarModel(def.id);
+      k.g.scale.setScalar(1.2 / Math.max(1.05, k.L * 0.95));
+      k.g.rotation.y = 0.7;
+      sc2.add(k.g);
+      cm.position.set(2.1, 1.35, 2.1); cm.lookAt(0, 0.22, 0);
+      r.render(sc2, cm);
+      garage.thumbs.push(r.domElement.toDataURL());
+      sc2.remove(k.g);
+    }
+  } catch (e) { /* thumbnails are optional */ }
+  if (r) { r.dispose(); if (r.forceContextLoss) r.forceContextLoss(); }
 }
 function garageAction() {
   const def = CARS[garage.idx];
@@ -2609,21 +2911,21 @@ function garageAction() {
   if (save.owned.includes(def.id)) {
     save.car = def.id; persist(); setPlayerCar(def.id); Sound.click();
   } else {
-    if (save.coins < def.price) { Sound.deny(); return; }
-    save.coins -= def.price; save.owned.push(def.id); save.car = def.id; persist();
-    setPlayerCar(def.id); Sound.buy(); updateCoinsUI(); confetti();
+    if (!spend(def.price)) return;
+    save.owned.push(def.id); save.car = def.id; persist();
+    setPlayerCar(def.id); confetti();
   }
   showGarageCar(true);
 }
 function updateGarage(dt) {
-  garage.rot += dt * 0.5;
-  if (garage.ring) garage.ring.material.color.setHSL((time * 0.08) % 1, 1, 0.6);
-  if (garage.beams) garage.beams.forEach((b, i) => { b.rotation.z = Math.sin(time * 0.6 + i * 1.3) * 0.45; });
+  if (!garage.drag && time - garage.dragT > 1.6) garage.rot += dt * 0.45;
+  if (!garage.drag && garage.spinV) { garage.rot += garage.spinV * 0.012; garage.spinV *= Math.exp(-dt * 5); if (Math.abs(garage.spinV) < 0.05) garage.spinV = 0; }
   garage.holder.rotation.y = garage.rot;
   garage.pop = Math.min(1, garage.pop + dt * 2.6);
   const p = easeOutBack(garage.pop);
   garage.holder.scale.setScalar(0.4 + 0.6 * p);
   garage.holder.position.y = (1 - p) * 0.8;
+  garage.glow.material.opacity = 0.55 + Math.sin(time * 2) * 0.12;
   if (garage.model) {
     garage.model.wheels.forEach(w => { w.spin.rotation.z -= dt * 2.5; });
     // a gentle showroom 'drift' so every car's animations are visible
@@ -2631,9 +2933,15 @@ function updateGarage(dt) {
     animateCar(garage.model, dt, { t: time, speed: 4, slip: Math.abs(lean) * 0.5, lean, accel: Math.cos(time * 0.9) * 2 });
   }
   const aspect = window.innerWidth / Math.max(1, window.innerHeight);
-  const dist = aspect < 1 ? 6.4 + (1 - aspect) * 4 : 5.6;
+  const dist = aspect < 1 ? 6.6 + (1 - aspect) * 3 : 5.4;
   garage.cam.position.set(dist * 0.72, dist * 0.42, dist * 0.72);
-  garage.cam.lookAt(0, aspect < 1 ? -0.1 : -0.35, 0);
+  garage.cam.lookAt(0, -0.2, 0);
+}
+function layoutGarageCam() {
+  const w = window.innerWidth, h = window.innerHeight;
+  // keep the car in the open space between the info card and the car list
+  if (w / h >= 1.15) garage.cam.setViewOffset(w, h, Math.min(260, w * 0.16), -h * 0.04, w, h);
+  else garage.cam.setViewOffset(w, h, 0, h * 0.24, w, h);
 }
 
 /* =========================================================================
@@ -2648,6 +2956,9 @@ function refreshMenu() {
   $('#mc-endless-best').textContent = 'Best ' + fmt(save.best);
   let stars = 0; for (const k in save.levelStars) stars += save.levelStars[k];
   $('#mc-level-sub').textContent = 'Level ' + save.level + ' \u00b7 ' + stars + ' \u2605';
+  $('#menu-stars').textContent = stars;
+  $('#nav-garage-sub').textContent = save.owned.length + '/' + CARS.length;
+  $('#nav-spin-sub').textContent = freeSpinReady() ? 'Free spin!' : 'Try your luck';
   renderMenuBoosters();
   updateCoinsUI();
   $('#spin-badge').classList.toggle('on', freeSpinReady());
@@ -2725,6 +3036,12 @@ on('#menu-next', () => cycleOwned(1));
 on('#g-prev', () => { garage.idx = (garage.idx - 1 + CARS.length) % CARS.length; Sound.click(); showGarageCar(false); });
 on('#g-next', () => { garage.idx = (garage.idx + 1) % CARS.length; Sound.click(); showGarageCar(false); });
 on('#g-action', garageAction);
+$$('[data-gfilter]').forEach(b => b.addEventListener('click', () => { garage.filter = b.dataset.gfilter; Sound.click(); renderGarageGrid(); }));
+window.addEventListener('keydown', e => {
+  if (!garage.active) return;
+  if (e.code === 'ArrowLeft') $('#g-prev').click();
+  else if (e.code === 'ArrowRight') $('#g-next').click();
+});
 $$('#shop .tab').forEach(t => t.addEventListener('click', () => { shopTab = t.dataset.tab; Sound.click(); renderShop(); }));
 on('#spin-free', () => doSpin(false));
 on('#spin-paid', () => doSpin(true));
@@ -2760,8 +3077,10 @@ function resize() {
   camera.aspect = w / h;
   camera.fov = w / h < 1 ? 46 : 40;
   camera.updateProjectionMatrix();
+  pointScale.value = h * renderer.getPixelRatio() / (2 * Math.tan(camera.fov * PI / 360));
   garage.cam.aspect = w / h;
   garage.cam.fov = w / h < 1 ? 44 : 34;
+  layoutGarageCam();
   garage.cam.updateProjectionMatrix();
 }
 window.addEventListener('resize', resize);
@@ -2782,6 +3101,7 @@ function frame(now) {
     let n = 0;
     while (acc >= STEP && n < 12) { fixedUpdate(STEP); acc -= STEP; n++; }
     if (n >= 12) acc = 0;
+    renderAlpha = acc / STEP;
     visualUpdate(dt);
   }
   renderer.render(scene, camera);
@@ -2793,7 +3113,7 @@ function frame(now) {
 function boot() {
   setPlayerCar(save.car);
   applyQuality();
-  clouds.forEach(c => placeCloud(c, new T.Vector3(0, 0, 0), false));
+  clouds.forEach((c, i) => placeCloud(i, new T.Vector3(0, 0, 0), false));
   enterAttract();
   refreshMenu();
   requestAnimationFrame(frame);
@@ -2815,6 +3135,7 @@ window.__driftMaster = {
   setNoise(v) { apNoise = v; apErr = 0; },
   get level() { return { n: currentLevel, finished: state === 'finished', coins: runState.rawCoins, total: track.coinTotal, stars: save.levelStars[currentLevel] || 0, unlocked: save.level }; },
   skids() { return Skids.debug(); },
+  info() { return { calls: renderer.info.render.calls, tris: renderer.info.render.triangles, geos: renderer.info.memory.geometries, segs: track.segs.length, coins: coinList.length }; },
   segLens() { return track.segs.map(sg => +sg.len.toFixed(2)); },
   simulate(seconds) {
     // fast-forward the simulation with the autopilot at the wheel (used for balancing tests)
@@ -2822,7 +3143,8 @@ window.__driftMaster = {
     if (state === 'ready') beginDriving();
     autopilot = true;
     const steps = Math.floor(seconds / STEP);
-    for (let i = 0; i < steps && state === 'playing'; i++) { fixedUpdate(STEP); if (i % 12 === 0) animateTrack(STEP * 12); }
+    for (let i = 0; i < steps && state === 'playing'; i++) fixedUpdate(STEP);
+    snapCar();
     const info = { state, score: runState.score, dist: car.dist, speed: car.speed };
     if (state !== 'playing') {
       const segs = [];

@@ -27,12 +27,20 @@ An endless one-button drifting game in a single HTML file. It runs offline in an
 - Skid marks, tyre smoke, coin sparkles, body roll, wheel spin and steering, plus camera shake when you fall.
 - **43 original cars**, all modelled in code, across six rarity tiers. Every car has suspension bounce, body lean, steering and spinning wheels, drift-reactive brake lights and exhaust puffs. Many also have their own moving parts: a turning cement-mixer drum, a swinging tow hook, cycling disco lights, a rocket flame, glowing hover pads, pumping hot-rod pistons, a hopping lowrider, a nodding rubber duck, a spinning pizza sign and a colour-shifting body.
 - Falls tip the car over the edge before it tumbles, with road crumbs and dust. The car drops onto the road with a bounce at the start of a run and after a revive.
+- **Shop**: a daily deal, three bundles, five-packs of each booster, and upgrades that preview their next level.
 - **Boosters**: Double Score, Insurance, Coin Rush and Head Start.
 - **Upgrades**: Traction and Coin Magnet.
 - **Lucky Spin**: a free spin every 4 hours, or a paid spin with coins.
 - A revive offer when you fall, a game-over screen with a score count-up, and confetti for a new best.
 - Synthesised engine and skid sounds, sound effects and an original chiptune loop, all made with WebAudio.
 - Progress is saved in `localStorage`.
+
+## Performance
+Drift Master targets low-end computers.
+- **Graphics presets:** Low, Medium (the default) and High, chosen in Settings.
+- **Draw calls:** coins and clouds are instanced, all particles render as two point clouds, and each car's static parts are merged at build time. A busy frame went from about 330 draw calls to about 75.
+- **Smooth motion:** physics runs at a fixed 120 Hz and the render interpolates between steps, so movement stays smooth at any frame rate.
+- **Road geometry:** the road is built whole, well beyond the fog. Neighbouring segments share edge vertices and leave out buried faces, so there is no pop-in and no cracks.
 
 ## Development
 `tools/min-length-table.js` regenerates the segment-length safety table (`node tools/min-length-table.js 0.17`).

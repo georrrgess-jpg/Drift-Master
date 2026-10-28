@@ -46,8 +46,15 @@
 <!-- ============ MAIN MENU ============ -->
 <div id="menu" class="layer screen">
   <div class="topbar">
-    <div class="pill coins"><i class="coin"></i><b data-coins>0</b></div>
-    <div class="pill best"><svg viewBox="0 0 24 24"><path d="M7 3h10v3h3a1 1 0 0 1 1 1c0 3.2-2 5.6-4.7 6A6 6 0 0 1 13 15.9V19h3v2H8v-2h3v-3.1A6 6 0 0 1 7.7 13C5 12.6 3 10.2 3 7a1 1 0 0 1 1-1h3V3zm10 5v3.8c1.2-.5 2-1.8 2-3.8h-2zM5 8c0 2 .8 3.3 2 3.8V8H5z"/></svg><b id="menu-best">0</b></div>
+    <div class="stat-group">
+      <div class="pill coins"><i class="coin"></i><b data-coins>0</b></div>
+      <div class="pill"><span class="star-ico">&#9733;</span><b id="menu-stars">0</b></div>
+      <div class="pill best"><svg viewBox="0 0 24 24"><path d="M7 3h10v3h3a1 1 0 0 1 1 1c0 3.2-2 5.6-4.7 6A6 6 0 0 1 13 15.9V19h3v2H8v-2h3v-3.1A6 6 0 0 1 7.7 13C5 12.6 3 10.2 3 7a1 1 0 0 1 1-1h3V3zm10 5v3.8c1.2-.5 2-1.8 2-3.8h-2zM5 8c0 2 .8 3.3 2 3.8V8H5z"/></svg><b id="menu-best">0</b></div>
+    </div>
+    <div class="icon-group">
+      <button class="icon-btn ui" data-open="help" aria-label="How to play"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 16h-2v-2h2v2zm2.1-7.7l-.9.9c-.8.8-1.2 1.4-1.2 2.8h-2v-.5c0-1.1.4-2.1 1.2-2.8l1.2-1.3A2 2 0 0 0 12 6a2 2 0 0 0-2 2H8a4 4 0 1 1 7.1 2.3z"/></svg></button>
+      <button class="icon-btn ui" data-open="settings" aria-label="Settings"><svg viewBox="0 0 24 24"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5L19.4 13zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg></button>
+    </div>
   </div>
 
   <div class="logo-wrap">
@@ -59,32 +66,31 @@
   </div>
 
   <div class="menu-bottom">
-    <div class="car-select">
-      <button class="arrow ui" id="menu-prev" aria-label="Previous car"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="car-label"><small id="menu-car-tier">COMMON</small><span id="menu-car-name">Rookie</span></div>
-      <button class="arrow ui" id="menu-next" aria-label="Next car"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="car-card">
+      <button class="arrow ui" id="menu-prev" aria-label="Previous car"><svg class="chev" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="car-label">
+        <small id="menu-car-tier">COMMON</small>
+        <span id="menu-car-name">Rookie</span>
+      </div>
+      <button class="arrow ui" id="menu-next" aria-label="Next car"><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
     <div id="menu-boosters" class="booster-row"></div>
     <div class="mode-cards">
-      <button class="mode-card endless ui" id="btn-endless">
-        <span class="mc-shine"></span>
-        <svg class="mc-ico" viewBox="0 0 48 24"><path d="M12 4a8 8 0 1 0 5.66 13.66L24 11.3l6.34 6.36A8 8 0 1 0 30.34 6.34L24 12.7l-6.34-6.36A7.96 7.96 0 0 0 12 4zm0 4a4 4 0 0 1 2.83 1.17L21.17 12l-6.34 2.83A4 4 0 1 1 12 8zm24 0a4 4 0 1 1-2.83 6.83L26.83 12l6.34-2.83A4 4 0 0 1 36 8z"/></svg>
-        <span class="mc-title">ENDLESS</span>
-        <span class="mc-sub" id="mc-endless-best">Best 0</span>
+      <button class="mode-card ui" id="btn-endless">
+        <span class="mc-ico"><svg viewBox="0 0 48 24"><path d="M12 4a8 8 0 1 0 5.66 13.66L24 11.3l6.34 6.36A8 8 0 1 0 30.34 6.34L24 12.7l-6.34-6.36A7.96 7.96 0 0 0 12 4zm0 4a4 4 0 0 1 2.83 1.17L21.17 12l-6.34 2.83A4 4 0 1 1 12 8zm24 0a4 4 0 1 1-2.83 6.83L26.83 12l6.34-2.83A4 4 0 0 1 36 8z"/></svg></span>
+        <span class="mc-text"><span class="mc-title">Endless</span><span class="mc-sub" id="mc-endless-best">Best 0</span></span>
+        <span class="mc-go"><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></span>
       </button>
-      <button class="mode-card levels ui" id="btn-levels">
-        <span class="mc-shine"></span>
-        <svg class="mc-ico" viewBox="0 0 24 24"><path d="M5 2h2v20H5V2zm3 1h11l-2.5 4L19 11H8V3z"/></svg>
-        <span class="mc-title">LEVELS</span>
-        <span class="mc-sub" id="mc-level-sub">Level 1</span>
+      <button class="mode-card ui" id="btn-levels">
+        <span class="mc-ico"><svg viewBox="0 0 24 24"><path d="M5 2h2v20H5V2zm3 1h11l-2.5 4L19 11H8V3z"/></svg></span>
+        <span class="mc-text"><span class="mc-title">Levels</span><span class="mc-sub" id="mc-level-sub">Level 1</span></span>
+        <span class="mc-go"><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></span>
       </button>
     </div>
     <div class="menu-nav">
-      <button class="nav-btn ui" data-open="garage"><svg viewBox="0 0 24 24"><path d="M5 11l1.6-4.3A2 2 0 0 1 8.5 5.4h7a2 2 0 0 1 1.9 1.3L19 11h.5A1.5 1.5 0 0 1 21 12.5V17a1 1 0 0 1-1 1h-1v1.5a1.5 1.5 0 0 1-3 0V18H8v1.5a1.5 1.5 0 0 1-3 0V18H4a1 1 0 0 1-1-1v-4.5A1.5 1.5 0 0 1 4.5 11H5zm2.2 0h9.6l-1.1-3.1a.8.8 0 0 0-.7-.5H9a.8.8 0 0 0-.7.5L7.2 11zM6.5 15.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5zm11 0a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5z"/></svg><span>Garage</span></button>
-      <button class="nav-btn ui" data-open="shop"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6.5L10 22l9-12h-6.5L13 2z"/></svg><span>Shop</span></button>
-      <button class="nav-btn ui" data-open="spin"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 2.07A8 8 0 0 1 19.93 11H13V4.07zM11 4.07V11H4.07A8 8 0 0 1 11 4.07zM4.07 13H11v6.93A8 8 0 0 1 4.07 13zM13 19.93V13h6.93A8 8 0 0 1 13 19.93z"/></svg><span>Spin</span><i class="badge" id="spin-badge">!</i></button>
-      <button class="nav-btn ui" data-open="settings"><svg viewBox="0 0 24 24"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5L19.4 13zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg><span>Settings</span></button>
-      <button class="nav-btn ui" data-open="help"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 16h-2v-2h2v2zm2.1-7.7l-.9.9c-.8.8-1.2 1.4-1.2 2.8h-2v-.5c0-1.1.4-2.1 1.2-2.8l1.2-1.3A2 2 0 0 0 12 6a2 2 0 0 0-2 2H8a4 4 0 1 1 7.1 2.3z"/></svg><span>How to</span></button>
+      <button class="nav-btn ui" data-open="garage"><svg viewBox="0 0 24 24"><path d="M5 11l1.6-4.3A2 2 0 0 1 8.5 5.4h7a2 2 0 0 1 1.9 1.3L19 11h.5A1.5 1.5 0 0 1 21 12.5V17a1 1 0 0 1-1 1h-1v1.5a1.5 1.5 0 0 1-3 0V18H8v1.5a1.5 1.5 0 0 1-3 0V18H4a1 1 0 0 1-1-1v-4.5A1.5 1.5 0 0 1 4.5 11H5zm2.2 0h9.6l-1.1-3.1a.8.8 0 0 0-.7-.5H9a.8.8 0 0 0-.7.5L7.2 11zM6.5 15.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5zm11 0a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5z"/></svg><span>Garage</span><em id="nav-garage-sub">1/43</em></button>
+      <button class="nav-btn ui" data-open="shop"><svg viewBox="0 0 24 24"><path d="M7 7V6a5 5 0 0 1 10 0v1h2.2a1 1 0 0 1 1 .9l1 12A2 2 0 0 1 19.2 22H4.8a2 2 0 0 1-2-2.1l1-12a1 1 0 0 1 1-.9H7zm2 0h6V6a3 3 0 0 0-6 0v1zm-1 3a1 1 0 0 0-1 1 5 5 0 0 0 10 0 1 1 0 0 0-2 0 3 3 0 0 1-6 0 1 1 0 0 0-1-1z"/></svg><span>Shop</span><em>Boosters</em></button>
+      <button class="nav-btn ui" data-open="spin"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 2.07A8 8 0 0 1 19.93 11H13V4.07zM11 4.07V11H4.07A8 8 0 0 1 11 4.07zM4.07 13H11v6.93A8 8 0 0 1 4.07 13zM13 19.93V13h6.93A8 8 0 0 1 13 19.93z"/></svg><span>Lucky Spin</span><em id="nav-spin-sub">Free</em><i class="badge" id="spin-badge">!</i></button>
     </div>
   </div>
 </div>
@@ -92,23 +98,34 @@
 <!-- ============ GARAGE ============ -->
 <div id="garage" class="layer screen">
   <div class="screen-head">
-    <button class="back-btn ui" data-back aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="back-btn ui" data-back aria-label="Back"><svg class="chev" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
     <h2>Garage</h2>
+    <div class="collection"><span id="g-count">1 / 43</span><div class="col-bar"><i id="g-count-bar"></i></div></div>
     <div class="pill coins"><i class="coin"></i><b data-coins>0</b></div>
   </div>
-  <button class="big-arrow left ui" id="g-prev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-  <button class="big-arrow right ui" id="g-next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-  <div class="garage-panel panel">
-    <div class="g-top">
-      <div class="g-info">
-        <div class="g-tier" id="g-tier">COMMON</div>
-        <div class="g-name" id="g-name">Rookie</div>
-        <div class="g-desc" id="g-desc"></div>
-      </div>
-      <button class="btn ui" id="g-action">Select</button>
+  <div class="g-stage-hint">Drag to rotate</div>
+  <div class="g-card panel">
+    <div class="g-card-top">
+      <span class="g-tier" id="g-tier">COMMON</span>
+      <span class="g-status" id="g-status"></span>
     </div>
-    <div class="thumbs" id="g-thumbs"></div>
-    <div class="g-count" id="g-count"></div>
+    <div class="g-name-row">
+      <button class="arrow ui" id="g-prev" aria-label="Previous car"><svg class="chev" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="g-name" id="g-name">Rookie</div>
+      <button class="arrow ui" id="g-next" aria-label="Next car"><svg class="chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="g-desc" id="g-desc"></div>
+    <div class="g-tags" id="g-tags"></div>
+    <button class="btn big ui" id="g-action">Select</button>
+    <div class="g-need" id="g-need"></div>
+  </div>
+  <div class="g-list panel">
+    <div class="g-filters">
+      <button class="chip ui active" data-gfilter="all">All</button>
+      <button class="chip ui" data-gfilter="owned">Owned</button>
+      <button class="chip ui" data-gfilter="locked">Locked</button>
+    </div>
+    <div class="g-grid" id="g-thumbs"></div>
   </div>
 </div>
 
@@ -148,17 +165,20 @@
 
 <!-- ============ SHOP ============ -->
 <div id="shop" class="layer screen modal">
-  <div class="panel sheet">
+  <div class="panel sheet shop-sheet">
     <div class="sheet-head">
       <h2>Shop</h2>
       <div class="pill coins small"><i class="coin"></i><b data-coins>0</b></div>
       <button class="x-btn ui" data-back aria-label="Close">&times;</button>
     </div>
+    <div class="deal" id="shop-deal"></div>
     <div class="tabs">
       <button class="tab ui active" data-tab="boosters">Boosters</button>
       <button class="tab ui" data-tab="upgrades">Upgrades</button>
+      <button class="tab ui" data-tab="bundles">Bundles</button>
     </div>
     <div class="shop-body" id="shop-body"></div>
+    <p class="shop-note" id="shop-note"></p>
   </div>
 </div>
 
@@ -193,7 +213,8 @@
     <div class="settings-list">
       <label class="setting"><span>Sound effects</span><input type="checkbox" class="toggle" data-setting="sfx"></label>
       <label class="setting"><span>Music</span><input type="checkbox" class="toggle" data-setting="music"></label>
-      <label class="setting"><span>High quality graphics</span><input type="checkbox" class="toggle" data-setting="quality"></label>
+      <div class="setting gfx-row"><span>Graphics<small>Low runs best on older computers</small></span>
+        <div class="seg" id="gfx-seg"><button class="ui" data-gfx="low">Low</button><button class="ui" data-gfx="medium">Medium</button><button class="ui" data-gfx="high">High</button></div></div>
       <label class="setting"><span>Screen shake</span><input type="checkbox" class="toggle" data-setting="shake"></label>
     </div>
     <div class="stats" id="stats"></div>
