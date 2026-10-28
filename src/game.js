@@ -383,8 +383,6 @@ THEMES.forEach(th => {
  * Track
  * ========================================================================= */
 const ROAD_W = 2.25, ROAD_T = 0.85, UV_SCALE = 1 / 1.5;
-// inside-corner chamfer: extra road that forgives drifting slightly too early
-const FILLET = 0.75;
 const DIRS = [{ x: 0, z: -1, ang: HALF_PI }, { x: 1, z: 0, ang: 0 }]; // 0 = release (up-left), 1 = hold (up-right)
 
 class Segment {
@@ -400,7 +398,7 @@ class Segment {
     this.theme = theme;
     this.wave = null;
     if (opts.wave) {
-      const a = ROAD_W / 2 + FILLET + 0.2, b = len - ROAD_W / 2 - FILLET - 0.2;
+      const a = ROAD_W / 2 + 0.2, b = len - ROAD_W / 2 - 0.2;
       if (b - a > 3) this.wave = { a, b, n: opts.wave.n, A: opts.wave.A };
     }
     this.coins = [];
@@ -408,24 +406,9 @@ class Segment {
     // the next segment always attaches to this side of the far corner square
     this.attachSide = dir === 0 ? 1 : -1;
     this.hasNext = !opts.last;
-    // the previous segment's inside-corner fillet touches this side near our start
-    const pu = DIRS[1 - dir];
-    this.innerSide = Math.sign(-(pu.x * this.px + pu.z * this.pz));
-    if (this.hasNext) {
-      // fillet triangle at our far corner: Q is the inside corner, A back along us, B along the next segment
-      const nu = DIRS[1 - dir], hw = ROAD_W / 2;
-      this.fq = [this.ex - this.ux * hw + nu.x * hw, this.ez - this.uz * hw + nu.z * hw];
-      this.fu = [-this.ux, -this.uz]; this.fv = [nu.x, nu.z];
-    }
-  }
-  inFillet(x, z) {
-    if (!this.fq) return false;
-    const dx = x - this.fq[0], dz = z - this.fq[1];
-    const a = dx * this.fu[0] + dz * this.fu[1], b = dx * this.fv[0] + dz * this.fv[1];
-    return a >= 0 && b >= 0 && a + b <= FILLET;
   }
   local(x, z) { const dx = x - this.sx, dz = z - this.sz; return [dx * this.ux + dz * this.uz, dx * this.px + dz * this.pz]; }
-  contains(x, z) { const l = this.local(x, z); return (l[0] >= this.s0 && l[0] <= this.s1 && Math.abs(l[1]) <= ROAD_W / 2) || this.inFillet(x, z); }
+  contains(x, z) { const l = this.local(x, z); return (l[0] >= this.s0 && l[0] <= this.s1 && Math.abs(l[1]) <= ROAD_W / 2) ; }
   height(s) {
     const w = this.wave;
     if (!w || s <= w.a || s >= w.b) return 0;
@@ -450,8 +433,7 @@ function buildSegmentMesh(seg) {
     for (let i = 0; i <= n; i++) ss.push(seg.s0 + (seg.s1 - seg.s0) * i / n);
   } else { ss.push(seg.s0, seg.s1); }
   const splits = [];
-  if (corner !== null) splits.push(corner, corner - FILLET);
-  if (seg.index > 0) splits.push(hw + FILLET);
+  if (corner !== null) splits.push(corner);
   for (const sp of splits) if (sp > seg.s0 + 1e-6 && sp < seg.s1 - 1e-6 && !ss.some(v => Math.abs(v - sp) < 1e-6)) ss.push(sp);
   ss.sort((a, b) => a - b);
   const white = { r: 1, g: 1, b: 1 };
@@ -470,11 +452,9 @@ function buildSegmentMesh(seg) {
   };
   for (const l of [-hw, hw]) {
     const attach = seg.hasNext && Math.sign(l) === seg.attachSide;
-    const inner = seg.index > 0 && Math.sign(l) === seg.innerSide;
     for (let k = 0; k < ss.length - 1; k++) {
       const sa = ss[k], sb = ss[k + 1];
-      if (attach && sa >= corner - FILLET - 1e-6) continue;   // against the next segment / under our fillet
-      if (inner && sb <= hw + FILLET + 1e-6) continue;          // under the previous segment's fillet
+      if (attach && sa >= corner - 1e-6) continue; // buried against the next segment
       wall(seg.wx(sa, l), seg.wz(sa, l), seg.height(sa), seg.wx(sb, l), seg.wz(sb, l), seg.height(sb));
     }
   }
@@ -483,24 +463,12 @@ function buildSegmentMesh(seg) {
     const h = seg.height(sc);
     wall(seg.wx(sc, -hw), seg.wz(sc, -hw), h, seg.wx(sc, hw), seg.wz(sc, hw), h);
   }
-  // inside-corner fillet: a flat triangle of road plus its chamfered wall
-  let filletTop = 0;
-  if (seg.fq) {
-    const [qx, qz] = seg.fq, ax = qx + seg.fu[0] * FILLET, az = qz + seg.fu[1] * FILLET, bx = qx + seg.fv[0] * FILLET, bz = qz + seg.fv[1] * FILLET;
-    const tri = [[qx, 0, qz], [ax, 0, az], [bx, 0, bz]];
-    const filletPos = [], filletUv = [], filletCol = [];
-    for (const v of tri) { filletPos.push(...v); filletUv.push(v[0] * UV_SCALE, v[2] * UV_SCALE); filletCol.push(1, 1, 1); }
-    // insert the triangle into the top group
-    pos.splice(topCount * 3, 0, ...filletPos); uv.splice(topCount * 2, 0, ...filletUv); col.splice(topCount * 3, 0, ...filletCol);
-    filletTop = 3;
-    wall(ax, az, 0, bx, bz, 0);
-  }
   const geo = new T.BufferGeometry();
   geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3));
   geo.setAttribute('uv', new T.Float32BufferAttribute(uv, 2));
   geo.setAttribute('color', new T.Float32BufferAttribute(col, 3));
-  geo.addGroup(0, topCount + filletTop, 0);
-  geo.addGroup(topCount + filletTop, pos.length / 3 - topCount - filletTop, 1);
+  geo.addGroup(0, topCount, 0);
+  geo.addGroup(topCount, pos.length / 3 - topCount, 1);
   geo.computeVertexNormals();
   const mesh = new T.Mesh(geo, [th.top, th.sideMat]);
   mesh.receiveShadow = true;
@@ -626,8 +594,7 @@ function speedAt(dist) {
  * every pair of switch times (tools/min-length-table.js, HW=1.125 TB=4.8
  * TK=0.3 GR=9.5): up to speed 8.5 any length works, above it a band of short
  * lengths gets too tight, and above 11.5 nothing does, so speed caps there.
- * Each speed is rounded up to the next bracket and a margin added. The corner
- * fillets only ever add road, so they can only make a corner easier. */
+ * Each speed is rounded up to the next bracket and a margin added. */
 const MIN_LEN_TABLE = [[8.5, 2.0], [9, 2.5], [9.5, 3.0], [10, 3.0], [10.5, 3.5], [11, 3.5], [11.5, 4.0]];
 function minLenFor(v) {
   let L = 3.0; // visual minimum
@@ -715,7 +682,7 @@ function genNext(dist) {
   // dropped entirely, so there are never stray groups of one or two.
   if (R() < (runState.coinRush ? 0.95 : 0.8)) {
     const hw = ROAD_W / 2, sp = 0.6;
-    const sA = hw + FILLET + 0.6, sB = len - hw - 0.4;
+    const sA = hw + 1.35, sB = len - hw - 0.4;
     const n = Math.min(Math.floor((sB - sA) / sp) + 1, len > 9 ? 8 : 6);
     if (n >= 3) {
       const start = sA + ((sB - sA) - (n - 1) * sp) * (0.3 + R() * 0.4);
