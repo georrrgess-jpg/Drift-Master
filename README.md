@@ -4,6 +4,13 @@ An endless one-button drifting game in a single HTML file. It runs offline in an
 
 **Play:** download [`drift-master.html`](drift-master.html) and open it. No install or server needed.
 
+## Game modes
+- **Endless**: drive as far as you can. The road speeds up and grows wavy sections the further you get.
+- **Levels**: hand-made-feeling (seeded) courses that end at a finish arch. Clear one to unlock the next, and the list never runs out. Each level is a little faster and longer than the one before. Earn up to 3 stars:
+  - ★ for finishing,
+  - ★★ for collecting half the coins,
+  - ★★★ for collecting 80% of the coins without falling.
+
 ## How to play
 - **Hold** (mouse, touch or any key such as Space or the arrow keys) to drift **right**.
 - **Release** to swing back **left**.
@@ -15,9 +22,11 @@ An endless one-button drifting game in a single HTML file. It runs offline in an
 ## Features
 - Smooth drift physics: heading turns at a limited rate, velocity trails behind it to create real slides, and the simulation runs at a fixed 120 Hz step.
 - A procedurally generated zigzag road that never ends. Segments rise into place ahead of you and fall away behind you. Wavy sections appear later on, and the road gets faster and tighter as you go.
+- **Never impossible.** Segment lengths come from a brute-force timing study of the car's exact dynamics (`tools/feasibility.js`). Every corner leaves at least a 0.17 s window to time the turn, and the speed is capped at the point where that can still be guaranteed. Two short segments are never placed back to back. Tests drove 600-second endless runs with ±30 ms of random timing error per corner and never fell.
 - Eight road themes with striped and checkered surfaces, and six sky "zones" that blend into each other as your score climbs.
 - Skid marks, tyre smoke, coin sparkles, body roll, wheel spin and steering, plus camera shake when you fall.
-- **25 original cars**, all modelled in code, across six rarity tiers. The lineup includes a hatchback, a cab, a patrol car, a medic van, an ice-cream van, a fire engine, a school bus, a monster truck, an open-wheel racer and a gold car.
+- **43 original cars**, all modelled in code, across six rarity tiers. Every car has suspension bounce, body lean, steering and spinning wheels, drift-reactive brake lights and exhaust puffs. Many also have their own moving parts: a turning cement-mixer drum, a swinging tow hook, cycling disco lights, a rocket flame, glowing hover pads, pumping hot-rod pistons, a hopping lowrider, a nodding rubber duck, a spinning pizza sign and a colour-shifting body.
+- Falls tip the car over the edge before it tumbles, with road crumbs and dust. The car drops onto the road with a bounce at the start of a run and after a revive.
 - **Boosters**: Double Score, Insurance, Coin Rush and Head Start.
 - **Upgrades**: Traction and Coin Magnet.
 - **Lucky Spin**: a free spin every 4 hours, or a paid spin with coins.
@@ -26,6 +35,8 @@ An endless one-button drifting game in a single HTML file. It runs offline in an
 - Progress is saved in `localStorage`.
 
 ## Development
+`tools/min-length-table.js` regenerates the segment-length safety table (`node tools/min-length-table.js 0.17`).
+
 The source is in `src/`. `build.js` inlines the CSS, the game code and three.js into the single distributable file:
 
 ```
