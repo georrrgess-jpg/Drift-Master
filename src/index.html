@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#f3893a">
+<title>Drift Master</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+/*@@STYLE@@*/
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div id="vignette"></div>
+<div id="fx"></div>
+
+<!-- ============ HUD ============ -->
+<div id="hud" class="layer">
+  <div class="hud-top">
+    <div class="pill coins" id="hud-coins"><i class="coin"></i><b data-coins-run>0</b></div>
+    <div class="hud-center">
+      <div id="hud-score">0</div>
+      <div id="hud-best">BEST 0</div>
+    </div>
+    <button class="round-btn ui" id="btn-pause" aria-label="Pause">
+      <svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1.5"/><rect x="14" y="5" width="4" height="14" rx="1.5"/></svg>
+    </button>
+  </div>
+  <div id="hud-boosters"></div>
+  <div id="combo"></div>
+  <div id="ready">
+    <div class="tap-ring"><span></span><span></span><i></i></div>
+    <div class="ready-title" id="ready-title">TAP TO START</div>
+    <div class="ready-sub"><b>HOLD</b> to drift right<em></em><b>RELEASE</b> to swing left</div>
+  </div>
+  <div id="toast"></div>
+</div>
+
+<!-- ============ MAIN MENU ============ -->
+<div id="menu" class="layer screen">
+  <div class="topbar">
+    <div class="pill coins"><i class="coin"></i><b data-coins>0</b></div>
+    <div class="pill best"><svg viewBox="0 0 24 24"><path d="M7 3h10v3h3a1 1 0 0 1 1 1c0 3.2-2 5.6-4.7 6A6 6 0 0 1 13 15.9V19h3v2H8v-2h3v-3.1A6 6 0 0 1 7.7 13C5 12.6 3 10.2 3 7a1 1 0 0 1 1-1h3V3zm10 5v3.8c1.2-.5 2-1.8 2-3.8h-2zM5 8c0 2 .8 3.3 2 3.8V8H5z"/></svg><b id="menu-best">0</b></div>
+  </div>
+
+  <div class="logo-wrap">
+    <div class="logo" aria-label="Drift Master">
+      <span class="w1" data-text="DRIFT">DRIFT</span>
+      <span class="w2" data-text="MASTER">MASTER</span>
+    </div>
+    <div class="tag">one button &middot; endless corners</div>
+  </div>
+
+  <div class="menu-bottom">
+    <div class="car-select">
+      <button class="arrow ui" id="menu-prev" aria-label="Previous car"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="car-label"><small id="menu-car-tier">COMMON</small><span id="menu-car-name">Rookie</span></div>
+      <button class="arrow ui" id="menu-next" aria-label="Next car"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div id="menu-boosters" class="booster-row"></div>
+    <button id="btn-play" class="btn-play ui"><svg viewBox="0 0 24 24"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span>PLAY</span></button>
+    <div class="menu-nav">
+      <button class="nav-btn ui" data-open="garage"><svg viewBox="0 0 24 24"><path d="M5 11l1.6-4.3A2 2 0 0 1 8.5 5.4h7a2 2 0 0 1 1.9 1.3L19 11h.5A1.5 1.5 0 0 1 21 12.5V17a1 1 0 0 1-1 1h-1v1.5a1.5 1.5 0 0 1-3 0V18H8v1.5a1.5 1.5 0 0 1-3 0V18H4a1 1 0 0 1-1-1v-4.5A1.5 1.5 0 0 1 4.5 11H5zm2.2 0h9.6l-1.1-3.1a.8.8 0 0 0-.7-.5H9a.8.8 0 0 0-.7.5L7.2 11zM6.5 15.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5zm11 0a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5z"/></svg><span>Garage</span></button>
+      <button class="nav-btn ui" data-open="shop"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h6.5L10 22l9-12h-6.5L13 2z"/></svg><span>Shop</span></button>
+      <button class="nav-btn ui" data-open="spin"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 2.07A8 8 0 0 1 19.93 11H13V4.07zM11 4.07V11H4.07A8 8 0 0 1 11 4.07zM4.07 13H11v6.93A8 8 0 0 1 4.07 13zM13 19.93V13h6.93A8 8 0 0 1 13 19.93z"/></svg><span>Spin</span><i class="badge" id="spin-badge">!</i></button>
+      <button class="nav-btn ui" data-open="settings"><svg viewBox="0 0 24 24"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5L19.4 13zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg><span>Settings</span></button>
+      <button class="nav-btn ui" data-open="help"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 16h-2v-2h2v2zm2.1-7.7l-.9.9c-.8.8-1.2 1.4-1.2 2.8h-2v-.5c0-1.1.4-2.1 1.2-2.8l1.2-1.3A2 2 0 0 0 12 6a2 2 0 0 0-2 2H8a4 4 0 1 1 7.1 2.3z"/></svg><span>How to</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ GARAGE ============ -->
+<div id="garage" class="layer screen">
+  <div class="screen-head">
+    <button class="back-btn ui" data-back aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <h2>Garage</h2>
+    <div class="pill coins"><i class="coin"></i><b data-coins>0</b></div>
+  </div>
+  <button class="big-arrow left ui" id="g-prev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="big-arrow right ui" id="g-next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+  <div class="garage-panel panel">
+    <div class="g-top">
+      <div class="g-info">
+        <div class="g-tier" id="g-tier">COMMON</div>
+        <div class="g-name" id="g-name">Rookie</div>
+        <div class="g-desc" id="g-desc"></div>
+      </div>
+      <button class="btn ui" id="g-action">Select</button>
+    </div>
+    <div class="thumbs" id="g-thumbs"></div>
+    <div class="g-count" id="g-count"></div>
+  </div>
+</div>
+
+<!-- ============ SHOP ============ -->
+<div id="shop" class="layer screen modal">
+  <div class="panel sheet">
+    <div class="sheet-head">
+      <h2>Shop</h2>
+      <div class="pill coins small"><i class="coin"></i><b data-coins>0</b></div>
+      <button class="x-btn ui" data-back aria-label="Close">&times;</button>
+    </div>
+    <div class="tabs">
+      <button class="tab ui active" data-tab="boosters">Boosters</button>
+      <button class="tab ui" data-tab="upgrades">Upgrades</button>
+    </div>
+    <div class="shop-body" id="shop-body"></div>
+  </div>
+</div>
+
+<!-- ============ SPIN ============ -->
+<div id="spin" class="layer screen modal">
+  <div class="panel sheet spin-sheet">
+    <div class="sheet-head">
+      <h2>Lucky Spin</h2>
+      <div class="pill coins small"><i class="coin"></i><b data-coins>0</b></div>
+      <button class="x-btn ui" data-back aria-label="Close">&times;</button>
+    </div>
+    <div class="wheel-wrap">
+      <div class="wheel-pointer"></div>
+      <div class="wheel" id="wheel"></div>
+      <div class="wheel-hub"></div>
+    </div>
+    <div class="spin-info" id="spin-info">&nbsp;</div>
+    <div class="row">
+      <button class="btn ui" id="spin-free">Free Spin</button>
+      <button class="btn alt ui" id="spin-paid">Spin &middot; 75 <i class="coin"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SETTINGS ============ -->
+<div id="settings" class="layer screen modal">
+  <div class="panel sheet">
+    <div class="sheet-head">
+      <h2>Settings</h2>
+      <button class="x-btn ui" data-back aria-label="Close">&times;</button>
+    </div>
+    <div class="settings-list">
+      <label class="setting"><span>Sound effects</span><input type="checkbox" class="toggle" data-setting="sfx"></label>
+      <label class="setting"><span>Music</span><input type="checkbox" class="toggle" data-setting="music"></label>
+      <label class="setting"><span>High quality graphics</span><input type="checkbox" class="toggle" data-setting="quality"></label>
+      <label class="setting"><span>Screen shake</span><input type="checkbox" class="toggle" data-setting="shake"></label>
+    </div>
+    <div class="stats" id="stats"></div>
+    <button class="btn danger ui" id="btn-reset">Reset progress</button>
+  </div>
+</div>
+
+<!-- ============ HELP ============ -->
+<div id="help" class="layer screen modal">
+  <div class="panel sheet">
+    <div class="sheet-head">
+      <h2>How to play</h2>
+      <button class="x-btn ui" data-back aria-label="Close">&times;</button>
+    </div>
+    <div class="help-grid">
+      <div class="help-item"><div class="hi-ico hold"></div><div><b>Hold</b> anywhere (mouse, touch or any key) to drift <b>right</b>.</div></div>
+      <div class="help-item"><div class="hi-ico release"></div><div><b>Release</b> to swing back <b>left</b>. Time it before each corner!</div></div>
+      <div class="help-item"><div class="hi-ico coin-ico"><i class="coin"></i></div><div>Grab <b>coins</b> to unlock new cars, boosters and upgrades.</div></div>
+      <div class="help-item"><div class="hi-ico perfect">&#9733;</div><div>Exit a corner near the center line for a <b>Perfect</b>. Chain them for combo bonuses.</div></div>
+      <div class="help-item"><div class="hi-ico wave">~</div><div>The road keeps getting faster and grows <b>waves</b> the further you go.</div></div>
+    </div>
+    <p class="help-keys">Keyboard: <kbd>Space</kbd> / arrows to drift &middot; <kbd>P</kbd> or <kbd>Esc</kbd> to pause</p>
+  </div>
+</div>
+
+<!-- ============ PAUSE ============ -->
+<div id="pause" class="layer screen modal">
+  <div class="panel sheet compact">
+    <h2 class="center">Paused</h2>
+    <button class="btn big ui" id="btn-resume">Resume</button>
+    <div class="row">
+      <button class="btn alt ui" id="btn-restart">Restart</button>
+      <button class="btn alt ui" id="btn-pause-menu">Menu</button>
+    </div>
+    <div class="row toggles-row">
+      <label class="mini-toggle"><input type="checkbox" class="toggle" data-setting="sfx"><span>SFX</span></label>
+      <label class="mini-toggle"><input type="checkbox" class="toggle" data-setting="music"><span>Music</span></label>
+    </div>
+  </div>
+</div>
+
+<!-- ============ REVIVE ============ -->
+<div id="revive" class="layer screen modal">
+  <div class="panel sheet compact revive-sheet">
+    <h2 class="center">Second chance?</h2>
+    <div class="ring-wrap">
+      <svg viewBox="0 0 100 100" class="ring"><circle cx="50" cy="50" r="44" class="ring-bg"/><circle cx="50" cy="50" r="44" class="ring-fg" id="revive-ring"/></svg>
+      <div class="ring-num" id="revive-num">5</div>
+    </div>
+    <button class="btn big ui" id="btn-revive">Continue &middot; <span id="revive-cost">100</span> <i class="coin"></i></button>
+    <button class="link-btn ui" id="btn-skip-revive">No thanks</button>
+  </div>
+</div>
+
+<!-- ============ GAME OVER ============ -->
+<div id="gameover" class="layer screen modal">
+  <div class="panel sheet compact go-sheet">
+    <div class="go-ribbon" id="go-ribbon">NEW BEST!</div>
+    <div class="go-label">SCORE</div>
+    <div class="go-score" id="go-score">0</div>
+    <div class="go-stats">
+      <div><small>BEST</small><b id="go-best">0</b></div>
+      <div><small>COINS</small><b><i class="coin"></i> <span id="go-coins">0</span></b></div>
+      <div><small>PERFECTS</small><b id="go-perfects">0</b></div>
+    </div>
+    <button class="btn big ui" id="btn-retry"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>Retry</button>
+    <div class="row">
+      <button class="btn alt ui" id="btn-go-garage">Garage</button>
+      <button class="btn alt ui" id="btn-go-menu">Menu</button>
+    </div>
+  </div>
+</div>
+
+<div id="fade"></div>
+<div id="boot"><div class="boot-logo">DRIFT MASTER</div><div class="boot-bar"><i></i></div></div>
+
+<script>
+/*@@THREE@@*/
+</script>
+<script>
+/*@@GAME@@*/
+</script>
+</body>
+</html>
