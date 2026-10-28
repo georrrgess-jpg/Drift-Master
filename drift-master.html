@@ -245,7 +245,7 @@ svg { fill: currentColor; }
 .mc-go .chev { width: 18px; height: 18px; }
 @keyframes cardIn { from { transform: translateY(20px) scale(.94); opacity: 0; } }
 
-.menu-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
+.menu-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; }
 .nav-btn {
   position: relative; height: 58px; border-radius: 16px; padding: 0 12px;
   display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 9px; align-content: center; text-align: left;
@@ -507,6 +507,21 @@ kbd { font-family: var(--display); background: rgba(255,255,255,.14); border-rad
   .logo, .ready-title, .lvl.current, .cp-burst { animation: none; }
 }
 
+/* missions */
+.badge.count { width: auto; min-width: 20px; padding: 0 5px; border-radius: 10px; font-size: 12px; }
+.mission .item-body > b { font-size: 17px; }
+.m-row { display: flex; align-items: center; gap: 8px; margin-top: 7px; }
+.m-bar { flex: 1; height: 8px; border-radius: 5px; background: rgba(255,255,255,.12); overflow: hidden; }
+.m-bar i { display: block; height: 100%; background: linear-gradient(180deg, var(--accent-hi), var(--accent-lo)); border-radius: 5px; }
+.m-prog { font-size: 12px; font-weight: 800; color: var(--muted); white-space: nowrap; }
+.m-rew { font-family: var(--display); font-size: 17px; color: var(--gold); }
+.m-done { font-family: var(--display); font-size: 15px; color: var(--muted); }
+.item-ico.got { background: linear-gradient(180deg, var(--accent-hi), var(--accent-lo)); }
+.item-ico.got svg { color: #fff; }
+.item-ico.chest { background: rgba(255, 201, 60, .14); border-color: rgba(255, 201, 60, .55); }
+.item-ico.chest svg { color: var(--gold); }
+@media (max-width: 520px) { .menu-nav { grid-template-columns: repeat(4, 1fr); gap: 6px; } .nav-btn span { font-size: 11.5px; } }
+
 </style>
 </head>
 <body>
@@ -587,6 +602,7 @@ kbd { font-family: var(--display); background: rgba(255,255,255,.14); border-rad
     <div class="menu-nav">
       <button class="nav-btn ui" data-open="garage"><svg viewBox="0 0 24 24"><path d="M5 11l1.6-4.3A2 2 0 0 1 8.5 5.4h7a2 2 0 0 1 1.9 1.3L19 11h.5A1.5 1.5 0 0 1 21 12.5V17a1 1 0 0 1-1 1h-1v1.5a1.5 1.5 0 0 1-3 0V18H8v1.5a1.5 1.5 0 0 1-3 0V18H4a1 1 0 0 1-1-1v-4.5A1.5 1.5 0 0 1 4.5 11H5zm2.2 0h9.6l-1.1-3.1a.8.8 0 0 0-.7-.5H9a.8.8 0 0 0-.7.5L7.2 11zM6.5 15.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5zm11 0a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5z"/></svg><span>Garage</span><em id="nav-garage-sub">1/43</em></button>
       <button class="nav-btn ui" data-open="shop"><svg viewBox="0 0 24 24"><path d="M7 7V6a5 5 0 0 1 10 0v1h2.2a1 1 0 0 1 1 .9l1 12A2 2 0 0 1 19.2 22H4.8a2 2 0 0 1-2-2.1l1-12a1 1 0 0 1 1-.9H7zm2 0h6V6a3 3 0 0 0-6 0v1zm-1 3a1 1 0 0 0-1 1 5 5 0 0 0 10 0 1 1 0 0 0-2 0 3 3 0 0 1-6 0 1 1 0 0 0-1-1z"/></svg><span>Shop</span><em>Boosters</em></button>
+      <button class="nav-btn ui" data-open="missions"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 2.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></svg><span>Missions</span><em id="nav-missions-sub">0/3 today</em><i class="badge count" id="missions-badge">0</i></button>
       <button class="nav-btn ui" data-open="spin"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 2.07A8 8 0 0 1 19.93 11H13V4.07zM11 4.07V11H4.07A8 8 0 0 1 11 4.07zM4.07 13H11v6.93A8 8 0 0 1 4.07 13zM13 19.93V13h6.93A8 8 0 0 1 13 19.93z"/></svg><span>Lucky Spin</span><em id="nav-spin-sub">Free</em><i class="badge" id="spin-badge">!</i></button>
     </div>
   </div>
@@ -657,6 +673,23 @@ kbd { font-family: var(--display); background: rgba(255,255,255,.14); border-rad
       <button class="btn alt ui" id="btn-cp-replay">Replay</button>
       <button class="btn alt ui" id="btn-cp-menu">Menu</button>
     </div>
+  </div>
+</div>
+
+<!-- ============ MISSIONS ============ -->
+<div id="missions" class="layer screen modal">
+  <div class="panel sheet shop-sheet">
+    <div class="sheet-head">
+      <h2>Missions</h2>
+      <div class="pill coins small"><i class="coin"></i><b data-coins>0</b></div>
+      <button class="x-btn ui" data-back aria-label="Close">&times;</button>
+    </div>
+    <div class="tabs">
+      <button class="tab ui active" data-mtab="daily">Daily</button>
+      <button class="tab ui" data-mtab="ach">Achievements</button>
+    </div>
+    <div class="shop-body" id="missions-body"></div>
+    <p class="shop-note" id="missions-note"></p>
   </div>
 </div>
 
@@ -731,7 +764,8 @@ kbd { font-family: var(--display); background: rgba(255,255,255,.14); border-rad
       <div class="help-item"><div class="hi-ico release"></div><div><b>Release</b> to swing back <b>left</b>. Time it before each corner!</div></div>
       <div class="help-item"><div class="hi-ico coin-ico"><i class="coin"></i></div><div>Grab <b>coins</b> to unlock new cars, boosters and upgrades.</div></div>
       <div class="help-item"><div class="hi-ico perfect">&#9733;</div><div>Exit a corner near the center line for a <b>Perfect</b>. Chain them for combo bonuses.</div></div>
-      <div class="help-item"><div class="hi-ico wave">~</div><div>The road keeps getting faster and grows <b>waves</b> the further you go.</div></div>
+      <div class="help-item"><div class="hi-ico wave">~</div><div>Take a <b>wave</b> fast (or mid-drift) and you will catch air. Land on the road!</div></div>
+      <div class="help-item"><div class="hi-ico">&#9678;</div><div>Complete <b>daily missions</b> and <b>achievements</b> for bonus coins.</div></div>
       <div class="help-item"><div class="hi-ico flag">&#9873;</div><div><b>Endless</b>: drive as far as you can. <b>Levels</b>: reach the finish line, earn up to 3 stars and unlock the next level.</div></div>
     </div>
     <p class="help-keys">Keyboard: <kbd>Space</kbd> / arrows to drift &middot; <kbd>P</kbd> or <kbd>Esc</kbd> to pause</p>
@@ -837,6 +871,7 @@ const DEFAULT_SAVE = {
   upgrades: { traction: 0, magnet: 0 },
   settings: { sfx: true, music: true, gfx: 'medium', shake: true },
   lastSpin: 0, tutorial: false, dealDay: -1,
+  missions: null, ach: {}, stats: { jumps: 0, bestCombo: 0, levelsCleared: 0, distance: 0 },
   level: 1, levelStars: {}, levelBest: {}
 };
 function loadSave() {
@@ -861,16 +896,16 @@ function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save));
 const Sound = (() => {
   let ctx = null, master, sfx, music, noiseBuf;
   let eng1, eng2, engFilter, engGain, skidGain, skidFilter;
-  let nextNote = 0, step = 0;
-  const BPM = 118, S16 = 60 / BPM / 4;
-  // Original loop: i - VI - III - VII in A minor
-  const CHORDS = [[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]];
-  const ARP = [0, 1, 2, 1, 2, 0, 2, 1, 0, 2, 1, 2, 0, 1, 2, 1];
-  const LEAD = [ // sparse melody, per bar, 16 steps (-1 = rest), semitone offsets from chord root + 24
-    [7, -1, -1, 5, -1, -1, 3, -1, 2, -1, 3, -1, -1, -1, -1, -1],
-    [7, -1, -1, 8, -1, -1, 7, -1, 3, -1, -1, -1, 0, -1, -1, -1],
-    [7, -1, -1, 4, -1, -1, 7, -1, 12, -1, 11, -1, 7, -1, -1, -1],
-    [5, -1, -1, 7, -1, -1, 9, -1, 7, -1, 5, -1, 2, -1, -1, -1]
+  let nextNote = 0, step = 0, musicIn, arpIn;
+  // Calm loop at 84 BPM: Cmaj7 - Am7 - Fmaj7 - G6, sixteenth-note grid, 16-bar form
+  const BPM = 84, S16 = 60 / BPM / 4;
+  const CHORDS = [[60, 64, 67, 71], [57, 60, 64, 67], [53, 57, 60, 64], [55, 59, 62, 64]];
+  const ARP = [0, 2, 1, 3, 2, 1, 3, 2]; // eighth-note pluck pattern (chord-tone index)
+  const MELODY = [ // bars 9-16: sparse C-major-pentatonic phrase, [step, midi, length in 16ths]
+    [[0, 76, 6], [8, 74, 4], [12, 72, 4]], [[0, 69, 8], [10, 72, 6]],
+    [[0, 72, 4], [4, 74, 4], [8, 76, 8]], [[0, 74, 10], [12, 67, 4]],
+    [[0, 76, 4], [4, 79, 6], [12, 76, 4]], [[0, 74, 6], [8, 72, 8]],
+    [[0, 69, 4], [4, 72, 4], [8, 74, 6]], [[0, 72, 14]]
   ];
   const mtof = m => 440 * Math.pow(2, (m - 69) / 12);
 
@@ -884,6 +919,20 @@ const Sound = (() => {
     master.connect(comp); comp.connect(ctx.destination);
     sfx = ctx.createGain(); sfx.connect(master);
     music = ctx.createGain(); music.gain.value = 0; music.connect(master);
+    // music bus: dry + a soft generated-impulse reverb, and an echo for the plucks
+    musicIn = ctx.createGain(); musicIn.connect(music);
+    const verb = ctx.createConvolver(), ir = ctx.createBuffer(2, ctx.sampleRate * 2.6, ctx.sampleRate);
+    for (let c = 0; c < 2; c++) { const ch = ir.getChannelData(c); for (let i = 0; i < ch.length; i++) ch[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / ch.length, 3.2); }
+    verb.buffer = ir;
+    const wet = ctx.createGain(); wet.gain.value = 0.42;
+    musicIn.connect(verb); verb.connect(wet); wet.connect(music);
+    const tone2 = ctx.createBiquadFilter(); tone2.type = 'lowpass'; tone2.frequency.value = 2600; // keeps everything mellow
+    music.disconnect(); music.connect(tone2); tone2.connect(master);
+    arpIn = ctx.createGain(); arpIn.connect(musicIn);
+    const echo = ctx.createDelay(1); echo.delayTime.value = S16 * 3;
+    const fb = ctx.createGain(); fb.gain.value = 0.38;
+    const echoLP = ctx.createBiquadFilter(); echoLP.type = 'lowpass'; echoLP.frequency.value = 1800;
+    arpIn.connect(echo); echo.connect(echoLP); echoLP.connect(fb); fb.connect(echo); echoLP.connect(musicIn);
 
     noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
     const d = noiseBuf.getChannelData(0);
@@ -911,7 +960,7 @@ const Sound = (() => {
     if (!ctx) return;
     const t = ctx.currentTime;
     sfx.gain.setTargetAtTime(save.settings.sfx ? 1 : 0, t, 0.02);
-    music.gain.setTargetAtTime(save.settings.music ? 0.17 : 0, t, 0.3);
+    music.gain.setTargetAtTime(save.settings.music ? 0.3 : 0, t, 0.4);
   }
   function engine(on, speed, slip) {
     if (!ctx) return;
@@ -948,35 +997,47 @@ const Sound = (() => {
     s.connect(f); f.connect(g); g.connect(dest || sfx);
     s.start(t, Math.random() * 1.5); s.stop(t + dur + 0.05);
   }
-  function note(freq, t, dur, type, vol) {
+  // one voice with a soft attack and an exponential tail
+  function note(freq, t, dur, type, vol, attack, dest, detune) {
     const o = ctx.createOscillator(); o.type = type; o.frequency.value = freq;
+    if (detune) o.detune.value = detune;
     const g = ctx.createGain();
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
+    g.gain.linearRampToValueAtTime(vol, t + (attack || 0.01));
     g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    o.connect(g); g.connect(music); o.start(t); o.stop(t + dur + 0.05);
+    o.connect(g); g.connect(dest || musicIn); o.start(t); o.stop(t + dur + 0.05);
   }
   function kick(t) {
     const o = ctx.createOscillator(); o.type = 'sine';
-    o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.14);
-    const g = ctx.createGain(); g.gain.setValueAtTime(0.9, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
-    o.connect(g); g.connect(music); o.start(t); o.stop(t + 0.25);
+    o.frequency.setValueAtTime(95, t); o.frequency.exponentialRampToValueAtTime(40, t + 0.18);
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.38, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+    o.connect(g); g.connect(music); o.start(t); o.stop(t + 0.32);
   }
   function schedule() {
     if (!ctx) return;
     if (!save.settings.music || ctx.state !== 'running') { nextNote = ctx.currentTime + 0.1; return; }
-    while (nextNote < ctx.currentTime + 0.12) { playStep(step, nextNote); nextNote += S16; step = (step + 1) % 128; }
+    while (nextNote < ctx.currentTime + 0.15) { playStep(step, nextNote); nextNote += S16; step = (step + 1) % 256; }
   }
   function playStep(st, t) {
-    const bar = (st >> 4) & 3, i = st & 15, ch = CHORDS[bar], section = st >> 6;
-    if (i % 4 === 0) kick(t);
-    if (i % 4 === 2) noise(0.05, 0.12, 8000, 'highpass', 0, music, t);
-    if (i === 4 || i === 12) noise(0.14, 0.25, 1800, 'bandpass', 0, music, t);
-    if (i % 2 === 0) note(mtof(ch[0] - 24 + (i % 8 === 6 ? 12 : 0)), t, S16 * 1.8, 'triangle', 0.32);
-    note(mtof(ch[ARP[i]] + 12), t, S16 * 0.9, 'square', 0.035);
-    if (section === 1) {
-      const l = LEAD[bar][i];
-      if (l >= 0) note(mtof(ch[0] + 12 + l), t, S16 * 2.6, 'triangle', 0.12);
+    const barN = st >> 4, bar = barN & 3, i = st & 15, ch = CHORDS[bar];
+    const bar16 = barN % 16;
+    if (i === 0) {
+      // warm pad: two slightly detuned soft voices per chord tone, long swell
+      const bl = S16 * 16;
+      ch.forEach((m, k) => {
+        note(mtof(m), t, bl * 1.15, 'sine', 0.045, bl * 0.35, musicIn, -6 + k * 3);
+        note(mtof(m), t, bl * 1.15, 'triangle', 0.02, bl * 0.4, musicIn, 7);
+      });
+    }
+    if (i === 0 || i === 10) note(mtof(ch[0] - 24), t, S16 * 7, 'sine', 0.22, 0.03, music); // round, soft bass
+    if (bar16 >= 2 && (i === 0 || i === 8)) kick(t);
+    if (bar16 >= 2 && i % 4 === 2) noise(0.04, 0.035, 7000, 'highpass', 0, music, t); // light shaker
+    if (i % 2 === 0) { // plucked arpeggio into the echo
+      const m = ch[ARP[(i >> 1) % 8]] + 12;
+      note(mtof(m), t, S16 * 3, 'triangle', 0.055, 0.004, arpIn);
+    }
+    if (bar16 >= 8) for (const [at, m, len] of MELODY[bar16 - 8]) {
+      if (at === i) { note(mtof(m), t, S16 * len * 1.4, 'sine', 0.07, 0.04, arpIn); note(mtof(m + 12), t, S16 * len, 'sine', 0.012, 0.06, musicIn); }
     }
   }
   return {
@@ -993,6 +1054,9 @@ const Sound = (() => {
     buy() { [523, 659, 784, 1046].forEach((f, i) => tone(f, 0.16, 'triangle', 0.12, null, i * 0.06)); },
     best() { [784, 988, 1175, 1568].forEach((f, i) => tone(f, 0.22, 'square', 0.06, null, i * 0.09)); },
     revive() { tone(300, 0.5, 'triangle', 0.14, 900); },
+    jump() { tone(260, 0.22, 'triangle', 0.1, 520); noise(0.18, 0.05, 1200, 'bandpass'); },
+    land(k) { tone(110, 0.18, 'sine', 0.18 * k, 55); noise(0.16, 0.12 * k, 500, 'lowpass'); },
+    mission() { [659, 880, 1109, 1319].forEach((f, i) => tone(f, 0.25, 'triangle', 0.09, null, i * 0.07)); },
     deny() { tone(220, 0.12, 'square', 0.08); tone(180, 0.16, 'square', 0.08, null, 0.1); },
     whoosh() { noise(0.35, 0.16, 900, 'bandpass'); },
     go() { tone(880, 0.12, 'triangle', 0.12); tone(1320, 0.25, 'triangle', 0.12, null, 0.1); }
@@ -1100,16 +1164,16 @@ function placeCloud(i, around, ahead) {
  * corner falls on a tile boundary: squares, dots and tiles are never cut off. */
 const TILE = 0.75;
 const THEMES = [
-  { name: 'Meadow', pattern: 'stripes', a: '#a6ea6e', b: '#cdf7a0', side: '#4e9d38', edge: '#7fcf55' },
-  { name: 'Glacier', pattern: 'checker', a: '#8bbff0', b: '#d9eafc', side: '#2b4f8c', edge: '#5b86c9' },
-  { name: 'Bubblegum', pattern: 'dots', a: '#f59cad', b: '#fde4e9', side: '#b64c68', edge: '#e07890' },
-  { name: 'Lemonade', pattern: 'tiles', a: '#e9b93a', b: '#ffe58a', side: '#c3911a', edge: '#ebbd3c' },
-  { name: 'Lavender', pattern: 'fine', a: '#bba0f4', b: '#eee5ff', side: '#6848a8', edge: '#9878d8' },
-  { name: 'Lagoon', pattern: 'plaid', a: '#68ddc6', b: '#c9fbf0', side: '#1f8e78', edge: '#47bfa5' },
-  { name: 'Ember', pattern: 'checker', a: '#ffa167', b: '#ffe4cf', side: '#b3552c', edge: '#e07c4a' },
-  { name: 'Slate', pattern: 'tiles', a: '#8792b2', b: '#c9d1e6', side: '#3d4766', edge: '#6b7699' },
-  { name: 'Citrus', pattern: 'dots', a: '#ffb347', b: '#fff0c9', side: '#c46a12', edge: '#ee9535' },
-  { name: 'Sakura', pattern: 'stripes', a: '#f7a8c9', b: '#fde6f0', side: '#b45a83', edge: '#e283ad' }
+  { name: 'Meadow', pattern: 'stripes', a: '#8fe85a', b: '#c8f79b', side: '#45c43a', edge: '#b5f57f' },
+  { name: 'Glacier', pattern: 'checker', a: '#6fb8ff', b: '#d2e9ff', side: '#3f8cf0', edge: '#9ccbff' },
+  { name: 'Bubblegum', pattern: 'dots', a: '#ff8fb4', b: '#ffe0eb', side: '#f0558f', edge: '#ffb3cd' },
+  { name: 'Lemonade', pattern: 'tiles', a: '#ffcc2e', b: '#fff08f', side: '#f2a90f', edge: '#ffe066' },
+  { name: 'Lavender', pattern: 'fine', a: '#b48cff', b: '#ece2ff', side: '#8a5cf5', edge: '#cdb5ff' },
+  { name: 'Lagoon', pattern: 'plaid', a: '#3fe0c4', b: '#c4fff2', side: '#16b89c', edge: '#7ff0dc' },
+  { name: 'Tangerine', pattern: 'checker', a: '#ff9a3d', b: '#ffe3c4', side: '#ff7414', edge: '#ffbe7d' },
+  { name: 'Sky', pattern: 'tiles', a: '#4fd2ff', b: '#c8f3ff', side: '#1bb0ea', edge: '#8fe4ff' },
+  { name: 'Citrus', pattern: 'dots', a: '#c4f03a', b: '#f2ffc4', side: '#93cc12', edge: '#dbff7a' },
+  { name: 'Sakura', pattern: 'stripes', a: '#ff9ed2', b: '#ffe5f3', side: '#f266b0', edge: '#ffc4e4' }
 ];
 function makePatternTexture(th) {
   const c = document.createElement('canvas'); c.width = c.height = 128; // 128px = 1.5 units, 64px = one tile
@@ -1140,18 +1204,22 @@ function makePatternTexture(th) {
   const tex = new T.CanvasTexture(c);
   tex.wrapS = tex.wrapT = T.RepeatWrapping;
   tex.anisotropy = maxAniso;
+  tex.offset.set(0.25, 0.25); // tile lines sit on the road edges (corners are on the 0.75 grid, edges half a tile off)
   return tex;
 }
 THEMES.forEach(th => {
   th.top = new T.MeshLambertMaterial({ map: makePatternTexture(th), side: T.DoubleSide });
-  th.sideMat = new T.MeshLambertMaterial({ vertexColors: true, side: T.DoubleSide });
-  th.sideC = new T.Color(th.side); th.edgeC = new T.Color(th.edge); th.darkC = new T.Color(th.side).multiplyScalar(0.55);
+  // a little self-glow keeps the walls saturated even on the side facing away from the sun
+  th.sideMat = new T.MeshLambertMaterial({ vertexColors: true, side: T.DoubleSide, emissive: new T.Color(th.side).multiplyScalar(0.28) });
+  th.sideC = new T.Color(th.side); th.edgeC = new T.Color(th.edge); th.darkC = new T.Color(th.side).multiplyScalar(0.8);
 });
 
 /* =========================================================================
  * Track
  * ========================================================================= */
-const ROAD_W = 3.0, ROAD_T = 0.85, UV_SCALE = 1 / 1.5;
+const ROAD_W = 2.25, ROAD_T = 0.85, UV_SCALE = 1 / 1.5;
+// inside-corner chamfer: extra road that forgives drifting slightly too early
+const FILLET = 0.75;
 const DIRS = [{ x: 0, z: -1, ang: HALF_PI }, { x: 1, z: 0, ang: 0 }]; // 0 = release (up-left), 1 = hold (up-right)
 
 class Segment {
@@ -1167,7 +1235,7 @@ class Segment {
     this.theme = theme;
     this.wave = null;
     if (opts.wave) {
-      const a = ROAD_W / 2 + 0.2, b = len - ROAD_W / 2 - 0.2;
+      const a = ROAD_W / 2 + FILLET + 0.2, b = len - ROAD_W / 2 - FILLET - 0.2;
       if (b - a > 3) this.wave = { a, b, n: opts.wave.n, A: opts.wave.A };
     }
     this.coins = [];
@@ -1175,9 +1243,24 @@ class Segment {
     // the next segment always attaches to this side of the far corner square
     this.attachSide = dir === 0 ? 1 : -1;
     this.hasNext = !opts.last;
+    // the previous segment's inside-corner fillet touches this side near our start
+    const pu = DIRS[1 - dir];
+    this.innerSide = Math.sign(-(pu.x * this.px + pu.z * this.pz));
+    if (this.hasNext) {
+      // fillet triangle at our far corner: Q is the inside corner, A back along us, B along the next segment
+      const nu = DIRS[1 - dir], hw = ROAD_W / 2;
+      this.fq = [this.ex - this.ux * hw + nu.x * hw, this.ez - this.uz * hw + nu.z * hw];
+      this.fu = [-this.ux, -this.uz]; this.fv = [nu.x, nu.z];
+    }
+  }
+  inFillet(x, z) {
+    if (!this.fq) return false;
+    const dx = x - this.fq[0], dz = z - this.fq[1];
+    const a = dx * this.fu[0] + dz * this.fu[1], b = dx * this.fv[0] + dz * this.fv[1];
+    return a >= 0 && b >= 0 && a + b <= FILLET;
   }
   local(x, z) { const dx = x - this.sx, dz = z - this.sz; return [dx * this.ux + dz * this.uz, dx * this.px + dz * this.pz]; }
-  contains(x, z) { const l = this.local(x, z); return l[0] >= this.s0 && l[0] <= this.s1 && Math.abs(l[1]) <= ROAD_W / 2; }
+  contains(x, z) { const l = this.local(x, z); return (l[0] >= this.s0 && l[0] <= this.s1 && Math.abs(l[1]) <= ROAD_W / 2) || this.inFillet(x, z); }
   height(s) {
     const w = this.wave;
     if (!w || s <= w.a || s >= w.b) return 0;
@@ -1201,7 +1284,11 @@ function buildSegmentMesh(seg) {
     const n = Math.max(2, Math.ceil((seg.s1 - seg.s0) / 0.2));
     for (let i = 0; i <= n; i++) ss.push(seg.s0 + (seg.s1 - seg.s0) * i / n);
   } else { ss.push(seg.s0, seg.s1); }
-  if (corner !== null && corner > seg.s0 + 1e-6 && !ss.some(v => Math.abs(v - corner) < 1e-6)) { ss.push(corner); ss.sort((a, b) => a - b); }
+  const splits = [];
+  if (corner !== null) splits.push(corner, corner - FILLET);
+  if (seg.index > 0) splits.push(hw + FILLET);
+  for (const sp of splits) if (sp > seg.s0 + 1e-6 && sp < seg.s1 - 1e-6 && !ss.some(v => Math.abs(v - sp) < 1e-6)) ss.push(sp);
+  ss.sort((a, b) => a - b);
   const white = { r: 1, g: 1, b: 1 };
   const pos = [], uv = [], col = [];
   const V = (x, y, z, c) => { pos.push(x, y, z); uv.push(x * UV_SCALE, z * UV_SCALE); col.push(c.r, c.g, c.b); };
@@ -1217,10 +1304,12 @@ function buildSegmentMesh(seg) {
     quad([xa, ha - 0.08, za], [xb, hb - 0.08, zb], [xb, hb - ROAD_T, zb], [xa, ha - ROAD_T, za], S, S, D, D);
   };
   for (const l of [-hw, hw]) {
-    const buried = seg.hasNext && Math.sign(l) === seg.attachSide;
+    const attach = seg.hasNext && Math.sign(l) === seg.attachSide;
+    const inner = seg.index > 0 && Math.sign(l) === seg.innerSide;
     for (let k = 0; k < ss.length - 1; k++) {
       const sa = ss[k], sb = ss[k + 1];
-      if (buried && sa >= corner - 1e-6) continue;
+      if (attach && sa >= corner - FILLET - 1e-6) continue;   // against the next segment / under our fillet
+      if (inner && sb <= hw + FILLET + 1e-6) continue;          // under the previous segment's fillet
       wall(seg.wx(sa, l), seg.wz(sa, l), seg.height(sa), seg.wx(sb, l), seg.wz(sb, l), seg.height(sb));
     }
   }
@@ -1229,12 +1318,24 @@ function buildSegmentMesh(seg) {
     const h = seg.height(sc);
     wall(seg.wx(sc, -hw), seg.wz(sc, -hw), h, seg.wx(sc, hw), seg.wz(sc, hw), h);
   }
+  // inside-corner fillet: a flat triangle of road plus its chamfered wall
+  let filletTop = 0;
+  if (seg.fq) {
+    const [qx, qz] = seg.fq, ax = qx + seg.fu[0] * FILLET, az = qz + seg.fu[1] * FILLET, bx = qx + seg.fv[0] * FILLET, bz = qz + seg.fv[1] * FILLET;
+    const tri = [[qx, 0, qz], [ax, 0, az], [bx, 0, bz]];
+    const filletPos = [], filletUv = [], filletCol = [];
+    for (const v of tri) { filletPos.push(...v); filletUv.push(v[0] * UV_SCALE, v[2] * UV_SCALE); filletCol.push(1, 1, 1); }
+    // insert the triangle into the top group
+    pos.splice(topCount * 3, 0, ...filletPos); uv.splice(topCount * 2, 0, ...filletUv); col.splice(topCount * 3, 0, ...filletCol);
+    filletTop = 3;
+    wall(ax, az, 0, bx, bz, 0);
+  }
   const geo = new T.BufferGeometry();
   geo.setAttribute('position', new T.Float32BufferAttribute(pos, 3));
   geo.setAttribute('uv', new T.Float32BufferAttribute(uv, 2));
   geo.setAttribute('color', new T.Float32BufferAttribute(col, 3));
-  geo.addGroup(0, topCount, 0);
-  geo.addGroup(topCount, pos.length / 3 - topCount, 1);
+  geo.addGroup(0, topCount + filletTop, 0);
+  geo.addGroup(topCount + filletTop, pos.length / 3 - topCount - filletTop, 1);
   geo.computeVertexNormals();
   const mesh = new T.Mesh(geo, [th.top, th.sideMat]);
   mesh.receiveShadow = true;
@@ -1339,7 +1440,7 @@ function levelParams(n) {
   return {
     n, seed: n * 7919 + 101,
     len: Math.min(120 + n * 22, 1000),
-    speed: Math.min(12.0, 7.0 + (n - 1) * 0.2),
+    speed: Math.min(11.5, 7.0 + (n - 1) * 0.18),
     diff: clamp(n / 20, 0, 1),
     waveP: clamp((n - 1) * 0.05, 0, 0.55),
     shortP: clamp(0.25 + n * 0.015, 0.25, 0.55),
@@ -1354,14 +1455,15 @@ function speedAt(dist) {
   return PHYS.base + PHYS.add * (1 - Math.exp(-dist / PHYS.k));
 }
 
-/* Shortest segment that still leaves a human at least a 0.17 s window to time
- * each turn at speed v. The table comes from brute-force simulation of these
- * exact car dynamics over every pair of switch times: up to speed 9 any length
- * works, above that a band of short lengths gets too tight. Above 12 even long
- * segments drop below 0.17 s, so both modes cap their speed at 12. Each speed
- * is rounded up to the next bracket and a margin added, so a generated corner
- * can never become physically impossible. */
-const MIN_LEN_TABLE = [[9.0, 2.0], [9.5, 3.5], [10, 3.5], [10.5, 4.0], [11, 4.5], [11.5, 5.0], [12, 5.0]];
+/* Shortest segment that still leaves a human at least a 0.14 s window to time
+ * each turn at speed v, on the 2.25-wide road with the current handling. The
+ * table comes from brute-force simulation of these exact car dynamics over
+ * every pair of switch times (tools/min-length-table.js, HW=1.125 TB=4.8
+ * TK=0.3 GR=9.5): up to speed 8.5 any length works, above it a band of short
+ * lengths gets too tight, and above 11.5 nothing does, so speed caps there.
+ * Each speed is rounded up to the next bracket and a margin added. The corner
+ * fillets only ever add road, so they can only make a corner easier. */
+const MIN_LEN_TABLE = [[8.5, 2.0], [9, 2.5], [9.5, 3.0], [10, 3.0], [10.5, 3.5], [11, 3.5], [11.5, 4.0]];
 function minLenFor(v) {
   let L = 3.0; // visual minimum
   for (const [sp, len] of MIN_LEN_TABLE) if (v > sp - 0.5) L = Math.max(L, len);
@@ -1389,7 +1491,7 @@ function resetTrack(intro, cfg) {
   track.rng = track.level ? mulberry32(track.level.seed) : Math.random;
   track.themeIdx = track.level ? track.level.theme : 0;
   track.themeLeft = 10 + ((track.rng() * 5) | 0);
-  const first = addSegment(new Segment(0, 0, 0, 0, 11.25, track.themeIdx, { s0: -4.5 }));
+  const first = addSegment(new Segment(0, 0, 0, 0, 11.25, track.themeIdx, { s0: -4.125 }));
   first.pathStart = 0;
   // build the whole visible road up front, well past the fog line
   for (let i = 0; i < 40 && Math.hypot(lastSeg().ex, lastSeg().ez) < 110; i++) if (!genNext(0)) break;
@@ -1443,17 +1545,26 @@ function genNext(dist) {
   }
   const seg = addSegment(new Segment(prev.index + 1, prev.ex, prev.ez, 1 - prev.dir, len, track.themeIdx, { wave }));
   seg.pathStart = pathStart;
-  // coins
-  const coinChance = (runState.coinRush ? 0.62 : 0.42);
-  if (R() < coinChance && len >= 4.2) {
-    const n = len > 8 ? 4 : 3;
-    const lat = [-0.75, 0, 0.75][(R() * 3) | 0];
-    const mid = ROAD_W / 2 + (len - ROAD_W / 2) * (0.35 + R() * 0.2);
-    for (let i = 0; i < n; i++) {
-      const s = mid + (i - (n - 1) / 2) * 0.85;
-      if (s < ROAD_W / 2 + 0.3 || s > len - 1.2) continue;
-      addCoin(seg, seg.wx(s, lat), seg.height(s) + 0.42, seg.wz(s, lat), i * 0.5);
-      track.coinTotal++;
+  // coins: rows of 3-8 on the line the car settles onto after a corner (or a
+  // gentle lane-change slalom on long straights). A row that would not fit is
+  // dropped entirely, so there are never stray groups of one or two.
+  if (R() < (runState.coinRush ? 0.95 : 0.8)) {
+    const hw = ROAD_W / 2, sp = 0.6;
+    const sA = hw + FILLET + 0.6, sB = len - hw - 0.4;
+    const n = Math.min(Math.floor((sB - sA) / sp) + 1, len > 9 ? 8 : 6);
+    if (n >= 3) {
+      const start = sA + ((sB - sA) - (n - 1) * sp) * (0.3 + R() * 0.4);
+      const roll = R();
+      const lane = roll < 0.6 ? 0 : (roll < 0.8 ? -0.45 : 0.45);
+      const slalom = n >= 6 && R() < 0.35 ? (R() < 0.5 ? 1 : -1) : 0;
+      for (let i = 0; i < n; i++) {
+        const s = start + i * sp, k = i / (n - 1);
+        const lat = slalom ? slalom * 0.45 * Math.cos(k * PI) : lane;
+        const h = seg.height(s);
+        // over a crest the coins float higher, where a jumping car passes
+        addCoin(seg, seg.wx(s, lat), h + 0.42 + Math.max(0, h) * 0.6, seg.wz(s, lat), i * 0.45);
+        track.coinTotal++;
+      }
     }
   }
   return seg;
@@ -2355,13 +2466,13 @@ scene.add(blobShadow);
 const car = {
   x: 0, y: 0, z: 0, psi: HALF_PI, phi: HALF_PI, speed: 0, slip: 0,
   segIdx: 0, dist: 0, vx: 0, vy: 0, vz: 0, lockAng: HALF_PI, wheelSpeed: 0, prevSpeed: 0, spawnT: 1,
-  roll: 0, pitch: 0, tumbleX: 0, tumbleZ: 0, fallT: 0, slope: 0,
+  roll: 0, pitch: 0, tumbleX: 0, tumbleZ: 0, fallT: 0, slope: 0, air: false, airT: 0, squash: 0, fallYaw: 0, yawRate: 0,
   // previous physics step and interpolated render pose (smooth at any frame rate)
   px: 0, py: 0, pz: 0, ppsi: HALF_PI, rx: 0, ry: 0, rz: 0, rpsi: HALF_PI
 };
 function snapCar() { car.px = car.rx = car.x; car.py = car.ry = car.y; car.pz = car.rz = car.z; car.ppsi = car.rpsi = car.psi; }
 
-const PHYS = { base: 7.4, add: 4.6, k: 650, turnBase: 3.5, turnK: 0.21, grip: 7.0 };
+const PHYS = { base: 7.4, add: 4.1, k: 650, turnBase: 4.8, turnK: 0.3, grip: 9.5 };
 
 /* =========================================================================
  * Effects: skid marks, smoke, sparkles
@@ -2543,7 +2654,7 @@ function resetCar(seg, s) {
   car.speed = 0; car.slip = 0; car.vy = 0; car.roll = car.pitch = 0;
   car.tumbleX = car.tumbleZ = 0; car.fallT = 0;
   carTilt.rotation.set(0, 0, 0);
-  car.slope = 0; car.fallSeg = null;
+  car.slope = 0; car.fallSeg = null; car.air = false; car.airT = 0; car.vy = 0; car.squash = 0; car.fallYaw = 0;
   apHoldState = seg.dir === 1;
   Skids.brk(0); Skids.brk(1);
   snapCar();
@@ -2618,8 +2729,24 @@ function physicsStep(dt, mode) {
   // rest on the wheels: in a dip the bumpers would otherwise sink into the road
   const along = (carKit ? carKit.L : 1.1) * 0.4 * Math.cos(car.psi - seg.ang);
   const hc = seg.height(loc[0]), hf = seg.height(loc[0] + along), hr = seg.height(loc[0] - along);
-  car.y = Math.max(hc, (hf + hr) / 2);
-  car.slope = Math.atan2(hf - hr, 0.84);
+  const ground = Math.max(hc, (hf + hr) / 2);
+  if (car.air) {
+    car.airT += dt;
+    car.vy -= GRAVITY * dt;
+    car.y += car.vy * dt;
+    car.slope = Math.atan2(car.vy, Math.max(4, car.speed)) * 0.7;
+    if (car.y <= ground) land(ground, mode);
+  } else {
+    const surf = (ground - car.y) / dt; // how fast the road surface is moving vertically
+    if (car.vy > 0.5 && surf < car.vy - GRAVITY * dt) {
+      // the road drops away faster than gravity can pull the car down: it takes off,
+      // with extra pop the faster and harder it is drifting
+      car.air = true; car.airT = 0;
+      car.vy += 0.5 + car.slip * 3.2 + Math.max(0, car.speed - 8) * 0.12;
+      car.y += car.vy * dt;
+      if (mode === 'play') { Sound.jump(); Missions.event('jump'); }
+    } else { car.vy = surf; car.y = ground; car.slope = Math.atan2(hf - hr, (carKit ? carKit.L : 1.1) * 0.8); }
+  }
 
   if (mode === 'play') {
     // perfect-corner check halfway down each segment
@@ -2632,6 +2759,18 @@ function physicsStep(dt, mode) {
   return true;
 }
 
+const GRAVITY = 26;
+function land(ground, mode) {
+  const impact = clamp(-car.vy / 6, 0, 1.4);
+  car.air = false; car.y = ground; car.vy = 0;
+  car.squash = Math.min(1, impact);
+  if (mode === 'play' && impact > 0.25) {
+    Sound.land(Math.min(1, impact));
+    cam.shake = Math.max(cam.shake, 0.05 * impact);
+    for (let i = 0; i < 6; i++) Particles.spawn('smoke', car.x + rand(-0.4, 0.4), car.y + 0.06, car.z + rand(-0.4, 0.4), rand(-1, 1), rand(0.2, 0.6), rand(-1, 1), rand(0.4, 0.7), 0.5, 1.6);
+  }
+}
+
 function onPerfect() {
   runState.combo++;
   runState.perfects++;
@@ -2641,6 +2780,7 @@ function onPerfect() {
   el.textContent = runState.combo > 1 ? `PERFECT x${runState.combo}  +${bonus * runState.mult}` : `PERFECT  +${bonus * runState.mult}`;
   el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
   Sound.perfect(runState.combo);
+  Missions.event('perfect', runState.combo);
   for (let i = 0; i < 8; i++) Particles.spawn('spark', car.x, car.y + 0.4, car.z, rand(-2, 2), rand(2, 4.5), rand(-2, 2), 0.7, 1.2, 0.4, i % 2 ? 0xffe066 : 0xffffff);
 }
 
@@ -2651,6 +2791,7 @@ function wheelWorld(lx, lz) {
 
 let smokeAcc = 0;
 function driveEffects(dt, onRoad) {
+  if (car.air) { Skids.brk(0); Skids.brk(1); return; }
   const L = carKit ? carKit.L : 1.1;
   const intensity = clamp((car.slip - 0.05) * 3.2, 0, 1);
   const rear = -L * 0.32;
@@ -2768,6 +2909,9 @@ function fixedUpdate(dt) {
     car.tumbleX += car.rollRate * tip * dt; car.tumbleZ += car.pitchRate * tip * dt;
     // while part of the car still rests on the road it pivots on the edge
     // instead of sinking through it
+    car.fallYaw += car.yawRate * dt;
+    // never pass through a neighbouring road block: push out of its sides
+    if (!car.fallSeg) pushOutOfRoad();
     const fs = car.fallSeg;
     if (fs) {
       const l = fs.local(car.x, car.z);
@@ -2822,6 +2966,7 @@ function pickCoin(c) {
   runState.coins += v; runState.rawCoins++;
   save.coins += v; save.totalCoins += v;
   Sound.coin(coinStreak);
+  Missions.event('coin');
   coinRing(c.x, c.y + 0.1, c.z);
   for (let j = 0; j < 10; j++) {
     const a = j / 10 * TAU;
@@ -2853,7 +2998,10 @@ function startFall() {
   car.fallSeg = seg; car.fallMode = mode; car.fallRoadY = roadY;
   car.fallExt = 0.3 * Math.abs(side) + 0.55 * Math.abs(fwd);
   car.vx += nx * 0.9; car.vz += nz * 0.9;
-  car.vy = 0;
+  car.vy = car.air ? car.vy : 0;
+  if (car.air && car.y > roadY + 0.3) car.fallSeg = null; // already clear of the road: no pivot needed
+  car.yawRate = rand(-1.2, 1.2);
+  car.air = false;
   runState.fell = true;
   cam.anchor = { x: car.x, y: car.y, z: car.z, y0: car.y };
   cam.shake = 0.3;
@@ -2863,6 +3011,26 @@ function startFall() {
   for (let i = 0; i < 6; i++) Particles.spawn('smoke', car.x + rand(-0.3, 0.3), car.y + 0.1, car.z + rand(-0.3, 0.3), rand(-0.6, 0.6), rand(0.3, 0.8), rand(-0.6, 0.6), rand(0.7, 1.1), 0.6, 2.2);
   Sound.fall();
   Sound.engine(false, 0, 0);
+}
+
+function pushOutOfRoad() {
+  const r = 0.34, hw = ROAD_W / 2;
+  for (let i = car.segIdx - 2; i <= car.segIdx + 3; i++) {
+    const sg = segAt(i);
+    if (!sg) continue;
+    const [ls, ll] = sg.local(car.x, car.z);
+    const top = sg.height(clamp(ls, sg.s0, sg.s1));
+    if (car.y > top - 0.04 || car.y < top - ROAD_T - 0.7) continue; // only beside the block's walls
+    if (ls < sg.s0 - r || ls > sg.s1 + r || Math.abs(ll) > hw + r) continue;
+    const dl = hw + r - Math.abs(ll), d0 = ls - (sg.s0 - r), d1 = sg.s1 + r - ls, m = Math.min(dl, d0, d1);
+    let nx, nz, d;
+    if (m === dl) { const sgn = Math.sign(ll) || 1; nx = sg.px * sgn; nz = sg.pz * sgn; d = dl; }
+    else if (m === d1) { nx = sg.ux; nz = sg.uz; d = d1; }
+    else { nx = -sg.ux; nz = -sg.uz; d = d0; }
+    car.x += nx * d; car.z += nz * d;
+    const vn = car.vx * nx + car.vz * nz;
+    if (vn < 0) { car.vx -= vn * nx * 1.3; car.vz -= vn * nz * 1.3; } // bounce lightly off the wall
+  }
 }
 
 function afterFall() {
@@ -2954,6 +3122,7 @@ function gameOver() {
   state = 'gameover';
   autopilot = false;
   save.runs++;
+  Missions.event('runEnd', { mode: currentMode, score: Math.floor(runState.score) });
   const score = Math.floor(runState.score);
   const isBest = score > save.best;
   if (isBest) save.best = score;
@@ -2999,6 +3168,8 @@ function levelComplete() {
   save.levelBest[n] = 100;
   save.level = Math.max(save.level, n + 1);
   save.runs++; save.totalPerfects += runState.perfects;
+  Missions.event('runEnd', { mode: 'level', score: 0 });
+  Missions.event('level');
   persist();
   Sound.best();
   Sound.engine(false, 0, 0);
@@ -3155,7 +3326,11 @@ function visualUpdate(dt) {
 
   // car transform
   carRoot.position.set(car.rx, car.ry, car.rz);
-  carRoot.rotation.y = car.rpsi;
+  carRoot.rotation.y = car.rpsi + car.fallYaw;
+  // brief squash on landing
+  car.squash = Math.max(0, car.squash - dt * 5);
+  const sq = Math.sin(car.squash * PI) * 0.12;
+  carTilt.scale.set(1 + sq * 0.5, 1 - sq, 1 + sq * 0.5);
   if (car.spawnT < 1) {
     // drop onto the road with a bounce
     const before = car.spawnT;
@@ -3328,11 +3503,12 @@ function fadeTransition(fn) {
   setTimeout(() => { fn(); requestAnimationFrame(() => f.classList.remove('on')); }, 300);
 }
 
-const SCREENS = ['menu', 'levels', 'garage', 'shop', 'spin', 'settings', 'help', 'pause', 'revive', 'gameover', 'complete'];
+const SCREENS = ['menu', 'missions', 'levels', 'garage', 'shop', 'spin', 'settings', 'help', 'pause', 'revive', 'gameover', 'complete'];
 function showScreen(name) {
   SCREENS.forEach(s => $('#' + s).classList.toggle('show', s === name));
-  if (['menu', 'levels', 'garage', 'shop', 'spin', 'settings', 'help'].includes(name)) menuSub = name;
+  if (['menu', 'missions', 'levels', 'garage', 'shop', 'spin', 'settings', 'help'].includes(name)) menuSub = name;
   if (name === 'levels') renderLevels();
+  if (name === 'missions') renderMissions();
   if (name === 'garage') openGarage(); else garage.active = false;
   if (name === 'menu') refreshMenu();
   if (name === 'shop') renderShop();
@@ -3350,6 +3526,8 @@ const ICONS = {
   headstart: '<svg viewBox="0 0 24 24"><path d="M13.5 2.5c3.6.3 7.7 4.4 8 8l-6.7 6.7-8-8 6.7-6.7zM15 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5.8 10.6l7.6 7.6-2 2-2.1-.7-1.4 1.4-2.3-2.3 1.4-1.4-.7-2.1-2 .9L3 14l2.8-3.4zM4 17l3 3-3.5 1.5L4 17z"/></svg>',
   traction: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3.5a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13zm0 3a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM12 1.5l1.2 2.6h-2.4zm0 21l-1.2-2.6h2.4zM1.5 12l2.6-1.2v2.4zm21 0-2.6 1.2v-2.4z"/></svg>',
   magnet: '<svg viewBox="0 0 24 24"><path d="M4 3h5v8a3 3 0 0 0 6 0V3h5v8a8 8 0 0 1-16 0V3zm1.5 1.5v3h2v-3h-2zm11 0v3h2v-3h-2z"/></svg>',
+  target: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 2.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></svg>',
+  trophy: '<svg viewBox="0 0 24 24"><path d="M7 3h10v3h3a1 1 0 0 1 1 1c0 3.2-2 5.6-4.7 6A6 6 0 0 1 13 15.9V19h3v2H8v-2h3v-3.1A6 6 0 0 1 7.7 13C5 12.6 3 10.2 3 7a1 1 0 0 1 1-1h3V3zm10 5v3.8c1.2-.5 2-1.8 2-3.8h-2zM5 8c0 2 .8 3.3 2 3.8V8H5z"/></svg>',
   box: '<svg viewBox="0 0 24 24"><path d="M12 2 3 6.5v11L12 22l9-4.5v-11L12 2zm0 2.2 6.6 3.3L12 10.8 5.4 7.5 12 4.2zM5 9.1l6 3v7.6l-6-3V9.1zm14 0v7.6l-6 3v-7.6l6-3z"/></svg>'
 };
 const BOOSTERS = [
@@ -3477,6 +3655,151 @@ function renderShop() {
       };
     });
     $('#shop-note').textContent = 'Bundles add straight to your booster stock.';
+  }
+}
+
+/* =========================================================================
+ * Missions & achievements
+ * ========================================================================= */
+const MISSION_POOL = [
+  { type: 'coinsRun', text: n => `Collect ${n} coins in one run`, ns: [30, 50, 75], r: [40, 70, 110] },
+  { type: 'coinsDay', text: n => `Collect ${n} coins today`, ns: [120, 220, 350], r: [50, 80, 120] },
+  { type: 'score', text: n => `Score ${fmt(n)} in Endless`, ns: [500, 1000, 1800], r: [50, 80, 130] },
+  { type: 'perfectsRun', text: n => `Get ${n} Perfects in one run`, ns: [5, 9, 14], r: [45, 75, 110] },
+  { type: 'combo', text: n => `Chain a x${n} Perfect combo`, ns: [3, 5, 7], r: [50, 80, 120] },
+  { type: 'jumps', text: n => `Catch air ${n} times today`, ns: [4, 8, 14], r: [40, 70, 100] },
+  { type: 'levels', text: n => `Clear ${n} level${n > 1 ? 's' : ''} today`, ns: [1, 2, 3], r: [50, 80, 120] },
+  { type: 'runs', text: n => `Play ${n} runs today`, ns: [3, 5, 8], r: [30, 50, 80] }
+];
+const ACHIEVEMENTS = [
+  { id: 'first', name: 'First Drift', desc: 'Finish your first run', val: () => save.runs, goal: 1, r: 25 },
+  { id: 'coins1', name: 'Pocket Change', desc: 'Collect 500 coins in total', val: () => save.totalCoins, goal: 500, r: 60 },
+  { id: 'coins2', name: 'Coin Collector', desc: 'Collect 2,500 coins in total', val: () => save.totalCoins, goal: 2500, r: 150 },
+  { id: 'coins3', name: 'Treasure Hunter', desc: 'Collect 10,000 coins in total', val: () => save.totalCoins, goal: 10000, r: 400 },
+  { id: 'perf1', name: 'Clean Lines', desc: '100 Perfect corners in total', val: () => save.totalPerfects, goal: 100, r: 80 },
+  { id: 'perf2', name: 'Perfectionist', desc: '500 Perfect corners in total', val: () => save.totalPerfects, goal: 500, r: 250 },
+  { id: 'combo', name: 'Combo King', desc: 'Chain a x10 Perfect combo', val: () => save.stats.bestCombo, goal: 10, r: 150 },
+  { id: 'air1', name: 'Lift Off', desc: 'Catch air 50 times', val: () => save.stats.jumps, goal: 50, r: 80 },
+  { id: 'air2', name: 'Frequent Flyer', desc: 'Catch air 250 times', val: () => save.stats.jumps, goal: 250, r: 250 },
+  { id: 'score1', name: 'Getting Warm', desc: 'Score 1,500 in Endless', val: () => save.best, goal: 1500, r: 80 },
+  { id: 'score2', name: 'Road Warrior', desc: 'Score 4,000 in Endless', val: () => save.best, goal: 4000, r: 200 },
+  { id: 'score3', name: 'Drift Master', desc: 'Score 8,000 in Endless', val: () => save.best, goal: 8000, r: 500 },
+  { id: 'lvl1', name: 'On The Map', desc: 'Clear 10 levels', val: () => save.level - 1, goal: 10, r: 100 },
+  { id: 'lvl2', name: 'Pathfinder', desc: 'Clear 30 levels', val: () => save.level - 1, goal: 30, r: 300 },
+  { id: 'stars', name: 'Star Struck', desc: 'Earn 60 level stars', val: () => Object.values(save.levelStars).reduce((a, b) => a + b, 0), goal: 60, r: 250 },
+  { id: 'cars1', name: 'Car Fan', desc: 'Own 8 cars', val: () => save.owned.length, goal: 8, r: 120 },
+  { id: 'cars2', name: 'Collector', desc: 'Own 20 cars', val: () => save.owned.length, goal: 20, r: 350 },
+  { id: 'cars3', name: 'Full Garage', desc: 'Own every car', val: () => save.owned.length, goal: CARS.length, r: 1000 }
+];
+const CHEST_REWARD = 150;
+const Missions = (() => {
+  const today = () => Math.floor(Date.now() / 86400000);
+  // three missions per day from distinct pool entries, seeded by the date
+  function make(day, avoid) {
+    const r = mulberry32(day * 977 + 13 + (avoid ? avoid.length * 31 : 0));
+    const types = MISSION_POOL.map(m => m.type).filter(t => !(avoid || []).includes(t));
+    const out = [];
+    while (out.length < (avoid ? 1 : 3)) {
+      const t = types.splice((r() * types.length) | 0, 1)[0];
+      const def = MISSION_POOL.find(m => m.type === t);
+      const tier = r() < 0.4 ? 0 : r() < 0.8 ? 1 : 2;
+      out.push({ type: t, n: def.ns[tier], reward: def.r[tier], prog: 0, done: false, claimed: false });
+    }
+    return out;
+  }
+  function ensure() {
+    const d = today();
+    if (!save.missions || save.missions.day !== d) { save.missions = { day: d, list: make(d), swapped: false, chest: false }; persist(); }
+    return save.missions;
+  }
+  function bump(type, value, isMax) {
+    const m = ensure();
+    for (const it of m.list) {
+      if (it.type !== type || it.done) continue;
+      it.prog = isMax ? Math.max(it.prog, value) : it.prog + value;
+      if (it.prog >= it.n) {
+        it.prog = it.n; it.done = true;
+        if (state === 'playing' || state === 'finished') toast('MISSION DONE!', MISSION_POOL.find(p => p.type === type).text(it.n).toLowerCase());
+        Sound.mission();
+      }
+    }
+  }
+  return {
+    ensure,
+    // gameplay events feed both the daily missions and the lifetime stats
+    event(kind, v) {
+      if (kind === 'coin') { bump('coinsDay', 1); bump('coinsRun', runState.rawCoins, true); }
+      else if (kind === 'perfect') {
+        bump('perfectsRun', runState.perfects, true); bump('combo', v, true);
+        save.stats.bestCombo = Math.max(save.stats.bestCombo, v);
+      } else if (kind === 'jump') { bump('jumps', 1); save.stats.jumps++; }
+      else if (kind === 'runEnd') { bump('runs', 1); if (v.mode === 'endless') bump('score', v.score, true); }
+      else if (kind === 'level') { bump('levels', 1); save.stats.levelsCleared++; }
+      refreshBadge();
+    },
+    swap(i) {
+      const m = ensure();
+      if (m.swapped || m.list[i].done) return false;
+      m.list[i] = make(m.day, m.list.map(x => x.type))[0];
+      m.swapped = true; persist();
+      return true;
+    },
+    claimables() {
+      const m = ensure();
+      let n = m.list.filter(x => x.done && !x.claimed).length;
+      if (m.list.every(x => x.claimed) && !m.chest) n++;
+      n += ACHIEVEMENTS.filter(a => !save.ach[a.id] && a.val() >= a.goal).length;
+      return n;
+    }
+  };
+})();
+function refreshBadge() {
+  const n = Missions.claimables();
+  const b = $('#missions-badge');
+  if (b) { b.textContent = n; b.classList.toggle('on', n > 0); }
+  const sub = $('#nav-missions-sub');
+  if (sub) sub.textContent = Missions.ensure().list.filter(x => x.done).length + '/3 today';
+}
+let missionTab = 'daily';
+function renderMissions() {
+  $$('#missions .tab').forEach(t => t.classList.toggle('active', t.dataset.mtab === missionTab));
+  const body = $('#missions-body');
+  body.innerHTML = '';
+  const m = Missions.ensure();
+  const row = (html) => { const d = document.createElement('div'); d.className = 'item mission'; d.innerHTML = html; body.appendChild(d); return d; };
+  const bar = (v, g) => `<div class="m-row"><div class="m-bar"><i style="width:${Math.min(100, v / g * 100)}%"></i></div><span class="m-prog">${fmt(Math.min(v, g))} / ${fmt(g)}</span></div>`;
+  if (missionTab === 'daily') {
+    const msLeft = (m.day + 1) * 86400000 - Date.now();
+    $('#missions-note').textContent = `New missions in ${Math.floor(msLeft / 3600000)}h ${Math.floor(msLeft % 3600000 / 60000)}m` + (m.swapped ? '' : ' · you can swap one mission today');
+    m.list.forEach((it, i) => {
+      const def = MISSION_POOL.find(p => p.type === it.type);
+      const d = row(`<div class="item-ico">${ICONS.target}</div>
+        <div class="item-body"><b>${def.text(it.n)}</b>${bar(it.prog, it.n)}</div>
+        <div class="item-buy">${it.claimed ? '<span class="m-done">Claimed</span>' : it.done ? `<button class="btn ui" data-c>Claim ${priceHTML(it.reward)}</button>` : `<span class="m-rew">${priceHTML(it.reward)}</span>${m.swapped ? '' : '<button class="btn small ui" data-s>Swap</button>'}`}</div>`);
+      const c = d.querySelector('[data-c]');
+      if (c) c.onclick = () => { it.claimed = true; save.coins += it.reward; persist(); Sound.buy(); updateCoinsUI(); renderMissions(); refreshBadge(); };
+      const sw = d.querySelector('[data-s]');
+      if (sw) sw.onclick = () => { if (Missions.swap(i)) { Sound.click(); renderMissions(); } };
+    });
+    const allClaimed = m.list.every(x => x.claimed);
+    const chest = row(`<div class="item-ico chest">${ICONS.box}</div>
+      <div class="item-body"><b>Daily Chest</b><p>Claim all three missions to open it.</p>${bar(m.list.filter(x => x.claimed).length, 3)}</div>
+      <div class="item-buy">${m.chest ? '<span class="m-done">Opened</span>' : `<button class="btn ui${allClaimed ? '' : ' disabled'}" data-chest>Open ${priceHTML(CHEST_REWARD)}</button>`}</div>`);
+    const cb = chest.querySelector('[data-chest]');
+    if (cb) cb.onclick = () => { if (!allClaimed || m.chest) return; m.chest = true; save.coins += CHEST_REWARD; persist(); Sound.best(); confetti(); updateCoinsUI(); renderMissions(); refreshBadge(); };
+  } else {
+    const done = ACHIEVEMENTS.filter(a => save.ach[a.id]).length;
+    $('#missions-note').textContent = `${done} of ${ACHIEVEMENTS.length} achievements claimed`;
+    // ready-to-claim first, then in progress, then already claimed
+    const rank = a => save.ach[a.id] ? 2 : a.val() >= a.goal ? 0 : 1;
+    ACHIEVEMENTS.slice().sort((a, b) => rank(a) - rank(b)).forEach(a => {
+      const v = a.val(), ready = v >= a.goal, claimed = !!save.ach[a.id];
+      const d = row(`<div class="item-ico${claimed ? ' got' : ''}">${ICONS.trophy}</div>
+        <div class="item-body"><b>${a.name}</b><p>${a.desc}</p>${bar(v, a.goal)}</div>
+        <div class="item-buy">${claimed ? '<span class="m-done">Claimed</span>' : ready ? `<button class="btn ui" data-a>Claim ${priceHTML(a.r)}</button>` : `<span class="m-rew">${priceHTML(a.r)}</span>`}</div>`);
+      const b = d.querySelector('[data-a]');
+      if (b) b.onclick = () => { save.ach[a.id] = true; save.coins += a.r; persist(); Sound.buy(); updateCoinsUI(); renderMissions(); refreshBadge(); };
+    });
   }
 }
 
@@ -3804,6 +4127,7 @@ function refreshMenu() {
   $('#menu-stars').textContent = stars;
   $('#nav-garage-sub').textContent = save.owned.length + '/' + CARS.length;
   $('#nav-spin-sub').textContent = freeSpinReady() ? 'Free spin!' : 'Try your luck';
+  refreshBadge();
   renderMenuBoosters();
   updateCoinsUI();
   $('#spin-badge').classList.toggle('on', freeSpinReady());
@@ -3881,6 +4205,7 @@ on('#menu-next', () => cycleOwned(1));
 on('#g-prev', () => { garage.idx = (garage.idx - 1 + CARS.length) % CARS.length; Sound.click(); showGarageCar(false); });
 on('#g-next', () => { garage.idx = (garage.idx + 1) % CARS.length; Sound.click(); showGarageCar(false); });
 on('#g-action', garageAction);
+$$('#missions .tab').forEach(t => t.addEventListener('click', () => { missionTab = t.dataset.mtab; Sound.click(); renderMissions(); }));
 $$('[data-gfilter]').forEach(b => b.addEventListener('click', () => { garage.filter = b.dataset.gfilter; Sound.click(); renderGarageGrid(); }));
 window.addEventListener('keydown', e => {
   if (!garage.active) return;
@@ -3992,6 +4317,11 @@ window.__driftMaster = {
   setNoise(v) { apNoise = v; apErr = 0; },
   get level() { return { n: currentLevel, finished: state === 'finished', coins: runState.rawCoins, total: track.coinTotal, stars: save.levelStars[currentLevel] || 0, unlocked: save.level }; },
   skids() { return Skids.debug(); },
+  coinGroups() {
+    // sizes of every coin row currently on the road (for the 'no groups of 1 or 2' check)
+    return track.segs.map(sg => sg.coins.length).filter(n => n > 0);
+  },
+  get jumps() { return save.stats.jumps; },
   info() { return { calls: renderer.info.render.calls, tris: renderer.info.render.triangles, geos: renderer.info.memory.geometries, segs: track.segs.length, coins: coinList.length }; },
   segLens() { return track.segs.map(sg => +sg.len.toFixed(2)); },
   simulate(seconds) {

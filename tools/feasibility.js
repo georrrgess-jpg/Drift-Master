@@ -1,9 +1,10 @@
 // Brute-force timing study for the road generator: simulates the game's exact car
 // dynamics through an A -> B -> C zigzag and measures how wide the window is for
 // timing each turn. Used to derive MIN_LEN_TABLE in src/game.js.
+// Env: HW (half road width), TB/TK/GR (turn base, turn per speed, grip).
 // Feasibility study: road A(+X... dir1) -> B (dir0, length L) -> C (dir1). Same dynamics as the game.
-const W = 3, HW = 1.5, HALF = Math.PI / 2;
-const PHYS = { turnBase: 3.5, turnK: 0.21, grip: 7.0 };
+const HW = +(process.env.HW || 1.5), W = HW * 2, HALF = Math.PI / 2;
+const PHYS = { turnBase: +(process.env.TB || 3.5), turnK: +(process.env.TK || 0.21), grip: +(process.env.GR || 7.0) };
 // segments as in game: dir0 = -Z (ang pi/2), dir1 = +X (ang 0)
 function seg(sx, sz, dir, len, s0) {
   const ux = dir ? 1 : 0, uz = dir ? 0 : -1;

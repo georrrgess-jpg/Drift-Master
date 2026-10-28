@@ -90,6 +90,7 @@
     <div class="menu-nav">
       <button class="nav-btn ui" data-open="garage"><svg viewBox="0 0 24 24"><path d="M5 11l1.6-4.3A2 2 0 0 1 8.5 5.4h7a2 2 0 0 1 1.9 1.3L19 11h.5A1.5 1.5 0 0 1 21 12.5V17a1 1 0 0 1-1 1h-1v1.5a1.5 1.5 0 0 1-3 0V18H8v1.5a1.5 1.5 0 0 1-3 0V18H4a1 1 0 0 1-1-1v-4.5A1.5 1.5 0 0 1 4.5 11H5zm2.2 0h9.6l-1.1-3.1a.8.8 0 0 0-.7-.5H9a.8.8 0 0 0-.7.5L7.2 11zM6.5 15.5a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5zm11 0a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5z"/></svg><span>Garage</span><em id="nav-garage-sub">1/43</em></button>
       <button class="nav-btn ui" data-open="shop"><svg viewBox="0 0 24 24"><path d="M7 7V6a5 5 0 0 1 10 0v1h2.2a1 1 0 0 1 1 .9l1 12A2 2 0 0 1 19.2 22H4.8a2 2 0 0 1-2-2.1l1-12a1 1 0 0 1 1-.9H7zm2 0h6V6a3 3 0 0 0-6 0v1zm-1 3a1 1 0 0 0-1 1 5 5 0 0 0 10 0 1 1 0 0 0-2 0 3 3 0 0 1-6 0 1 1 0 0 0-1-1z"/></svg><span>Shop</span><em>Boosters</em></button>
+      <button class="nav-btn ui" data-open="missions"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 2.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></svg><span>Missions</span><em id="nav-missions-sub">0/3 today</em><i class="badge count" id="missions-badge">0</i></button>
       <button class="nav-btn ui" data-open="spin"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 2.07A8 8 0 0 1 19.93 11H13V4.07zM11 4.07V11H4.07A8 8 0 0 1 11 4.07zM4.07 13H11v6.93A8 8 0 0 1 4.07 13zM13 19.93V13h6.93A8 8 0 0 1 13 19.93z"/></svg><span>Lucky Spin</span><em id="nav-spin-sub">Free</em><i class="badge" id="spin-badge">!</i></button>
     </div>
   </div>
@@ -160,6 +161,23 @@
       <button class="btn alt ui" id="btn-cp-replay">Replay</button>
       <button class="btn alt ui" id="btn-cp-menu">Menu</button>
     </div>
+  </div>
+</div>
+
+<!-- ============ MISSIONS ============ -->
+<div id="missions" class="layer screen modal">
+  <div class="panel sheet shop-sheet">
+    <div class="sheet-head">
+      <h2>Missions</h2>
+      <div class="pill coins small"><i class="coin"></i><b data-coins>0</b></div>
+      <button class="x-btn ui" data-back aria-label="Close">&times;</button>
+    </div>
+    <div class="tabs">
+      <button class="tab ui active" data-mtab="daily">Daily</button>
+      <button class="tab ui" data-mtab="ach">Achievements</button>
+    </div>
+    <div class="shop-body" id="missions-body"></div>
+    <p class="shop-note" id="missions-note"></p>
   </div>
 </div>
 
@@ -234,7 +252,8 @@
       <div class="help-item"><div class="hi-ico release"></div><div><b>Release</b> to swing back <b>left</b>. Time it before each corner!</div></div>
       <div class="help-item"><div class="hi-ico coin-ico"><i class="coin"></i></div><div>Grab <b>coins</b> to unlock new cars, boosters and upgrades.</div></div>
       <div class="help-item"><div class="hi-ico perfect">&#9733;</div><div>Exit a corner near the center line for a <b>Perfect</b>. Chain them for combo bonuses.</div></div>
-      <div class="help-item"><div class="hi-ico wave">~</div><div>The road keeps getting faster and grows <b>waves</b> the further you go.</div></div>
+      <div class="help-item"><div class="hi-ico wave">~</div><div>Take a <b>wave</b> fast (or mid-drift) and you will catch air. Land on the road!</div></div>
+      <div class="help-item"><div class="hi-ico">&#9678;</div><div>Complete <b>daily missions</b> and <b>achievements</b> for bonus coins.</div></div>
       <div class="help-item"><div class="hi-ico flag">&#9873;</div><div><b>Endless</b>: drive as far as you can. <b>Levels</b>: reach the finish line, earn up to 3 stars and unlock the next level.</div></div>
     </div>
     <p class="help-keys">Keyboard: <kbd>Space</kbd> / arrows to drift &middot; <kbd>P</kbd> or <kbd>Esc</kbd> to pause</p>
