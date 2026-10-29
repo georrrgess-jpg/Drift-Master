@@ -2299,6 +2299,98 @@ const CARS = [
         core.scale.setScalar(0.3 + Math.sin(cc.t * 6) * 0.04); core.scale.y = 0.1;
       });
     } },
+  { id: 'nightfin', name: 'Nightfin', price: 3500, tier: 5, desc: 'A jet-age bubble-top roadster: gloss black, red pinstripes, turbine tail.',
+    build(k) {
+      k.L = 1.6;
+      // glossy paint and chrome get their own shiny materials
+      const paint = new T.MeshPhongMaterial({ color: 0x15151d, flatShading: true, shininess: 70, specular: 0x3a3a4a });
+      const red = new T.MeshPhongMaterial({ color: 0xff2a22, flatShading: true, shininess: 80, specular: 0x553333, emissive: 0x550000 });
+      const chrome = new T.MeshPhongMaterial({ color: 0xd8dce6, flatShading: true, shininess: 140, specular: 0xffffff });
+      const P = { m: paint }, R = { m: red }, C = { m: chrome };
+      const y0 = 0.08, W = 0.6, hw = W / 2;
+      // long low body, sculpted from overlapping slabs
+      k.box(1.5, 0.15, W, '', 0, y0 + 0.075, 0, P);                           // main tub
+      k.box(1.5, 0.05, W + 0.01, '#1d1d24', 0, y0 + 0.02, 0);                   // dark sill
+      k.box(0.62, 0.08, 0.5, '', 0.42, y0 + 0.17, 0, { m: paint, rz: -0.07 }); // hood sloping to the nose
+      k.box(0.6, 0.035, 0.07, '', 0.42, y0 + 0.215, 0, { m: paint, rz: -0.07 }); // hood centre ridge
+      k.box(0.22, 0.13, W - 0.04, '', 0.72, y0 + 0.08, 0, P);                   // nose
+      for (const s of [-1, 1]) {
+        k.box(1.42, 0.1, 0.09, '', -0.02, y0 + 0.19, s * (hw - 0.03), P);        // raised side pods
+        k.box(0.3, 0.08, 0.1, '', 0.48, y0 + 0.2, s * (hw - 0.03), { m: paint, rz: -0.18 }); // pod tapering into the nose
+      }
+      k.box(0.46, 0.07, W - 0.1, '', -0.5, y0 + 0.19, 0, P);                    // rear deck
+      // cockpit: dark tub with two red seats under twin bubble canopies
+      k.box(0.44, 0.04, W - 0.16, '#101016', -0.05, y0 + 0.2, 0);
+      for (const s of [-1, 1]) {
+        k.box(0.12, 0.04, 0.16, '', -0.08, y0 + 0.24, s * 0.12, R);
+        k.box(0.04, 0.12, 0.16, '', -0.16, y0 + 0.29, s * 0.12, R);
+        k.cyl(0.035, 0.035, 0.01, '#1d1d24', 0.06, y0 + 0.3, s * 0.12, { axis: 'x', seg: 10, rz: 0.5 }); // steering wheel
+      }
+      const glass = new T.MeshPhongMaterial({ color: 0xbfe6ff, transparent: true, opacity: 0.32, shininess: 150, specular: 0xffffff, depthWrite: false, side: T.DoubleSide });
+      for (const s of [-1, 1]) {
+        const b = k.sphere(0.5, '', -0.06, y0 + 0.215, s * 0.13, 0.5, 0.34, 0.22, { half: true, seg: 16, m: glass });
+        b.castShadow = false;
+        k.box(0.26, 0.012, 0.012, '', -0.06, y0 + 0.218, s * 0.13 + s * 0.11, C); // canopy rim
+      }
+      k.box(0.06, 0.07, 0.04, '', 0.18, y0 + 0.24, 0, C);                        // centre windscreen post
+      // swept tail fins with red leading edges
+      for (const s of [-1, 1]) {
+        // a long, low fin that rises toward the tail, plus a taller trailing tip
+        k.box(0.62, 0.08, 0.04, '', -0.47, y0 + 0.26, s * (hw - 0.04), { m: paint, rz: 0.14 });
+        k.box(0.22, 0.09, 0.035, '', -0.7, y0 + 0.31, s * (hw - 0.04), { m: paint, rz: 0.38 });
+        k.box(0.64, 0.014, 0.045, '', -0.47, y0 + 0.302, s * (hw - 0.04), { m: red, rz: 0.14 });
+        k.box(0.24, 0.014, 0.04, '', -0.7, y0 + 0.36, s * (hw - 0.04), { m: red, rz: 0.38 });
+      }
+      // front intakes: dark recesses framed in red
+      for (const s of [-1, 1]) {
+        const z = s * 0.15;
+        k.box(0.012, 0.07, 0.17, '#08080c', 0.835, y0 + 0.08, z);
+        k.box(0.014, 0.012, 0.19, '', 0.838, y0 + 0.12, z, R);
+        k.box(0.014, 0.012, 0.19, '', 0.838, y0 + 0.04, z, R);
+        k.box(0.014, 0.09, 0.012, '', 0.838, y0 + 0.08, z + 0.09, R);
+        k.box(0.014, 0.09, 0.012, '', 0.838, y0 + 0.08, z - 0.09, R);
+        k.cyl(0.028, 0.028, 0.02, '#fffbe6', 0.8, y0 + 0.165, s * 0.21, { axis: 'x', seg: 10, e: '#fff1a8', ei: 0.9 }); // headlight
+      }
+      // red pinstripes along the body, around the arches and down the hood
+      for (const s of [-1, 1]) {
+        const z = s * (hw + 0.006);
+        k.box(1.48, 0.014, 0.008, '', -0.01, y0 + 0.155, z, R);
+        k.box(1.2, 0.012, 0.008, '', -0.05, y0 + 0.235, s * (hw - 0.03 + 0.047), R);
+        for (const ax of [0.5, -0.5]) {
+          k.box(0.12, 0.012, 0.008, '', ax - 0.1, y0 + 0.1, z, { m: red, rz: 0.9 });
+          k.box(0.12, 0.012, 0.008, '', ax + 0.1, y0 + 0.1, z, { m: red, rz: -0.9 });
+        }
+      }
+      k.box(0.6, 0.006, 0.02, '', 0.42, y0 + 0.235, 0, { m: red, rz: -0.07 });
+      // chrome side pipes and rear details
+      for (const s of [-1, 1]) k.cyl(0.022, 0.022, 0.62, '', 0.02, y0 + 0.02, s * (hw + 0.025), { axis: 'x', seg: 8, m: chrome });
+      k.box(0.03, 0.02, W - 0.1, '', -0.76, y0 + 0.05, 0, C);
+      k.tail(0.02, 0.05, 0.1, -0.77, y0 + 0.12, 0.2); k.tail(0.02, 0.05, 0.1, -0.77, y0 + 0.12, -0.2);
+      // turbine exhaust with a glowing core and a speed-reactive flame
+      k.cyl(0.075, 0.085, 0.1, '', -0.78, y0 + 0.17, 0, { axis: 'x', seg: 14, m: chrome });
+      const core = new T.MeshBasicMaterial({ color: 0xff7a1a });
+      k.cyl(0.055, 0.055, 0.012, '', -0.832, y0 + 0.17, 0, { axis: 'x', seg: 14, m: core });
+      const flame = k.group(-0.84, y0 + 0.17, 0);
+      const fm = new T.MeshBasicMaterial({ color: 0xffa040, transparent: true, opacity: 0.8 });
+      k.cyl(0.05, 0.0, 0.22, '', -0.11, 0, 0, { axis: 'x', seg: 10, parent: flame, m: fm }).rotation.z = -HALF_PI;
+      // flashing beacon and a springy antenna on the rear deck
+      k.cyl(0.03, 0.03, 0.02, '#2a2a34', -0.42, y0 + 0.235, 0, { seg: 10 });
+      k.flasher(0.045, 0.05, 0.045, -0.42, y0 + 0.27, 0, '#ff2a22', '#3a0505', 0);
+      const ant = k.group(-0.6, y0 + 0.23, -0.18);
+      k.box(0.008, 0.32, 0.008, '', 0, 0.16, 0, { parent: ant, m: chrome });
+      k.exhaust = null;
+      k.wheels4(0.5, 0.5, hw - 0.02, 0.145, 0.13, { hub: '#d8dce6', hub2: '#9aa0ad', cap: '#ff2a22', wall: '#2a2a32' });
+      let ax = 0, av = 0;
+      k.anims.push((c, dt) => {
+        const sp = Math.min(1, c.speed / 10);
+        flame.scale.set(0.35 + sp * 0.9 + Math.random() * 0.2, 0.85 + Math.random() * 0.2, 0.85 + Math.random() * 0.2);
+        fm.opacity = 0.5 + sp * 0.35 + Math.random() * 0.15;
+        core.color.setRGB(1, 0.42 + Math.sin(c.t * 9) * 0.08, 0.1);
+        av += (-ax * 55 - av * 3 + c.lean * 35) * dt; ax += av * dt;
+        ant.rotation.x = clamp(ax, -0.7, 0.7);
+        ant.rotation.z = Math.min(0.35, c.speed * 0.03);
+      });
+    } },
   { id: 'prism', name: 'Prism', price: 3000, tier: 5, desc: 'Every colour at once. The rarest ride on the road.',
     build(k) {
       const paint = new T.MeshPhongMaterial({ color: 0xff0000, flatShading: true, shininess: 100, specular: 0xffffff, emissive: 0x000000 });
@@ -3896,7 +3988,8 @@ const CAR_TAGS = {
   hotrod: ['Pumping pistons', 'Side pipes'], dune: ['Flapping flag', 'Roll cage'], lowrider: ['Hydraulic hops'],
   stomper: ['Bouncy suspension', 'Giant wheels'], party: ['Disco lights', 'Disco ball'], synth: ['Pulsing underglow'],
   robo: ['Scanning visor', 'Springy antenna'], wedge: ['Neon trim'], rocket: ['Rocket flame'], hover: ['Hovers', 'Glowing pads'],
-  lava: ['Glowing cracks'], aurum: ['Solid gold'], ghost: ['See-through shell'], prism: ['Colour-shifting paint', 'Underglow']
+  lava: ['Glowing cracks'], aurum: ['Solid gold'], ghost: ['See-through shell'], prism: ['Colour-shifting paint', 'Underglow'],
+  nightfin: ['Twin bubble canopies', 'Turbine flame', 'Red pinstripes', 'Flashing beacon']
 };
 const garage = { scene: new T.Scene(), cam: new T.PerspectiveCamera(34, 1, 0.1, 100), holder: new T.Group(), idx: 0, model: null, active: false, rot: 0.6, pop: 1, thumbs: null, filter: 'all', drag: null, dragT: -9 };
 (function buildGarage() {
