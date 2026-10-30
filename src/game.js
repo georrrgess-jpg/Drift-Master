@@ -1556,6 +1556,55 @@ const CARS = [
         ant.rotation.z = Math.min(0.35, c.speed * 0.03);
       });
     } },
+  { id: 'ridgeback', name: 'Ridgeback', price: 950, tier: 3, desc: 'Lowered crew-cab pickup in deep metallic blue, riding on black wheels.',
+    build(k) {
+      k.L = 1.42;
+      const paint = new T.MeshPhongMaterial({ color: 0x1f6fe0, flatShading: true, shininess: 70, specular: 0x34466e });
+      const P = { m: paint }, BL = '#17171e', TINT = '#1c2430';
+      const L = 1.42, W = 0.62, hw = W / 2, y0 = 0.07, bh = 0.22, top = y0 + bh;
+      // lower body, slightly tucked rocker and a crisp shoulder line
+      k.box(L, bh, W, '', 0, y0 + bh / 2, 0, P);
+      k.box(L * 0.99, 0.045, W + 0.012, BL, 0, y0 + 0.025, 0);
+      k.box(L - 0.1, 0.018, W + 0.008, '', -0.02, top - 0.03, 0, P);
+      // hood rising gently to the windscreen
+      k.box(0.36, 0.06, W - 0.04, '', 0.5, top + 0.02, 0, { m: paint, rz: -0.06 });
+      // crew cab: four doors, tinted glass, black B-pillar
+      const cx = 0.04, cl = 0.66, ch = 0.25, cw = W * 0.88;
+      k.box(cl, ch, cw, '', cx, top + ch / 2, 0, P);
+      k.box(cl - 0.04, ch * 0.55, cw + 0.014, TINT, cx - 0.01, top + ch * 0.5, 0);
+      k.box(0.03, ch * 0.57, cw + 0.018, BL, cx + 0.01, top + ch * 0.5, 0);          // B-pillar
+      k.box(0.1, ch * 0.62, cw * 0.92, TINT, cx + cl / 2 + 0.02, top + ch * 0.45, 0, { rz: -0.55 }); // raked windscreen
+      k.box(cl + 0.02, 0.025, cw + 0.004, '', cx, top + ch + 0.005, 0, P);           // roof cap
+      for (const sd of [-1, 1]) {
+        const z = sd * (hw + 0.004);
+        // door seams and handles
+        k.box(0.006, bh * 0.85, 0.006, BL, cx + 0.02, y0 + bh * 0.55, z);
+        k.box(0.006, bh * 0.85, 0.006, BL, cx + cl / 2 - 0.01, y0 + bh * 0.55, z);
+        k.box(0.006, bh * 0.85, 0.006, BL, cx - cl / 2 + 0.02, y0 + bh * 0.55, z);
+        k.box(0.05, 0.012, 0.01, '#c9ccd6', cx + 0.12, top - 0.05, z);
+        k.box(0.05, 0.012, 0.01, '#c9ccd6', cx - 0.18, top - 0.05, z);
+        // mirrors and black fender vents
+        k.box(0.05, 0.04, 0.05, BL, cx + cl / 2 - 0.05, top + 0.05, sd * (cw / 2 + 0.035));
+        k.box(0.03, 0.07, 0.008, BL, 0.4, y0 + bh * 0.62, z);
+      }
+      // short bed with walls, liner and tailgate
+      const bx = -0.5, bw = 0.42;
+      for (const sd of [-1, 1]) k.box(bw, 0.13, 0.03, '', bx, top + 0.06, sd * (hw - 0.015), P);
+      k.box(bw, 0.01, W - 0.06, BL, bx, top + 0.005, 0);
+      k.box(0.03, 0.13, W - 0.02, '', -L / 2 + 0.015, top + 0.06, 0, P);
+      k.box(0.006, 0.02, 0.18, BL, -L / 2 - 0.002, top + 0.07, 0);                   // tailgate handle
+      // front: black grille band with a slim LED light bar and lamps
+      k.box(0.012, 0.09, W * 0.8, BL, L / 2 + 0.004, y0 + bh * 0.58, 0);
+      k.box(0.014, 0.012, W * 0.82, '#fffbe6', L / 2 + 0.008, top - 0.012, 0, { e: '#fff1a8', ei: 1 });
+      for (const sd of [-1, 1]) k.box(0.016, 0.05, 0.1, '#fffbe6', L / 2 + 0.008, top - 0.04, sd * 0.24, { e: '#fff1a8', ei: 0.9 });
+      k.box(0.05, 0.06, W * 0.98, BL, L / 2 + 0.02, y0 + 0.04, 0);
+      k.box(0.05, 0.06, W * 0.98, BL, -L / 2 - 0.02, y0 + 0.04, 0);
+      // tall rear lamps
+      for (const sd of [-1, 1]) k.tail(0.02, 0.1, 0.06, -L / 2 - 0.006, top - 0.02, sd * 0.25);
+      k.pipe(-L / 2 - 0.03, y0 + 0.04, -W * 0.27);
+      // big black multi-spoke wheels, low ride
+      k.wheels4(L * 0.33, L * 0.32, hw - 0.03, 0.16, 0.14, { hub: '#202028', hub2: '#34343e', cap: '#4a4a56', wall: '#121218' });
+    } },
   { id: 'prism', name: 'Prism', price: 3000, tier: 5, desc: 'Every colour at once. The rarest ride on the road.',
     build(k) {
       const paint = new T.MeshPhongMaterial({ color: 0xff0000, flatShading: true, shininess: 100, specular: 0xffffff, emissive: 0x000000 });
@@ -3154,6 +3203,7 @@ const CAR_TAGS = {
   stomper: ['Bouncy suspension', 'Giant wheels'], party: ['Disco lights', 'Disco ball'], synth: ['Pulsing underglow'],
   robo: ['Scanning visor', 'Springy antenna'], wedge: ['Neon trim'], rocket: ['Rocket flame'], hover: ['Hovers', 'Glowing pads'],
   lava: ['Glowing cracks'], aurum: ['Solid gold'], ghost: ['See-through shell'], prism: ['Colour-shifting paint', 'Underglow'],
+  ridgeback: ['Crew cab', 'Short bed', 'Lowered stance', 'LED light bar'],
   nightfin: ['Twin bubble canopies', 'Turbine flame', 'Red pinstripes', 'Flashing beacon']
 };
 const garage = { scene: new T.Scene(), cam: new T.PerspectiveCamera(34, 1, 0.1, 100), holder: new T.Group(), idx: 0, model: null, active: false, rot: 0.6, pop: 1, thumbs: null, filter: 'all', drag: null, dragT: -9 };
