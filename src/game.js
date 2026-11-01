@@ -22,7 +22,8 @@ const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
 const easeOutBack = t => { const c1 = 1.5, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
-const fmt = n => Math.floor(n).toLocaleString('en-US');
+const NUMF = new Intl.NumberFormat('en-US');
+const fmt = n => NUMF.format(Math.floor(n));
 
 /* =========================================================================
  * Save data
@@ -127,8 +128,11 @@ const Sound = (() => {
     sfx.gain.setTargetAtTime(save.settings.sfx ? 1 : 0, t, 0.02);
     music.gain.setTargetAtTime(save.settings.music ? 0.3 : 0, t, 0.4);
   }
+  let engLast = 0, engOn = false;
   function engine(on, speed, slip) {
     if (!ctx) return;
+    if (on === engOn && ctx.currentTime - engLast < 0.066) return;
+    engLast = ctx.currentTime; engOn = on;
     const t = ctx.currentTime;
     const f = 42 + speed * 6.5 + slip * 25;
     eng1.frequency.setTargetAtTime(f, t, 0.06);
@@ -259,19 +263,21 @@ const SKIES = [
   { name: 'Aurora', top: '#2fb9a6', mid: '#56d6b5', bot: '#8fe6c4', cloud: '#e5fff6' }
 ];
 const skyUniforms = { top: { value: new T.Color(SKIES[0].top) }, mid: { value: new T.Color(SKIES[0].mid) }, bot: { value: new T.Color(SKIES[0].bot) }, time: { value: 0 } };
-const sky = new T.Mesh(new T.SphereGeometry(320, 32, 20), new T.ShaderMaterial({
+const sky = new T.Mesh(new T.SphereGeometry(320, 40, 24), new T.ShaderMaterial({
   uniforms: skyUniforms, side: T.BackSide, depthWrite: false, fog: false,
-  vertexShader: 'varying vec3 vP; void main(){ vP = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-  fragmentShader: [
-    'uniform vec3 top; uniform vec3 mid; uniform vec3 bot; uniform float time; varying vec3 vP;',
+  // all the colour work happens per vertex; the fragment shader only writes the
+  // interpolated colour, which keeps this full-screen pass cheap on weak GPUs
+  vertexShader: [
+    'uniform vec3 top; uniform vec3 mid; uniform vec3 bot; varying vec3 vC;',
     'void main(){',
-    '  float h = vP.y;',
+    '  vec3 d = normalize(position); float h = d.y;',
     '  vec3 c = h > 0.0 ? mix(mid, top, smoothstep(0.0, 0.55, h)) : mix(mid, bot, smoothstep(0.0, 0.35, -h));',
-    '  float band = sin(h * 140.0 + time * 0.4) * 0.5 + 0.5;',
-    '  c += (band - 0.5) * 0.018 * (1.0 - smoothstep(0.0, 0.5, abs(h + 0.08)));',
-    '  gl_FragColor = vec4(c, 1.0);',
+    '  float s = max(dot(d, normalize(vec3(0.62, 0.16, -0.77))), 0.0);',
+    '  c += vec3(1.0, 0.86, 0.6) * (pow(s, 24.0) * 0.55 + pow(s, 4.0) * 0.12);', // warm sun glow
+    '  vC = c; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);',
     '}'
-  ].join('\n')
+  ].join('\n'),
+  fragmentShader: 'varying vec3 vC; void main(){ gl_FragColor = vec4(vC, 1.0); }'
 }));
 sky.renderOrder = -10;
 scene.add(sky);
@@ -288,7 +294,7 @@ scene.add(sun, sun.target);
 
 function applyQuality() {
   gfx = GFX[save.settings.gfx] || GFX.medium;
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, gfx.ratio));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, gfx.ratio) * (typeof adapt === 'object' ? adapt.scale : 1));
   renderer.shadowMap.enabled = gfx.shadows;
   sun.castShadow = gfx.shadows;
   scene.traverse(o => { if (o.material) [].concat(o.material).forEach(m => { m.needsUpdate = true; }); });
@@ -408,6 +414,7 @@ class Segment {
     this.hasNext = !opts.last;
   }
   local(x, z) { const dx = x - this.sx, dz = z - this.sz; return [dx * this.ux + dz * this.uz, dx * this.px + dz * this.pz]; }
+  containsLip(x, z, m) { const l = this.local(x, z); return l[0] >= this.s0 - m && l[0] <= this.s1 + m && Math.abs(l[1]) <= ROAD_W / 2 + m; }
   contains(x, z) { const l = this.local(x, z); return (l[0] >= this.s0 && l[0] <= this.s1 && Math.abs(l[1]) <= ROAD_W / 2) ; }
   height(s) {
     const w = this.wave;
@@ -507,6 +514,7 @@ function updateCoins(dt) {
     const c = coinList[i];
     let y, rot, sc = 1;
     if (c.state === 0) {
+      if (Math.abs(c.x - car.rx) + Math.abs(c.z - car.rz) > 60) continue; // beyond the fog: skip
       y = c.y + Math.sin(time * 3 + c.phase) * 0.06;
       rot = time * 3.2 + c.phase;
     } else {
@@ -526,13 +534,16 @@ function updateCoins(dt) {
     n++;
   }
   coinOuter.count = coinInner.count = n;
+  // a quick shared glint so the coins catch the light
+  const g = Math.pow(Math.max(0, Math.sin(time * 2.6)), 12);
+  coinMat.emissiveIntensity = 0.45 + g * 0.5; coinInnerMat.emissiveIntensity = 0.4 + g * 0.6;
   coinOuter.instanceMatrix.needsUpdate = coinInner.instanceMatrix.needsUpdate = true;
 }
 
 /* Gold shockwave rings for coin pickups (a small reusable pool of billboards) */
 const ringPool = [];
 const ringGeo = new T.RingGeometry(0.72, 1, 28);
-function coinRing(x, y, z) {
+function coinRing(x, y, z, ground) {
   let r = ringPool.find(o => !o.alive);
   if (!r) {
     if (ringPool.length >= 8) return;
@@ -542,6 +553,8 @@ function coinRing(x, y, z) {
     ringPool.push(r);
   }
   r.alive = true; r.t = 0; r.m.visible = true; r.m.position.set(x, y, z);
+  r.ground = !!ground;
+  r.m.material.color.set(ground ? 0xffffff : 0xffd23f);
 }
 function updateRings(dt) {
   for (const r of ringPool) {
@@ -549,8 +562,8 @@ function updateRings(dt) {
     r.t += dt;
     const k = r.t / 0.38;
     if (k >= 1) { r.alive = false; r.m.visible = false; continue; }
-    r.m.quaternion.copy(camera.quaternion);
-    r.m.scale.setScalar(0.25 + easeOutCubic(k) * 0.85);
+    if (r.ground) { r.m.rotation.set(-HALF_PI, 0, 0); r.m.scale.setScalar(0.4 + easeOutCubic(k) * 1.6); }
+    else { r.m.quaternion.copy(camera.quaternion); r.m.scale.setScalar(0.25 + easeOutCubic(k) * 0.85); }
     r.m.material.opacity = 0.95 * (1 - k);
   }
 }
@@ -611,13 +624,55 @@ const finishTex = (() => {
 
 function disposeSeg(seg) {
   track.group.remove(seg.group);
-  seg.mesh.geometry.dispose();
+  seg.geo.dispose();
   removeSegCoins(seg);
+  const ch = seg.chunk;
+  if (ch && --ch.alive === 0) {
+    track.group.remove(ch.mesh); ch.mesh.geometry.dispose();
+    if (track.openChunk === ch) track.openChunk = null;
+  }
+}
+/* Road chunks: up to CHUNK_SEGS consecutive segments of the same theme are
+ * merged into one mesh (2 draw calls for the whole chunk instead of 2 per
+ * segment). A chunk is freed once every segment in it has been retired. */
+const CHUNK_SEGS = 6;
+function rebuildChunk(ch) {
+  let nTop = 0, nSide = 0;
+  for (const sg of ch.segs) { nTop += sg.geo.groups[0].count; nSide += sg.geo.groups[1].count; }
+  const N = nTop + nSide;
+  const pos = new Float32Array(N * 3), nor = new Float32Array(N * 3), col = new Float32Array(N * 3), uv = new Float32Array(N * 2);
+  let oT = 0, oS = nTop;
+  const copy = (g, start, count, o) => {
+    const a = g.attributes;
+    pos.set(a.position.array.subarray(start * 3, (start + count) * 3), o * 3);
+    nor.set(a.normal.array.subarray(start * 3, (start + count) * 3), o * 3);
+    col.set(a.color.array.subarray(start * 3, (start + count) * 3), o * 3);
+    uv.set(a.uv.array.subarray(start * 2, (start + count) * 2), o * 2);
+  };
+  for (const sg of ch.segs) {
+    const [t, sd] = sg.geo.groups;
+    copy(sg.geo, t.start, t.count, oT); oT += t.count;
+    copy(sg.geo, sd.start, sd.count, oS); oS += sd.count;
+  }
+  const geo = new T.BufferGeometry();
+  geo.setAttribute('position', new T.BufferAttribute(pos, 3));
+  geo.setAttribute('normal', new T.BufferAttribute(nor, 3));
+  geo.setAttribute('color', new T.BufferAttribute(col, 3));
+  geo.setAttribute('uv', new T.BufferAttribute(uv, 2));
+  geo.addGroup(0, nTop, 0); geo.addGroup(nTop, nSide, 1);
+  geo.computeBoundingSphere();
+  if (ch.mesh) { ch.mesh.geometry.dispose(); ch.mesh.geometry = geo; }
+  else {
+    const th = THEMES[ch.theme];
+    ch.mesh = new T.Mesh(geo, [th.top, th.sideMat]);
+    ch.mesh.receiveShadow = true; ch.mesh.matrixAutoUpdate = false;
+    track.group.add(ch.mesh);
+  }
 }
 function resetTrack(intro, cfg) {
   cfg = cfg || { mode: 'endless' };
   track.segs.forEach(disposeSeg);
-  track.segs = []; track.base = 0;
+  track.segs = []; track.base = 0; track.openChunk = null;
   coinList.length = 0;
   track.mode = cfg.mode; track.level = cfg.level || null; track.finishSeg = null; track.coinTotal = 0;
   track.rng = track.level ? mulberry32(track.level.seed) : Math.random;
@@ -629,10 +684,16 @@ function resetTrack(intro, cfg) {
   for (let i = 0; i < 40 && Math.hypot(lastSeg().ex, lastSeg().ez) < 110; i++) if (!genNext(0)) break;
 }
 function addSegment(seg) {
-  seg.group = new T.Group();
-  seg.mesh = buildSegmentMesh(seg);
-  seg.group.add(seg.mesh);
+  seg.group = new T.Group(); // holds per-segment decorations (finish arch)
   track.group.add(seg.group);
+  seg.geo = buildSegmentMesh(seg).geometry;
+  let ch = track.openChunk;
+  if (!ch || ch.theme !== seg.theme || ch.segs.length >= CHUNK_SEGS) {
+    ch = track.openChunk = { theme: seg.theme, segs: [], alive: 0, mesh: null };
+  }
+  ch.segs.push(seg); ch.alive++;
+  seg.chunk = ch;
+  rebuildChunk(ch);
   track.segs.push(seg);
   return seg;
 }
@@ -1933,6 +1994,15 @@ function resetCar(seg, s) {
   snapCar();
 }
 
+// "wheels on the lip": the centre may poke this far past an edge before the car falls
+const LIP = 0.1;
+function findSegLip(x, z) {
+  for (let i = car.segIdx - 1; i <= car.segIdx + 2; i++) {
+    const s = segAt(i);
+    if (s && s.containsLip(x, z, LIP)) return s;
+  }
+  return null;
+}
 function findSeg(x, z) {
   for (let i = car.segIdx - 1; i <= car.segIdx + 2; i++) {
     const s = segAt(i);
@@ -1995,10 +2065,11 @@ function physicsStep(dt, mode) {
   car.x += car.vx * dt; car.z += car.vz * dt;
   car.dist += car.speed * dt;
 
-  const seg = findSeg(car.x, car.z);
+  const seg = findSeg(car.x, car.z) || findSegLip(car.x, car.z);
   if (!seg) return false;
   car.segIdx = seg.index;
   const loc = seg.local(car.x, car.z);
+  loc[0] = clamp(loc[0], seg.s0, seg.s1);
   // rest on the wheels: in a dip the bumpers would otherwise sink into the road
   const along = (carKit ? carKit.L : 1.1) * 0.4 * Math.cos(car.psi - seg.ang);
   const hc = seg.height(loc[0]), hf = seg.height(loc[0] + along), hr = seg.height(loc[0] - along);
@@ -2025,7 +2096,7 @@ function physicsStep(dt, mode) {
     // perfect-corner check halfway down each segment
     if (!seg.checked && seg.index > 0 && loc[0] > ROAD_W / 2 + Math.min(1.6, (seg.len - ROAD_W / 2) * 0.5)) {
       seg.checked = true;
-      if (Math.abs(loc[1]) < 0.38 && Math.abs(car.psi - seg.ang) < 0.12) onPerfect();
+      if (Math.abs(loc[1]) < ROAD_W * 0.17 && Math.abs(car.psi - seg.ang) < 0.12) onPerfect();
       else runState.combo = 0;
     }
   }
@@ -2053,6 +2124,7 @@ function onPerfect() {
   el.textContent = runState.combo > 1 ? `PERFECT x${runState.combo}  +${bonus * runState.mult}` : `PERFECT  +${bonus * runState.mult}`;
   el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
   Sound.perfect(runState.combo);
+  coinRing(car.x, car.y + 0.05, car.z, true);
   Missions.event('perfect', runState.combo);
   for (let i = 0; i < 8; i++) Particles.spawn('spark', car.x, car.y + 0.4, car.z, rand(-2, 2), rand(2, 4.5), rand(-2, 2), 0.7, 1.2, 0.4, i % 2 ? 0xffe066 : 0xffffff);
 }
@@ -2089,6 +2161,8 @@ function driveEffects(dt, onRoad) {
  * ========================================================================= */
 const cam = { pos: new T.Vector3(-6, 10, 6), look: new T.Vector3(), shake: 0, anchor: null, orbit: 0 };
 const OFFSET = new T.Vector3(-6.3, 9.6, 6.3);
+const _camOff = new T.Vector3(), _camWant = new T.Vector3(), _yAxis = new T.Vector3(0, 1, 0);
+cam.roll = 0; cam.baseFov = 40;
 function updateCamera(dt, snap) {
   let tx = car.rx, ty = car.ry, tz = car.rz;
   if (cam.anchor) { tx = cam.anchor.x; ty = cam.anchor.y; tz = cam.anchor.z; }
@@ -2097,15 +2171,15 @@ function updateCamera(dt, snap) {
   const aspect = window.innerWidth / Math.max(1, window.innerHeight);
   let k = 1 + Math.max(0, car.speed - 6.3) * 0.022;
   if (aspect < 1) k *= 1 + (1 - aspect) * 0.75;
-  const off = OFFSET.clone().multiplyScalar(k);
+  const off = _camOff.copy(OFFSET).multiplyScalar(k);
   if (state === 'menu') {
     cam.orbit += dt;
     const a = Math.sin(cam.orbit * 0.13) * 0.42;
-    off.applyAxisAngle(new T.Vector3(0, 1, 0), a);
+    off.applyAxisAngle(_yAxis, a);
     off.multiplyScalar(1.12);
     off.y *= 0.85;
   }
-  const want = new T.Vector3(lx + off.x, ty * 0.5 + off.y, lz + off.z);
+  const want = _camWant.set(lx + off.x, ty * 0.5 + off.y, lz + off.z);
   if (snap) { cam.pos.copy(want); cam.look.set(lx, ty, lz); }
   else {
     cam.pos.x = damp(cam.pos.x, want.x, 5, dt); cam.pos.z = damp(cam.pos.z, want.z, 5, dt); cam.pos.y = damp(cam.pos.y, want.y, 3, dt);
@@ -2117,6 +2191,12 @@ function updateCamera(dt, snap) {
   }
   cam.shake = Math.max(0, cam.shake - dt * 1.4);
   camera.lookAt(cam.look);
+  // lean the view a touch into drifts and widen it with speed
+  const driving = state === 'playing' || state === 'menu';
+  cam.roll = damp(cam.roll, driving ? clamp((car.psi - car.phi) * 0.1, -0.035, 0.035) : 0, 4, dt);
+  camera.rotateZ(cam.roll);
+  const fovT = cam.baseFov + (driving ? clamp((car.speed - 7) * 0.7, 0, 3.2) : 0);
+  if (Math.abs(fovT - camera.fov) > 0.02) { camera.fov = damp(camera.fov, fovT, 3, dt); camera.updateProjectionMatrix(); }
   sky.position.copy(camera.position);
   sun.position.set(cam.look.x + 7, cam.look.y + 16, cam.look.z + 5);
   sun.target.position.copy(cam.look);
@@ -2138,7 +2218,7 @@ function fixedUpdate(dt) {
     return;
   }
   if (state === 'playing') {
-    const headDone = currentMode === 'level' ? pathPos() >= track.level.len * 0.3 : runState.score >= 300;
+    const headDone = currentMode === 'level' && track.level ? pathPos() >= track.level.len * 0.3 : runState.score >= 300;
     if (autopilot && !autopilotForced && headDone) {
       // hand control back on a straight once the car is lined up
       const seg = segAt(car.segIdx);
@@ -2276,6 +2356,7 @@ function startFall() {
   car.yawRate = rand(-1.2, 1.2);
   car.air = false;
   runState.fell = true;
+  const vg = $('#vignette'); vg.classList.remove('pulse'); void vg.offsetWidth; vg.classList.add('pulse');
   cam.anchor = { x: car.x, y: car.y, z: car.z, y0: car.y };
   cam.shake = 0.3;
   // crumbs of road and dust kicked up at the edge
@@ -2344,9 +2425,10 @@ function doRevive() {
  * ========================================================================= */
 function startRun(mode, level) {
   Sound.ensure();
-  if (mode) currentMode = mode;
-  if (level) currentLevel = level;
   fadeTransition(() => {
+    // switch mode together with the track, never while the old run is still stepping
+    if (mode) currentMode = mode;
+    if (level) currentLevel = level;
     showScreen(null);
     Object.assign(runState, { fell: false, rawCoins: 0, score: 0, bonus: 0, coins: 0, perfects: 0, combo: 0, mult: 1, coinMult: 1, coinRush: false, insurance: false, insuranceUsed: false, headstart: false, revived: false, newBest: false, zone: 0, milestone: 500 });
     // consume boosters
@@ -2539,11 +2621,22 @@ function enterAttract() {
 
 function togglePause(force) {
   if (state === 'paused' && force !== true) {
-    state = pausedFrom; pausedFrom = null;
+    const from = pausedFrom; pausedFrom = null;
     showScreen(null);
     input.hold = false;
-    if (state === 'playing') { steerLock = true; car.lockAng = car.psi; }
     last = performance.now();
+    if (from === 'playing') {
+      // 3-2-1 with the world frozen; hold during it to resume drifting right
+      state = 'countdown'; steerLock = false;
+      let n = 3;
+      const tick = () => {
+        if (state !== 'countdown') return;
+        if (n === 0) { state = 'playing'; toast('GO!'); Sound.go(); return; }
+        toast(String(n)); Sound.tick(); n--;
+        setTimeout(tick, 420);
+      };
+      tick();
+    } else state = from;
     return;
   }
   if (state === 'playing' || state === 'ready') {
@@ -2586,6 +2679,52 @@ function updateSky(dt) {
  * Per-frame visuals
  * ========================================================================= */
 let hudScoreShown = -1, lastProgress = -1;
+/* Wind streaks at high speed: short lines that rush past the camera (one draw call) */
+const Streaks = (() => {
+  const N = 26, pos = new Float32Array(N * 6), P = [];
+  const geo = new T.BufferGeometry();
+  const attr = new T.BufferAttribute(pos, 3); attr.setUsage(T.DynamicDrawUsage);
+  geo.setAttribute('position', attr);
+  const mat = new T.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthWrite: false, blending: T.AdditiveBlending });
+  const lines = new T.LineSegments(geo, mat);
+  lines.frustumCulled = false; scene.add(lines);
+  for (let i = 0; i < N; i++) P.push({ t: Math.random() });
+  return {
+    update(dt) {
+      const k = state === 'playing' && !car.air ? clamp((car.speed - 8.5) / 3, 0, 1) : 0;
+      mat.opacity = damp(mat.opacity, k * 0.32, 3, dt);
+      lines.visible = mat.opacity > 0.01;
+      if (!lines.visible) return;
+      const vx = Math.cos(car.phi), vz = -Math.sin(car.phi);
+      for (let i = 0; i < N; i++) {
+        const p = P[i];
+        p.t += dt * 1.6;
+        if (p.t >= 1 || p.ox === undefined) { p.t = p.t % 1; p.ox = rand(-5, 5); p.oy = rand(0.2, 3.5); p.oz = rand(-5, 5); }
+        // spawn ahead of the car and slide back past it
+        const d = 8 - p.t * 16, len = 0.9 + car.speed * 0.06;
+        const x = car.rx + p.ox + vx * d, y = car.ry + p.oy, z = car.rz + p.oz + vz * d;
+        pos.set([x, y, z, x - vx * len, y, z - vz * len], i * 6);
+      }
+      attr.needsUpdate = true;
+    }
+  };
+})();
+
+/* Adaptive resolution: if frames run long, render fewer pixels (the main cost
+ * on weak GPUs); creep back up when there is headroom. */
+const adapt = { scale: 1, acc: 0, n: 0 };
+function adaptResolution(rawDt) {
+  if (rawDt > 0.25 || !(state === 'playing' || state === 'menu')) return;
+  adapt.acc += rawDt; adapt.n++;
+  if (adapt.acc < 1.5) return;
+  const avg = adapt.acc / adapt.n;
+  adapt.acc = 0; adapt.n = 0;
+  let next = adapt.scale;
+  if (avg > 1 / 45) next = Math.max(0.6, adapt.scale - 0.1);
+  else if (avg < 1 / 57) next = Math.min(1, adapt.scale + 0.05);
+  if (next !== adapt.scale) { adapt.scale = next; renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, gfx.ratio) * adapt.scale); resize(); }
+}
+
 let renderAlpha = 0;
 function visualUpdate(dt) {
   // interpolate between the last two physics steps so motion is smooth at any frame rate
@@ -2593,6 +2732,7 @@ function visualUpdate(dt) {
   car.rx = lerp(car.px, car.x, a); car.ry = lerp(car.py, car.y, a); car.rz = lerp(car.pz, car.z, a); car.rpsi = lerp(car.ppsi, car.psi, a);
   updateCoins(dt);
   updateRings(dt);
+  Streaks.update(dt);
   Particles.update(dt);
   Skids.update(time);
   updateSky(dt);
@@ -2687,14 +2827,18 @@ function visualUpdate(dt) {
 /* =========================================================================
  * HUD & UI helpers
  * ========================================================================= */
+const hudEl = { score: $('#hud-score'), best: $('#hud-best') };
+let hudNext = 0;
 function updateHud(force) {
   const s = Math.floor(runState.score);
+  if (!force && time < hudNext) return;
+  hudNext = time + 0.05;
   if (s !== hudScoreShown || force) {
-    const el = $('#hud-score');
+    const el = hudEl.score;
     if (!force && Math.floor(s / 100) !== Math.floor(hudScoreShown / 100)) { el.classList.add('pop'); setTimeout(() => el.classList.remove('pop'), 150); }
     el.textContent = fmt(s);
     hudScoreShown = s;
-    $('#hud-best').textContent = 'BEST ' + fmt(Math.max(save.best, s));
+    hudEl.best.textContent = 'BEST ' + fmt(Math.max(save.best, s));
   }
 }
 function updateCoinsUI(bump) {
@@ -2713,18 +2857,28 @@ function toast(big, small) {
 }
 const projV = new T.Vector3();
 let hudCoinRect = null;
+const popPool = [];
+let popIdx = 0;
+for (let i = 0; i < 8; i++) { const d = document.createElement('div'); d.className = 'coin-pop'; d.style.display = 'none'; d.style.animation = 'none'; $('#fx').appendChild(d); popPool.push(d); }
 window.addEventListener('resize', () => { hudCoinRect = null; });
 function flyCoin(x, y, z, value, streak) {
   const fx = $('#fx');
   projV.set(x, y + 0.3, z).project(camera);
   const sx = (projV.x * 0.5 + 0.5) * window.innerWidth, sy = (-projV.y * 0.5 + 0.5) * window.innerHeight;
   // "+1" pop (with a streak counter for chains of coins)
-  const pop = document.createElement('div');
+  const pop = popPool[popIdx = (popIdx + 1) % popPool.length];
   pop.className = 'coin-pop' + (streak >= 3 ? ' hot' : '');
   pop.innerHTML = '+' + value + (streak >= 3 ? ' <small>x' + streak + '</small>' : '');
   pop.style.left = sx + 'px'; pop.style.top = sy + 'px';
-  fx.appendChild(pop);
-  setTimeout(() => pop.remove(), 820);
+  pop.style.display = 'block';
+  if (pop.anim) pop.anim.cancel();
+  pop.anim = pop.animate([
+    { opacity: 0, transform: 'translate(-50%, -30%) scale(.4)' },
+    { opacity: 1, transform: 'translate(-50%, -90%) scale(1.25)', offset: 0.2 },
+    { opacity: 1, transform: 'translate(-50%, -110%) scale(1)', offset: 0.35 },
+    { opacity: 0, transform: 'translate(-50%, -260%) scale(.9)' }
+  ], { duration: 800, easing: 'cubic-bezier(.2,.9,.3,1)' });
+  pop.anim.onfinish = () => { pop.style.display = 'none'; };
   if (fx.getElementsByClassName('fly-coin').length > 10 || !Element.prototype.animate) return;
   if (!hudCoinRect) hudCoinRect = $('#hud-coins .coin').getBoundingClientRect();
   const tx = hudCoinRect.left + hudCoinRect.width / 2, ty = hudCoinRect.top + hudCoinRect.height / 2;
@@ -3436,7 +3590,7 @@ function release() {
 }
 window.addEventListener('pointerdown', e => {
   if (isUI(e.target)) { Sound.ensure(); return; }
-  if (state === 'ready' || state === 'playing') { e.preventDefault(); press(); }
+  if (state === 'ready' || state === 'playing' || state === 'countdown') { e.preventDefault(); press(); }
 }, { passive: false });
 window.addEventListener('pointerup', release);
 window.addEventListener('pointercancel', release);
@@ -3520,7 +3674,7 @@ function resize() {
   const w = window.innerWidth, h = window.innerHeight;
   renderer.setSize(w, h, false);
   camera.aspect = w / h;
-  camera.fov = w / h < 1 ? 46 : 40;
+  cam.baseFov = camera.fov = w / h < 1 ? 46 : 40;
   camera.updateProjectionMatrix();
   pointScale.value = h * renderer.getPixelRatio() / (2 * Math.tan(camera.fov * PI / 360));
   garage.cam.aspect = w / h;
@@ -3533,7 +3687,9 @@ window.addEventListener('resize', resize);
 let last = performance.now();
 function frame(now) {
   requestAnimationFrame(frame);
-  const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
+  const rawDt = Math.max(0, (now - last) / 1000);
+  const dt = Math.min(0.05, rawDt);
+  adaptResolution(rawDt);
   last = now;
   time += dt;
   if (thumb.next < CARS.length && state !== 'playing' && time > 1.2) thumbStep(garage.active ? 8 : 3);
@@ -3597,6 +3753,14 @@ window.__driftMaster = {
     return track.segs.map(sg => sg.coins.length).filter(n => n > 0);
   },
   get jumps() { return save.stats.jumps; },
+  get autopilot() { return autopilot; },
+  run(seconds) { // step the simulation as-is (no forced autopilot)
+    autopilotForced = false;
+    const steps = Math.floor(seconds / STEP);
+    for (let i = 0; i < steps && (state === 'playing' || state === 'falling'); i++) fixedUpdate(STEP);
+    snapCar();
+    return state;
+  },
   info() { return { calls: renderer.info.render.calls, tris: renderer.info.render.triangles, geos: renderer.info.memory.geometries, segs: track.segs.length, coins: coinList.length }; },
   segLens() { return track.segs.map(sg => +sg.len.toFixed(2)); },
   simulate(seconds) {

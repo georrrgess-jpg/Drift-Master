@@ -43,6 +43,9 @@ An endless one-button drifting game in a single HTML file. It runs offline in an
 Drift Master targets low-end computers.
 - **Graphics presets:** Low, Medium (the default) and High, chosen in Settings.
 - **Draw calls:** coins and clouds are instanced, all particles render as two point clouds, and each car's static parts are merged at build time. A busy frame went from about 330 draw calls to about 75.
+- **Adaptive resolution:** if frames start running long, the render resolution steps down (to as low as 60%) and climbs back when there is headroom. Pixel fill is the main cost on weak GPUs.
+- **Road chunks:** up to six consecutive same-theme road segments share one mesh.
+- **Light per-frame work:** the sky gradient is computed per vertex, distant coins are skipped, and HUD text, number formatting and engine-sound updates are throttled and allocation-free.
 - **Smooth motion:** physics runs at a fixed 120 Hz and the render interpolates between steps, so movement stays smooth at any frame rate.
 - **Road geometry:** the road is built whole, well beyond the fog. Neighbouring segments share edge vertices and leave out buried faces, so there is no pop-in and no cracks.
 
