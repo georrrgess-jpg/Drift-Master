@@ -1657,24 +1657,24 @@ function genNext(dist) {
     track.bestPlaced = true;
     addBestGate(seg, clamp(save.bestPath - pathStart, ROAD_W / 2 + 0.3, len - 0.3));
   }
-  // coins: rows of 3-8 on the line the car settles onto after a corner (or a
-  // gentle lane-change slalom on long straights). A row that would not fit is
-  // dropped entirely, so there are never stray groups of one or two.
+  // coins: straight rows of 3-8 along one lane, placed where the car is
+  // settled on its line: after it has straightened out of the last corner and
+  // before it starts swinging into the next one. Side lanes sit inside the
+  // pickup radius of the centre line. A row that does not fit is dropped
+  // entirely, so there are never stray groups of one or two.
   if (pat.type === 'breather' || R() < (runState.coinRush ? 0.95 : 0.8)) {
     const hw = ROAD_W / 2, sp = 0.6;
-    const sA = hw + 1.35, sB = len - hw - 0.4;
+    const sA = hw + 1.35, sB = len - hw - 0.9;
     const n = Math.min(Math.floor((sB - sA) / sp) + 1, len > 9 ? 8 : 6);
     if (n >= 3) {
-      const start = sA + ((sB - sA) - (n - 1) * sp) * (0.3 + R() * 0.4);
+      const start = sA + ((sB - sA) - (n - 1) * sp) * (0.4 + R() * 0.2);
       const roll = R();
-      const lane = roll < 0.6 ? 0 : (roll < 0.8 ? -0.45 : 0.45);
-      const slalom = n >= 6 && R() < 0.35 ? (R() < 0.5 ? 1 : -1) : 0;
+      const lane = roll < 0.7 ? 0 : (roll < 0.85 ? -0.4 : 0.4);
       for (let i = 0; i < n; i++) {
-        const s = start + i * sp, k = i / (n - 1);
-        const lat = slalom ? slalom * 0.45 * Math.cos(k * PI) : lane;
+        const s = start + i * sp;
         const h = seg.height(s);
         // over a crest the coins float higher, where a jumping car passes
-        addCoin(seg, seg.wx(s, lat), h + 0.42 + Math.max(0, h) * 0.6, seg.wz(s, lat), i * 0.45);
+        addCoin(seg, seg.wx(s, lane), h + 0.42 + Math.max(0, h) * 0.6, seg.wz(s, lane), i * 0.45);
         track.coinTotal++;
       }
     }
@@ -3502,7 +3502,7 @@ function levelComplete() {
   }
   void fx; void fz;
   $('#hud').classList.remove('show');
-  setTimeout(() => showComplete(n, stars, reward), 1400);
+  setTimeout(() => { if (state === 'finished') showComplete(n, stars, reward); }, 1400);
 }
 function showComplete(n, stars, reward) {
   $('#cp-title').textContent = 'LEVEL ' + n;
