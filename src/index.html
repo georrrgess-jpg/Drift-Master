@@ -24,6 +24,7 @@
     <div class="hud-center">
       <div id="hud-score">0</div>
       <div id="hud-best">BEST 0</div>
+      <div id="hud-mult">x1.0</div>
       <div id="hud-level">
         <div class="lvl-title">LEVEL <b id="hud-level-n">1</b></div>
         <div class="lvl-bar"><i id="hud-level-fill"></i><span id="hud-level-car"></span><em></em></div>
@@ -35,8 +36,10 @@
   </div>
   <div id="hud-boosters"></div>
   <div id="combo"></div>
+  <div id="coach"></div>
   <div id="ready">
     <div class="tap-ring"><span></span><span></span><i></i></div>
+    <div class="ready-goal" id="ready-goal"></div>
     <div class="ready-title" id="ready-title">TAP TO START</div>
     <div class="ready-sub"><b>HOLD</b> to drift right<em></em><b>RELEASE</b> to swing left</div>
   </div>
@@ -300,6 +303,8 @@
       <div><small>COINS</small><b><i class="coin"></i> <span id="go-coins">0</span></b></div>
       <div><small>PERFECTS</small><b id="go-perfects">0</b></div>
     </div>
+    <div class="go-extra" id="go-extra"></div>
+    <div class="go-mission" id="go-mission"></div>
     <button class="btn big ui" id="btn-retry"><svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>Retry</button>
     <div class="row">
       <button class="btn alt ui" id="btn-go-garage">Garage</button>

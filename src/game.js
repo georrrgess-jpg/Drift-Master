@@ -36,7 +36,7 @@ const DEFAULT_SAVE = {
   active: { double: true, insurance: true, coinrush: true, headstart: true },
   upgrades: { traction: 0, magnet: 0 },
   settings: { sfx: true, music: true, gfx: 'medium', shake: true },
-  lastSpin: 0, tutorial: false, dealDay: -1,
+  lastSpin: 0, tutorial: false, dealDay: -1, bestPath: 0,
   missions: null, ach: {}, stats: { jumps: 0, bestCombo: 0, levelsCleared: 0, distance: 0 },
   level: 1, levelStars: {}, levelBest: {}
 };
@@ -598,7 +598,7 @@ function levelParams(n) {
 // Speed the car aims for after travelling `dist`.
 function speedAt(dist) {
   if (track.mode === 'level' && track.level) return track.level.speed * (0.8 + 0.2 * Math.min(1, dist / 40));
-  return PHYS.base + PHYS.add * (1 - Math.exp(-dist / PHYS.k));
+  return PHYS.base + PHYS.add * (1 - Math.exp(-dist / PHYS.k)) + lateOf(dist) * 1.0;
 }
 
 /* Shortest segment that still leaves a human at least a 0.14 s window to time
@@ -609,6 +609,22 @@ function speedAt(dist) {
  * lengths gets too tight, and above 11.5 nothing does, so speed caps there.
  * Each speed is rounded up to the next bracket and a margin added. */
 const MIN_LEN_TABLE = [[8.5, 2.0], [9, 2.5], [9.5, 3.0], [10, 3.0], [10.5, 3.5], [11, 3.5], [11.5, 4.0]];
+// Late game (expert) table: >= 0.11 s windows on the same road and handling, valid up to speed 12.5
+const MIN_LEN_TABLE_HARD = [[10.5, 2.5], [11, 3.0], [11.5, 3.5], [12, 3.5], [12.5, 4.0]];
+function tableLen(table, v) {
+  let L = 3.0;
+  for (const [sp, len] of table) if (v > sp - 0.5) L = Math.max(L, len);
+  return L + 0.25;
+}
+// late in a run the window tightens from the 0.14 s table toward the 0.11 s one;
+// lengths never drop below the 0.11 s table for the actual speed
+function minLenLate(v, late) {
+  const hard = tableLen(MIN_LEN_TABLE_HARD, v);
+  if (late <= 0) return minLenFor(v);
+  return Math.max(hard, lerp(minLenFor(Math.min(v, 11.5)), hard, late));
+}
+// endless late-game ramp, 0 until distance 1800, 1 by 4400
+const lateOf = dist => clamp((dist - 1800) / 2600, 0, 1);
 function minLenFor(v) {
   let L = 3.0; // visual minimum
   for (const [sp, len] of MIN_LEN_TABLE) if (v > sp - 0.5) L = Math.max(L, len);
@@ -674,10 +690,11 @@ function resetTrack(intro, cfg) {
   track.segs.forEach(disposeSeg);
   track.segs = []; track.base = 0; track.openChunk = null;
   coinList.length = 0;
-  track.mode = cfg.mode; track.level = cfg.level || null; track.finishSeg = null; track.coinTotal = 0;
+  track.mode = cfg.mode; track.level = cfg.level || null; track.finishSeg = null; track.coinTotal = 0; track.bestPlaced = false;
   track.rng = track.level ? mulberry32(track.level.seed) : Math.random;
   track.themeIdx = track.level ? track.level.theme : 0;
   track.themeLeft = 10 + ((track.rng() * 5) | 0);
+  track.pat = { type: 'warm', left: 0 };
   const first = addSegment(new Segment(0, 0, 0, 0, 11.25, track.themeIdx, { s0: -4.125 }));
   first.pathStart = 0;
   // build the whole visible road up front, well past the fog line
@@ -712,18 +729,36 @@ function genNext(dist) {
   const pathStart = prev.pathStart + prev.len;
   if (lvl && pathStart >= lvl.len) return makeFinish(prev, pathStart);
   const d = lvl ? lvl.diff : clamp(dist / 1500, 0, 1);
+  // once speed has hit its safe cap, keep escalating through the corner mix
+  const late = lvl ? clamp((lvl.n - 30) / 40, 0, 1) : lateOf(dist + 120);
   // size corners for the fastest the car can be going when it reaches them
   const v = lvl ? lvl.speed : speedAt(dist + 120);
-  const minLen = minLenFor(v);
-  const maxLen = Math.max(minLen + 2.5, lerp(9.5, 6.5, d) + 1);
+  const minLen = lvl ? minLenFor(v) : minLenLate(v, late);
+  const shortLen = minLen + 1.6;
+  const maxLen = Math.max(minLen + 2.5, lerp(9.5, 6.5, d) + 1 - late * 1.2);
+  // pacing: runs of mixed corners, rhythm sections (equal lengths you can feel)
+  // and breathers (a long coin straight to recover); fewer breathers late on
+  const pat = track.pat;
+  if (pat.left <= 0) {
+    const r0 = R();
+    if (dist < 120 && !lvl) Object.assign(pat, { type: 'warm', left: 4 });
+    else if (r0 < 0.16 - late * 0.06) Object.assign(pat, { type: 'breather', left: 1 + ((R() * 2) | 0) });
+    else if (r0 < 0.42) Object.assign(pat, { type: 'rhythm', left: 4 + ((R() * 3) | 0), len: shortLen + R() * lerp(2.5, 1.2, late) });
+    else Object.assign(pat, { type: 'mix', left: 6 + ((R() * 5) | 0) });
+  }
+  pat.left--;
   let len;
-  const r = R();
-  if (r < 0.06) len = 8 + R() * 4;
-  else if (r < (lvl ? lvl.shortP : 0.35 + d * 0.25)) len = minLen + R() * 1.6;
-  else len = minLen + 1.2 + R() * (maxLen - minLen - 1.2);
+  if (pat.type === 'warm') len = minLen + 2 + R() * 4;
+  else if (pat.type === 'breather') len = 9 + R() * 3;
+  else if (pat.type === 'rhythm') len = pat.len;
+  else {
+    const r = R();
+    if (r < 0.06 * (1 - late)) len = 8 + R() * 4;
+    else if (r < (lvl ? lvl.shortP : 0.35 + d * 0.25) + late * 0.2) len = minLen + R() * 1.6 * (1 - late * 0.5);
+    else len = minLen + 1.2 + R() * Math.max(0.5, maxLen - minLen - 1.2);
+  }
   // never chain two short segments: the timing study assumes the car has settled
   // onto a segment before its next corner, which needs one comfortable length in between
-  const shortLen = minLen + 1.6;
   if (prev.index > 0 && prev.len < shortLen && len < shortLen) len = shortLen + R() * 1.0;
   len = Math.ceil(len / TILE - 1e-6) * TILE; // snap up to the tile grid (never below the safe minimum)
   track.themeLeft--;
@@ -733,15 +768,19 @@ function genNext(dist) {
   }
   let wave = null;
   const waveRoll = R();
-  if (len >= 7 && (lvl ? waveRoll < lvl.waveP : dist > 120 && waveRoll < 0.25 + d * 0.25)) {
+  if (len >= (late > 0.3 ? 6 : 7) && pat.type !== 'warm' && (lvl ? waveRoll < lvl.waveP : dist > 120 && waveRoll < 0.25 + d * 0.25 + late * 0.2)) {
     wave = { n: len > 10 ? 2 : 1, A: (0.45 + R() * 0.4) * (R() < 0.35 ? -1 : 1) };
   }
   const seg = addSegment(new Segment(prev.index + 1, prev.ex, prev.ez, 1 - prev.dir, len, track.themeIdx, { wave }));
   seg.pathStart = pathStart;
+  if (!lvl && track.mode === 'endless' && save.bestPath > 60 && !track.bestPlaced && save.bestPath < pathStart + len) {
+    track.bestPlaced = true;
+    addBestGate(seg, clamp(save.bestPath - pathStart, ROAD_W / 2 + 0.3, len - 0.3));
+  }
   // coins: rows of 3-8 on the line the car settles onto after a corner (or a
   // gentle lane-change slalom on long straights). A row that would not fit is
   // dropped entirely, so there are never stray groups of one or two.
-  if (R() < (runState.coinRush ? 0.95 : 0.8)) {
+  if (pat.type === 'breather' || R() < (runState.coinRush ? 0.95 : 0.8)) {
     const hw = ROAD_W / 2, sp = 0.6;
     const sA = hw + 1.35, sB = len - hw - 0.4;
     const n = Math.min(Math.floor((sB - sA) / sp) + 1, len > 9 ? 8 : 6);
@@ -761,6 +800,28 @@ function genNext(dist) {
     }
   }
   return seg;
+}
+
+const bestTex = (() => {
+  const c = document.createElement('canvas'); c.width = 256; c.height = 64;
+  const g = c.getContext('2d');
+  g.fillStyle = '#ff7a1a'; g.beginPath(); g.roundRect ? g.roundRect(4, 4, 248, 56, 18) : g.rect(4, 4, 248, 56); g.fill();
+  g.fillStyle = '#fff'; g.font = 'bold 34px "Lilita One", "Arial Black", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText('YOUR BEST', 128, 34);
+  return new T.CanvasTexture(c);
+})();
+function addBestGate(seg, s) {
+  const hw = ROAD_W / 2, x = seg.wx(s, 0), z = seg.wz(s, 0), y = seg.height(s);
+  const g = new T.Group(); g.position.set(x, y, z); g.rotation.y = seg.ang;
+  const band = new T.Mesh(new T.PlaneGeometry(0.22, ROAD_W), new T.MeshBasicMaterial({ color: 0xff7a1a, transparent: true, opacity: 0.85, depthWrite: false }));
+  band.rotation.x = -HALF_PI; band.position.y = 0.02; g.add(band);
+  for (const sd of [-1, 1]) {
+    const post = new T.Mesh(unitBoxR, new T.MeshLambertMaterial({ color: 0xffffff, emissive: 0xff7a1a, emissiveIntensity: 0.6 }));
+    post.scale.set(0.07, 0.9, 0.07); post.position.set(0, 0.45, sd * (hw + 0.08)); g.add(post);
+  }
+  const sign = new T.Sprite(new T.SpriteMaterial({ map: bestTex, depthWrite: false }));
+  sign.scale.set(1.6, 0.4, 1); sign.position.set(0, 1.25, 0); g.add(sign);
+  seg.group.add(g);
 }
 
 function makeFinish(prev, pathStart) {
@@ -1974,7 +2035,7 @@ let time = 0;
 const input = { hold: false };
 let steerLock = false;
 let currentMode = 'endless', currentLevel = 1;
-const runState = { fell: false, rawCoins: 0, score: 0, bonus: 0, coins: 0, perfects: 0, combo: 0, mult: 1, coinMult: 1, coinRush: false, insurance: false, insuranceUsed: false, headstart: false, revived: false, newBest: false, zone: 0, milestone: 500 };
+const runState = { pts: 0, maxCombo: 0, jumps: 0, fell: false, rawCoins: 0, score: 0, bonus: 0, coins: 0, perfects: 0, combo: 0, mult: 1, coinMult: 1, coinRush: false, insurance: false, insuranceUsed: false, headstart: false, revived: false, newBest: false, zone: 0, milestone: 500 };
 let autopilot = false;
 let autopilotForced = false; // test hook: never hand control back
 let apHoldState = false;
@@ -2088,7 +2149,7 @@ function physicsStep(dt, mode) {
       car.air = true; car.airT = 0;
       car.vy += 0.5 + car.slip * 3.2 + Math.max(0, car.speed - 8) * 0.12;
       car.y += car.vy * dt;
-      if (mode === 'play') { Sound.jump(); Missions.event('jump'); }
+      if (mode === 'play') { Sound.jump(); Missions.event('jump'); runState.jumps++; }
     } else { car.vy = surf; car.y = ground; car.slope = Math.atan2(hf - hr, (carKit ? carKit.L : 1.1) * 0.8); }
   }
 
@@ -2115,9 +2176,22 @@ function land(ground, mode) {
   }
 }
 
+function comboMult() { return 1 + Math.min(runState.combo, 10) * 0.1; }
+let hudMultShown = -1;
+function updateMultBadge() {
+  const m = comboMult();
+  if (m === hudMultShown) return;
+  const el = $('#hud-mult');
+  el.textContent = 'x' + m.toFixed(1);
+  el.classList.toggle('on', m > 1);
+  if (m > hudMultShown) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
+  hudMultShown = m;
+}
+
 function onPerfect() {
   runState.combo++;
   runState.perfects++;
+  runState.maxCombo = Math.max(runState.maxCombo, runState.combo);
   const bonus = 2 + Math.min(runState.combo, 8);
   runState.bonus += bonus;
   const el = $('#combo');
@@ -2229,7 +2303,9 @@ function fixedUpdate(dt) {
     }
     const ok = physicsStep(dt, 'play');
     driveEffects(dt, ok);
-    runState.score = Math.floor(car.dist * runState.mult) + runState.bonus * runState.mult;
+    // distance points earn the combo multiplier (+10% per Perfect in a row, up to x2)
+    runState.pts += car.speed * dt * comboMult();
+    runState.score = Math.floor(runState.pts * runState.mult) + runState.bonus * runState.mult;
     if (!ok) { startFall(); return; }
     maintainTrack();
     collectCoins(dt);
@@ -2356,6 +2432,7 @@ function startFall() {
   car.yawRate = rand(-1.2, 1.2);
   car.air = false;
   runState.fell = true;
+  runState.combo = 0;
   const vg = $('#vignette'); vg.classList.remove('pulse'); void vg.offsetWidth; vg.classList.add('pulse');
   cam.anchor = { x: car.x, y: car.y, z: car.z, y0: car.y };
   cam.shake = 0.3;
@@ -2409,7 +2486,6 @@ function doRevive() {
   if (track.finishSeg && seg.index >= track.finishSeg.index) seg = segAt(car.segIdx);
   resetCar(seg, ROAD_W / 2 + 0.3);
   car.spawnT = 0;
-  car.dist = runState.score / runState.mult - runState.bonus; // keep progress
   car.speed = speedAt(car.dist) * 0.6;
   cam.anchor = null;
   Particles.clear();
@@ -2430,7 +2506,7 @@ function startRun(mode, level) {
     if (mode) currentMode = mode;
     if (level) currentLevel = level;
     showScreen(null);
-    Object.assign(runState, { fell: false, rawCoins: 0, score: 0, bonus: 0, coins: 0, perfects: 0, combo: 0, mult: 1, coinMult: 1, coinRush: false, insurance: false, insuranceUsed: false, headstart: false, revived: false, newBest: false, zone: 0, milestone: 500 });
+    Object.assign(runState, { pts: 0, maxCombo: 0, jumps: 0, fell: false, rawCoins: 0, score: 0, bonus: 0, coins: 0, perfects: 0, combo: 0, mult: 1, coinMult: 1, coinRush: false, insurance: false, insuranceUsed: false, headstart: false, revived: false, newBest: false, zone: 0, milestone: 500 });
     // consume boosters
     for (const b of BOOSTERS) {
       if (save.active[b.id] && save.boosters[b.id] > 0) {
@@ -2451,6 +2527,9 @@ function startRun(mode, level) {
     state = 'ready';
     autopilot = false;
     $('#ready-title').textContent = runState.headstart ? 'TAP TO LAUNCH' : 'TAP TO START';
+    $('#ready-goal').textContent = lvl ? `Level ${lvl.n} \u00b7 reach the finish arch` : save.best > 0 ? `Your best: ${fmt(save.best)}. Beat it!` : 'Drift as far as you can';
+    hudMultShown = -1; coachShown = '';
+    $('#coach').classList.remove('show');
     $('#ready').classList.add('show');
     $('#hud').classList.add('show');
     $('#hud').classList.toggle('level-mode', !!lvl);
@@ -2483,6 +2562,10 @@ function gameOver() {
   if (isBest) save.best = score;
   save.totalPerfects += runState.perfects;
   const lv = currentMode === 'level';
+  if (!lv) save.bestPath = Math.max(save.bestPath || 0, pathPos());
+  $('#go-extra').innerHTML = `<span>${fmt(car.dist)} m</span><span>Max combo x${runState.maxCombo}</span><span>${runState.jumps} jump${runState.jumps === 1 ? '' : 's'}</span>`;
+  const next = Missions.ensure().list.filter(x => !x.done).sort((a, b) => b.prog / b.n - a.prog / a.n)[0];
+  $('#go-mission').innerHTML = next ? `<small>NEXT MISSION</small><b>${MISSION_POOL.find(m => m.type === next.type).text(next.n)}</b><div class="m-row"><div class="m-bar"><i style="width:${Math.min(100, next.prog / next.n * 100)}%"></i></div><span class="m-prog">${fmt(next.prog)} / ${fmt(next.n)}</span></div>` : '<small>DAILY MISSIONS</small><b>All done for today. Nice!</b>';
   let pct = 0;
   if (lv) {
     pct = Math.floor(clamp(pathPos() / (track.finishSeg ? track.finishSeg.pathStart + track.finishSeg.finishS : track.level.len), 0, 0.99) * 100);
@@ -2725,6 +2808,20 @@ function adaptResolution(rawDt) {
   if (next !== adapt.scale) { adapt.scale = next; renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, gfx.ratio) * adapt.scale); resize(); }
 }
 
+let coachShown = '';
+function updateCoach() {
+  let want = '';
+  if (save.runs < 2 && currentMode === 'endless' && !autopilot && car.segIdx <= 9) {
+    const ideal = autopilotHold(); // what a perfect driver would be doing right now
+    if (ideal !== input.hold) want = ideal ? 'HOLD' : 'LET GO';
+  }
+  if (want === coachShown) return;
+  coachShown = want;
+  const el = $('#coach');
+  if (want) { el.textContent = want; el.classList.remove('show'); void el.offsetWidth; el.classList.add('show'); }
+  else el.classList.remove('show');
+}
+
 let renderAlpha = 0;
 function visualUpdate(dt) {
   // interpolate between the last two physics steps so motion is smooth at any frame rate
@@ -2806,6 +2903,8 @@ function visualUpdate(dt) {
     }
   }
   if (state === 'playing') {
+    updateMultBadge();
+    updateCoach();
     updateHud(false);
     const zone = currentMode === 'endless' ? Math.floor(runState.score / 1000) : 0;
     if (zone > runState.zone) {

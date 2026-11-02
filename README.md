@@ -15,6 +15,13 @@ An endless one-button drifting game in a single HTML file. It runs offline in an
 - **Daily missions:** three a day, picked from a pool covering coins, scores, Perfects, combos, jumps, levels and runs. Each pays coins, you get one swap per day, and finishing all three opens a Daily Chest.
 - **Achievements:** 18 permanent milestones with claimable rewards.
 
+## Difficulty & pacing
+- **Warm-up, then pacing:** runs start with a short warm-up, then alternate mixed corners, rhythm sections (runs of equal-length corners) and breathers (long coin straights).
+- **Late game (from distance 1,800):** top speed climbs from 11.5 to 12.5 and corners tighten from a 0.14 s to a 0.11 s timing window. Every corner stays physically possible.
+- **Combo multiplier:** consecutive Perfect corners raise the score rate by 10% each, up to x2.
+- **Your best:** a "YOUR BEST" gate marks where your best Endless run ended.
+- **First-run coach:** the first runs show HOLD / LET GO prompts at the right moments.
+
 ## How to play
 - **Hold** (mouse, touch or any key such as Space or the arrow keys) to drift **right**.
 - **Release** to swing back **left**.

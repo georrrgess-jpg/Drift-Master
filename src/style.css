@@ -514,3 +514,39 @@ kbd { font-family: var(--display); background: rgba(255,255,255,.14); border-rad
 /* fall: a brief darkening pulse at the screen edges */
 #vignette.pulse { animation: vgPulse .9s ease-out; }
 @keyframes vgPulse { 0% { box-shadow: inset 0 0 0 0 rgba(20, 0, 30, 0); } 25% { box-shadow: inset 0 0 160px 40px rgba(30, 0, 40, .55); } 100% { box-shadow: inset 0 0 0 0 rgba(20, 0, 30, 0); } }
+
+/* combo multiplier badge under the score */
+#hud-mult { display: inline-block; margin: 6px auto 0; padding: 2px 12px; border-radius: 999px; font-family: var(--display); font-size: 16px; letter-spacing: .5px;
+  color: #fff; background: linear-gradient(180deg, var(--accent-hi), var(--accent-lo)); box-shadow: 0 3px 0 var(--accent-edge);
+  opacity: 0; transform: scale(.6); transition: opacity .25s, transform .25s; }
+#hud-mult.on { opacity: 1; transform: scale(1); }
+#hud-mult.bump { animation: multBump .45s cubic-bezier(.3, 1.8, .5, 1); }
+@keyframes multBump { 40% { transform: scale(1.35); } }
+#hud.level-mode #hud-mult { display: none; }
+.hud-center { display: flex; flex-direction: column; align-items: center; }
+
+/* first-run timing coach */
+#coach { position: absolute; left: 50%; bottom: calc(18% + var(--safe-b)); transform: translateX(-50%); font-family: var(--display); font-size: clamp(34px, 7vw, 54px);
+  letter-spacing: 2px; color: #fff; text-shadow: 0 4px 0 var(--accent-edge), 0 0 26px rgba(255, 122, 26, .8); opacity: 0; pointer-events: none; }
+#coach.show { animation: coachIn .35s cubic-bezier(.2, 1.6, .4, 1) both; }
+@keyframes coachIn { from { opacity: 0; transform: translateX(-50%) scale(.5); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
+
+/* start screen goal */
+.ready-goal { display: inline-block; margin-bottom: 8px; padding: 4px 14px; border-radius: 999px; font-weight: 900; font-size: 14px; color: var(--accent-hi); background: rgba(14, 18, 44, .75); border: 1px solid var(--line-2); }
+
+/* richer game over */
+.go-extra { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.go-extra span { font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,.07); border: 1px solid var(--line); color: #dfe4ff; }
+.go-mission { text-align: left; padding: 10px 12px; border-radius: 14px; background: rgba(255, 122, 26, .1); border: 1px solid rgba(255, 122, 26, .45); }
+.go-mission small { display: block; font-size: 10px; font-weight: 900; letter-spacing: 1.5px; color: var(--accent-hi); }
+.go-mission b { font-family: var(--display); font-weight: normal; font-size: 16px; }
+/* staggered entrance for result panels */
+.modal.show .go-sheet > *, .modal.show .cp-sheet > * { animation: riseIn .45s cubic-bezier(.2, .9, .3, 1.2) both; }
+.modal.show .go-sheet > :nth-child(2), .modal.show .cp-sheet > :nth-child(2) { animation-delay: .04s; }
+.modal.show .go-sheet > :nth-child(3), .modal.show .cp-sheet > :nth-child(3) { animation-delay: .08s; }
+.modal.show .go-sheet > :nth-child(4), .modal.show .cp-sheet > :nth-child(4) { animation-delay: .12s; }
+.modal.show .go-sheet > :nth-child(5), .modal.show .cp-sheet > :nth-child(5) { animation-delay: .16s; }
+.modal.show .go-sheet > :nth-child(6), .modal.show .cp-sheet > :nth-child(6) { animation-delay: .2s; }
+.modal.show .go-sheet > :nth-child(n+7), .modal.show .cp-sheet > :nth-child(n+7) { animation-delay: .24s; }
+@keyframes riseIn { from { opacity: 0; transform: translateY(12px); } }
+.go-ribbon.on { animation: ribbon .6s cubic-bezier(.2,.9,.3,1.5) both !important; }
