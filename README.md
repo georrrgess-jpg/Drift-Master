@@ -8,8 +8,14 @@ An endless one-button drifting game in a single HTML file. It runs offline in an
 - **Endless**: drive as far as you can. The road speeds up and grows wavy sections the further you get.
 - **Levels**: hand-made-feeling (seeded) courses that end at a finish arch. Clear one to unlock the next, and the list never runs out. Each level is a little faster and longer than the one before. Earn up to 3 stars:
   - ★ for finishing,
-  - ★★ for collecting half the coins,
-  - ★★★ for collecting 80% of the coins without falling.
+  - ★★ for collecting 70% of the coins,
+  - ★★★ for collecting 90% of the coins without falling.
+  The HUD tracks your coin percentage live and shows which stars are still in reach.
+
+## Driver level
+- **Earning XP:** every run earns XP from score, coins, Perfects and jumps, and finishing a level earns XP too.
+- **Levelling up:** each level-up pays coins.
+- **Where it shows:** your driver level and XP bar sit on the main menu, and results screens animate the XP you earned.
 
 ## Missions & achievements
 - **Daily missions:** three a day, picked from a pool covering coins, scores, Perfects, combos, jumps, levels and runs. Each pays coins, you get one swap per day, and finishing all three opens a Daily Chest.

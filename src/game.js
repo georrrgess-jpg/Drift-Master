@@ -36,7 +36,7 @@ const DEFAULT_SAVE = {
   active: { double: true, insurance: true, coinrush: true, headstart: true },
   upgrades: { traction: 0, magnet: 0 },
   settings: { sfx: true, music: true, gfx: 'medium', shake: true },
-  lastSpin: 0, tutorial: false, dealDay: -1, bestPath: 0,
+  lastSpin: 0, tutorial: false, dealDay: -1, bestPath: 0, plevel: 1, xp: 0,
   missions: null, ach: {}, stats: { jumps: 0, bestCombo: 0, levelsCleared: 0, distance: 0 },
   level: 1, levelStars: {}, levelBest: {}
 };
@@ -639,6 +639,7 @@ const finishTex = (() => {
 })();
 
 function disposeSeg(seg) {
+  track.retiredCoins = (track.retiredCoins || 0) + seg.coins.length;
   track.group.remove(seg.group);
   seg.geo.dispose();
   removeSegCoins(seg);
@@ -688,7 +689,7 @@ function rebuildChunk(ch) {
 function resetTrack(intro, cfg) {
   cfg = cfg || { mode: 'endless' };
   track.segs.forEach(disposeSeg);
-  track.segs = []; track.base = 0; track.openChunk = null;
+  track.segs = []; track.base = 0; track.openChunk = null; track.retiredCoins = 0;
   coinList.length = 0;
   track.mode = cfg.mode; track.level = cfg.level || null; track.finishSeg = null; track.coinTotal = 0; track.bestPlaced = false;
   track.rng = track.level ? mulberry32(track.level.seed) : Math.random;
@@ -2509,6 +2510,7 @@ function startRun(mode, level) {
     Object.assign(runState, { pts: 0, maxCombo: 0, jumps: 0, fell: false, rawCoins: 0, score: 0, bonus: 0, coins: 0, perfects: 0, combo: 0, mult: 1, coinMult: 1, coinRush: false, insurance: false, insuranceUsed: false, headstart: false, revived: false, newBest: false, zone: 0, milestone: 500 });
     // consume boosters
     for (const b of BOOSTERS) {
+      if (currentMode === 'level' && b.id === 'double') continue; // levels have no score to double
       if (save.active[b.id] && save.boosters[b.id] > 0) {
         save.boosters[b.id]--;
         b.apply(runState);
@@ -2579,7 +2581,11 @@ function gameOver() {
   $('#btn-go-garage').textContent = lv ? 'Levels' : 'Garage';
   $('#go-coins').textContent = fmt(runState.coins);
   $('#go-perfects').textContent = fmt(runState.perfects);
+  const xpAmt = lv ? 5 + Math.floor(runState.rawCoins / 2) + runState.perfects * 2 + Math.floor(pct / 4)
+    : 5 + Math.floor(runState.score / 20) + Math.floor(runState.rawCoins / 2) + runState.perfects * 2 + runState.jumps * 2;
+  const xpg = grantXP(xpAmt);
   showScreen('gameover');
+  showXP('go-xp', xpg);
   $('#hud').classList.remove('show');
   // count-up
   const el = $('#go-score');
@@ -2599,7 +2605,8 @@ function levelComplete() {
   autopilot = false; input.hold = false;
   const n = currentLevel;
   const frac = track.coinTotal ? runState.rawCoins / track.coinTotal : 1;
-  const stars = 1 + (frac >= 0.5 ? 1 : 0) + (frac >= 0.8 && !runState.fell ? 1 : 0);
+  const stars = 1 + (frac >= 0.7 ? 1 : 0) + (frac >= 0.9 && !runState.fell ? 1 : 0);
+  runState.xpg = grantXP(30 + 15 * stars + Math.floor(runState.rawCoins / 2) + runState.perfects * 2);
   const reward = 10 + n * 2 + stars * 5;
   save.coins += reward; save.totalCoins += reward;
   save.levelStars[n] = Math.max(save.levelStars[n] || 0, stars);
@@ -2632,15 +2639,26 @@ function showComplete(n, stars, reward) {
   const st = $$('#cp-stars i');
   st.forEach(e => e.classList.remove('on'));
   showScreen('complete');
+  if (runState.xpg) showXP('cp-xp', runState.xpg);
   st.forEach((e, i) => { if (i < stars) setTimeout(() => { e.classList.add('on'); Sound.perfect(i * 3); }, 450 + i * 380); });
   setTimeout(confetti, 300);
   updateCoinsUI();
 }
 
+let selLevel = 1;
+function renderLevelInfo() {
+  const n = selLevel, lp = levelParams(n), stars = save.levelStars[n] || 0, best = save.levelBest[n] || 0;
+  const th = THEMES[lp.theme];
+  $('#lvl-info').innerHTML = `<span class="li-swatch" style="--a:${th.a};--b:${th.side}"></span>
+    <div class="li-main"><b>Level ${n}</b><span>${th.name} &middot; ${fmt(lp.len)} m &middot; speed ${lp.speed.toFixed(1)}</span></div>
+    <div class="li-side"><span class="li-stars">${[0, 1, 2].map(i => `<i class="${i < stars ? 'on' : ''}"></i>`).join('')}</span><em>${best ? 'Best ' + best + '%' : 'Not played'}</em></div>`;
+  $('#btn-level-continue').querySelector('span').textContent = (n < save.level ? 'Replay' : 'Play') + ' Level ' + n;
+}
 function renderLevels() {
   const grid = $('#level-grid');
   grid.innerHTML = '';
   const count = Math.max(30, Math.ceil((save.level + 12) / 5) * 5);
+  if (selLevel > save.level || selLevel < 1) selLevel = save.level;
   let total = 0;
   for (const k in save.levelStars) total += save.levelStars[k];
   for (let n = 1; n <= count; n++) {
@@ -2648,15 +2666,24 @@ function renderLevels() {
     const locked = n > save.level;
     const th = THEMES[(n - 1) % THEMES.length];
     const stars = save.levelStars[n] || 0;
-    b.className = 'lvl ui' + (locked ? ' locked' : '') + (n === save.level ? ' current' : '') + (stars ? ' done' : '');
+    b.className = 'lvl ui' + (locked ? ' locked' : '') + (n === save.level ? ' current' : '') + (stars ? ' done' : '') + (n === selLevel ? ' sel' : '');
     b.style.setProperty('--a', th.a); b.style.setProperty('--b', th.side);
     b.innerHTML = `<span class="lvl-n">${n}</span><span class="lvl-stars">${[0, 1, 2].map(i => `<i class="${i < stars ? 'on' : ''}"></i>`).join('')}</span>`;
-    b.onclick = () => { if (locked) { Sound.deny(); return; } Sound.click(); startRun('level', n); };
+    // first tap selects and shows details, a second tap on the same level plays it
+    b.onclick = () => {
+      if (locked) { Sound.deny(); return; }
+      Sound.click();
+      if (selLevel === n) { startRun('level', n); return; }
+      selLevel = n;
+      $$('#level-grid .lvl').forEach(x => x.classList.remove('sel'));
+      b.classList.add('sel');
+      renderLevelInfo();
+    };
     grid.appendChild(b);
   }
   $('#levels-stars').textContent = total;
-  $('#btn-level-continue').querySelector('span').textContent = 'Play Level ' + save.level;
-  const cur = grid.querySelector('.current');
+  renderLevelInfo();
+  const cur = grid.querySelector('.sel');
   if (cur) requestAnimationFrame(() => { grid.parentElement.scrollTop = cur.offsetTop - grid.parentElement.clientHeight / 2; });
 }
 
@@ -2761,7 +2788,7 @@ function updateSky(dt) {
 /* =========================================================================
  * Per-frame visuals
  * ========================================================================= */
-let hudScoreShown = -1, lastProgress = -1;
+let hudScoreShown = -1, lastProgress = -1, liveNext = 0;
 /* Wind streaks at high speed: short lines that rush past the camera (one draw call) */
 const Streaks = (() => {
   const N = 26, pos = new Float32Array(N * 6), P = [];
@@ -2893,6 +2920,16 @@ function visualUpdate(dt) {
 
   updateCamera(dt, false);
 
+  if (state === 'playing' && currentMode === 'level' && track.level && time > liveNext) {
+    // coins collected out of those already passed, and which stars are still on
+    liveNext = time + 0.25;
+    let passed = track.retiredCoins || 0;
+    for (const sg of track.segs) if (sg.index < car.segIdx) passed += sg.coins.length;
+    const acc = passed ? Math.min(1, runState.rawCoins / passed) : 1;
+    $('#hud-lvl-coins').textContent = 'Coins ' + Math.round(acc * 100) + '%';
+    const st = $$('#hud-lvl-stars i');
+    st[0].className = 'on'; st[1].className = acc >= 0.7 ? 'on' : ''; st[2].className = acc >= 0.9 && !runState.fell ? 'on' : '';
+  }
   if (state === 'playing' && currentMode === 'level' && track.level) {
     const end = track.finishSeg ? track.finishSeg.pathStart + track.finishSeg.finishS : track.level.len + 4;
     const k = Math.round(clamp(pathPos() / end, 0, 1) * 400) / 4;
@@ -3046,15 +3083,17 @@ function showScreen(name) {
  * Boosters & upgrades
  * ========================================================================= */
 const ICONS = {
-  double: '<svg viewBox="0 0 24 24"><text x="12" y="17.5" text-anchor="middle" font-size="15" font-family="Lilita One, Arial Black, sans-serif">2&#215;</text></svg>',
-  insurance: '<svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3zm-1.2 14.2L7 12.4l1.4-1.4 2.4 2.4 4.8-4.8L17 10l-6.2 6.2z"/></svg>',
-  coinrush: '<svg viewBox="0 0 24 24"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 9.5c0 1.7 2.7 3 6 3s6-1.3 6-3V12c0 1.7-2.7 3-6 3s-6-1.3-6-3V9.5zm0 5c0 1.7 2.7 3 6 3s6-1.3 6-3V17c0 1.7-2.7 3-6 3s-6-1.3-6-3v-2.5z"/><circle cx="17.5" cy="15.5" r="4.5" opacity=".85"/></svg>',
-  headstart: '<svg viewBox="0 0 24 24"><path d="M13.5 2.5c3.6.3 7.7 4.4 8 8l-6.7 6.7-8-8 6.7-6.7zM15 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM5.8 10.6l7.6 7.6-2 2-2.1-.7-1.4 1.4-2.3-2.3 1.4-1.4-.7-2.1-2 .9L3 14l2.8-3.4zM4 17l3 3-3.5 1.5L4 17z"/></svg>',
-  traction: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3.5a6.5 6.5 0 1 1 0 13 6.5 6.5 0 0 1 0-13zm0 3a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM12 1.5l1.2 2.6h-2.4zm0 21l-1.2-2.6h2.4zM1.5 12l2.6-1.2v2.4zm21 0-2.6 1.2v-2.4z"/></svg>',
-  magnet: '<svg viewBox="0 0 24 24"><path d="M4 3h5v8a3 3 0 0 0 6 0V3h5v8a8 8 0 0 1-16 0V3zm1.5 1.5v3h2v-3h-2zm11 0v3h2v-3h-2z"/></svg>',
-  target: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm0 2.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"/></svg>',
-  trophy: '<svg viewBox="0 0 24 24"><path d="M7 3h10v3h3a1 1 0 0 1 1 1c0 3.2-2 5.6-4.7 6A6 6 0 0 1 13 15.9V19h3v2H8v-2h3v-3.1A6 6 0 0 1 7.7 13C5 12.6 3 10.2 3 7a1 1 0 0 1 1-1h3V3zm10 5v3.8c1.2-.5 2-1.8 2-3.8h-2zM5 8c0 2 .8 3.3 2 3.8V8H5z"/></svg>',
-  box: '<svg viewBox="0 0 24 24"><path d="M12 2 3 6.5v11L12 22l9-4.5v-11L12 2zm0 2.2 6.6 3.3L12 10.8 5.4 7.5 12 4.2zM5 9.1l6 3v7.6l-6-3V9.1zm14 0v7.6l-6 3v-7.6l6-3z"/></svg>'
+  double: '<svg viewBox="0 0 24 24"><path opacity=".35" d="M12 1.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 16.1l-5.9 3.2 1.3-6.5-4.9-4.5 6.6-.8z"/><text x="12" y="15.6" text-anchor="middle" font-size="10" font-family="Lilita One, Arial Black, sans-serif">2&#215;</text></svg>',
+  insurance: '<svg viewBox="0 0 24 24"><path opacity=".35" d="M12 1.5 3.5 4.7v6.4c0 5.3 3.6 10 8.5 11.4 4.9-1.4 8.5-6.1 8.5-11.4V4.7z"/><path fill-rule="evenodd" d="M12 4 6 6.3V11c0 4 2.5 7.5 6 8.9 3.5-1.4 6-4.9 6-8.9V6.3zm-1.4 11.5-3.1-3.1 1.4-1.4 1.7 1.7 4.6-4.6 1.4 1.4z"/></svg>',
+  coinrush: '<svg viewBox="0 0 24 24"><ellipse cx="9" cy="18" rx="6.5" ry="2.5" opacity=".45"/><ellipse cx="9" cy="15" rx="6.5" ry="2.5" opacity=".7"/><ellipse cx="9" cy="12" rx="6.5" ry="2.5"/><path fill-rule="evenodd" d="M16.5 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2.3a2.7 2.7 0 1 0 0 5.4 2.7 2.7 0 0 0 0-5.4z"/><path opacity=".8" d="M21.5 1l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/></svg>',
+  headstart: '<svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M13.5 2.5c3.6.3 7.7 4.4 8 8l-6.7 6.7-8-8zM15.2 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/><path opacity=".7" d="M5.8 10.6l7.6 7.6-2 2-2.1-.7-1.4 1.4-2.3-2.3 1.4-1.4-.7-2.1-2 .9L3 14z"/><path opacity=".45" d="M4.5 16.5l3 3-4.5 2z"/></svg>',
+  traction: '<svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10z"/><circle cx="12" cy="12" r="2.3" opacity=".6"/><path opacity=".35" d="M12 .5l1.3 2h-2.6zm0 23l-1.3-2h2.6zM.5 12l2-1.3v2.6zm23 0-2 1.3v-2.6z"/></svg>',
+  magnet: '<svg viewBox="0 0 24 24"><path d="M4.5 3h5v8a2.5 2.5 0 0 0 5 0V3h5v8a7.5 7.5 0 0 1-15 0z"/><path opacity=".45" d="M4.5 3h5v3.2h-5zm10 0h5v3.2h-5z"/><path opacity=".5" d="M2 19.5l2.5-1 .6 1.4-2.5 1zm20 0-2.5-1-.6 1.4 2.5 1zM11 21.5h2V24h-2z"/></svg>',
+  box: '<svg viewBox="0 0 24 24"><path opacity=".55" d="M12 2 3 6.5v11L12 22z"/><path d="M12 2l9 4.5v11L12 22zM12 4.2 5.4 7.5 12 10.8l6.6-3.3z"/><path opacity=".35" d="M8.2 4.6l9 4.5v3l-2 1V10L6.2 5.6z"/></svg>',
+  target: '<svg viewBox="0 0 24 24"><path opacity=".4" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path fill-rule="evenodd" d="M12 5a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/><circle cx="12" cy="12" r="1.8"/></svg>',
+  trophy: '<svg viewBox="0 0 24 24"><path opacity=".45" d="M17 6h3a1 1 0 0 1 1 1c0 3.2-2 5.6-4.7 6l.4-2.2c1.2-.5 2.3-1.8 2.3-2.8h-2zM7 6H4a1 1 0 0 0-1 1c0 3.2 2 5.6 4.7 6l-.4-2.2C5.1 10.3 4 9 4 8h3z"/><path d="M7 3h10v6a5 5 0 0 1-4 4.9V18h3v3H8v-3h3v-4.1A5 5 0 0 1 7 9z"/></svg>',
+  bolt: '<svg viewBox="0 0 24 24"><path d="M13 2L4 14h6.5L10 22l9-12h-6.5z"/></svg>',
+  up: '<svg viewBox="0 0 24 24"><path d="M12 3l8 8h-5v10H9V11H4z"/></svg>'
 };
 const BOOSTERS = [
   { id: 'double', name: 'Double Score', short: '2x SCORE', price: 60, color: '#ff4f81', icon: '2x', desc: 'Every point counts twice for one run.', apply: r => { r.mult = 2; } },
@@ -3117,37 +3156,47 @@ function spend(cost) {
   return true;
 }
 const priceHTML = n => `${fmt(n)} <i class="coin"></i>`;
+const ico = (id, badge, cls) => `<div class="item-ico t-${cls || id}">${ICONS[id]}${badge ? `<em class="own-badge">${badge}</em>` : ''}</div>`;
+function buyPop(it, text) {
+  const tile = it.querySelector('.item-ico');
+  if (tile) { tile.classList.remove('bought'); void tile.offsetWidth; tile.classList.add('bought'); }
+  const f = document.createElement('span'); f.className = 'buy-pop'; f.textContent = text; it.appendChild(f);
+  setTimeout(() => f.remove(), 900);
+}
+// re-render after the purchase pop has played
+function afterBuy(it, text) { buyPop(it, text); setTimeout(renderShop, 420); }
 function renderShop() {
   $$('#shop .tab').forEach(t => t.classList.toggle('active', t.dataset.tab === shopTab));
   // daily deal banner
   const d = dailyDeal(), claimed = save.dealDay === d.day;
   const msLeft = (d.day + 1) * 86400000 - Date.now();
-  $('#shop-deal').innerHTML = `<div class="deal-ico">${ICONS[d.b.id]}<em>x${d.qty}</em></div>
+  $('#shop-deal').innerHTML = `${ico(d.b.id, 'x' + d.qty)}
     <div class="deal-body"><small>DAILY DEAL &middot; ends in ${Math.floor(msLeft / 3600000)}h ${Math.floor(msLeft % 3600000 / 60000)}m</small>
-      <b>${d.qty}&times; ${d.b.name}</b><span><s>${fmt(d.full)}</s> 40% off</span></div>
+      <b>${d.qty}&times; ${d.b.name}</b><span><s>${fmt(d.full)}</s> <em class="save-tag">-40%</em></span></div>
     <button class="btn ui" ${claimed ? 'disabled' : ''}>${claimed ? 'Claimed' : priceHTML(d.price)}</button>`;
   const dealBtn = $('#shop-deal button');
   if (!claimed && save.coins < d.price) dealBtn.classList.add('disabled');
   dealBtn.onclick = () => {
     if (claimed || !spend(d.price)) return;
-    save.boosters[d.b.id] += d.qty; save.active[d.b.id] = true; save.dealDay = d.day; persist(); renderShop();
+    save.boosters[d.b.id] += d.qty; save.active[d.b.id] = true; save.dealDay = d.day; persist();
+    afterBuy($('#shop-deal'), '+' + d.qty);
   };
 
   const body = $('#shop-body');
   body.innerHTML = '';
-  const card = html => { const it = document.createElement('div'); it.className = 'item'; it.innerHTML = html; body.appendChild(it); return it; };
+  const card = (html, cls) => { const it = document.createElement('div'); it.className = 'item ' + (cls || ''); it.innerHTML = html; body.appendChild(it); return it; };
   if (shopTab === 'boosters') {
     BOOSTERS.forEach(b => {
-      const five = Math.round(b.price * 5 * 0.85 / 5) * 5;
-      const it = card(`<div class="item-ico">${ICONS[b.id]}</div>
+      const five = Math.round(b.price * 5 * 0.85 / 5) * 5, n = save.boosters[b.id];
+      const it = card(`${ico(b.id, n ? 'x' + n : '')}
         <div class="item-body"><b>${b.name}</b><p>${b.desc}</p>
-          <div class="item-meta"><span class="chip-s">1 run</span><span class="chip-s owned-n">Owned &times;${save.boosters[b.id]}</span>
+          <div class="item-meta"><span class="chip-s">Lasts 1 run</span>${b.id === 'double' ? '<span class="chip-s">Endless only</span>' : ''}
           <label class="use-toggle"><input type="checkbox" class="toggle sm" ${save.active[b.id] ? 'checked' : ''}> Use next run</label></div></div>
-        <div class="item-buy"><button class="btn ui" data-q="1">${priceHTML(b.price)}</button><button class="btn small ui" data-q="5"><span class="q">&times;5</span> ${priceHTML(five)}</button></div>`);
+        <div class="item-buy"><button class="btn ui" data-q="1">${priceHTML(b.price)}</button><button class="btn small ui" data-q="5"><span class="q">&times;5</span> ${priceHTML(five)}</button></div>`, 'c-' + b.id);
       it.querySelectorAll('button').forEach(btn => {
         const q = +btn.dataset.q, cost = q === 5 ? five : b.price;
         if (save.coins < cost) btn.classList.add('disabled');
-        btn.onclick = () => { if (!spend(cost)) return; save.boosters[b.id] += q; save.active[b.id] = true; persist(); renderShop(); };
+        btn.onclick = () => { if (!spend(cost)) return; save.boosters[b.id] += q; save.active[b.id] = true; persist(); afterBuy(it, '+' + q); };
       });
       it.querySelector('input').onchange = e => { save.active[b.id] = e.target.checked; persist(); Sound.click(); };
     });
@@ -3155,33 +3204,84 @@ function renderShop() {
   } else if (shopTab === 'upgrades') {
     UPGRADES.forEach(u => {
       const lvl = save.upgrades[u.id], max = lvl >= u.costs.length, cost = max ? 0 : u.costs[lvl];
-      const it = card(`<div class="item-ico">${ICONS[u.id]}</div>
-        <div class="item-body"><b>${u.name} <span class="lvl-tag">Lv ${lvl}/${u.costs.length}</span></b><p>${u.desc}</p>
+      const it = card(`${ico(u.id, 'Lv' + lvl)}
+        <div class="item-body"><b>${u.name}</b><p>${u.desc}</p>
           <div class="item-meta"><div class="pips">${u.costs.map((_, i) => `<i class="${i < lvl ? 'on' : ''}"></i>`).join('')}</div>
           <span class="fx-line">${u.fx(lvl)}${max ? '' : ` <span class="arrow-r">&rarr;</span> <b>${u.fx(lvl + 1)}</b>`}</span></div></div>
-        <div class="item-buy"><button class="btn ui">${max ? 'MAX' : priceHTML(cost)}</button></div>`);
+        <div class="item-buy"><button class="btn ui">${max ? 'MAX' : ICONS.up + ' ' + priceHTML(cost)}</button></div>`, 'c-' + u.id);
       const btn = it.querySelector('button');
       if (max || save.coins < cost) btn.classList.add('disabled');
-      btn.onclick = () => { if (max || !spend(cost)) return; save.upgrades[u.id]++; persist(); renderShop(); };
+      btn.onclick = () => { if (max || !spend(cost)) return; save.upgrades[u.id]++; persist(); afterBuy(it, 'Level ' + save.upgrades[u.id]); };
     });
     $('#shop-note').textContent = 'Upgrades are permanent and apply to every car.';
   } else {
-    BUNDLES.forEach(bd => {
-      const value = bundleValue(bd), save_pct = Math.round((1 - bd.price / value) * 100);
-      const it = card(`<div class="item-ico bundle">${ICONS.box}<em>-${save_pct}%</em></div>
+    BUNDLES.forEach((bd, k) => {
+      const value = bundleValue(bd), pct = Math.round((1 - bd.price / value) * 100);
+      const grade = ['bronze', 'silver', 'gold'][k];
+      const it = card(`${ico('box', '-' + pct + '%', grade)}${k === 2 ? '<span class="ribbon">BEST VALUE</span>' : ''}
         <div class="item-body"><b>${bd.name}</b><p>${bd.desc}</p>
-          <div class="item-meta contents">${Object.entries(bd.items).map(([id, n]) => `<span class="chip-s ico">${ICONS[id]}&times;${n}</span>`).join('')}</div></div>
-        <div class="item-buy"><s class="was">${fmt(value)}</s><button class="btn ui">${priceHTML(bd.price)}</button></div>`);
+          <div class="item-meta contents">${Object.entries(bd.items).map(([id, n]) => `<span class="chip-s ico c-${id}">${ICONS[id]}&times;${n}</span>`).join('')}</div></div>
+        <div class="item-buy"><s class="was">${fmt(value)}</s><button class="btn ui">${priceHTML(bd.price)}</button></div>`, 'c-' + grade);
       const btn = it.querySelector('button');
       if (save.coins < bd.price) btn.classList.add('disabled');
       btn.onclick = () => {
         if (!spend(bd.price)) return;
         for (const [id, n] of Object.entries(bd.items)) { save.boosters[id] += n; save.active[id] = true; }
-        persist(); renderShop();
+        persist(); afterBuy(it, 'Unpacked!');
       };
     });
     $('#shop-note').textContent = 'Bundles add straight to your booster stock.';
   }
+}
+// tab icons
+$$('#shop .tab').forEach(t => { t.innerHTML = ICONS[{ boosters: 'bolt', upgrades: 'up', bundles: 'box' }[t.dataset.tab]] + '<span>' + t.textContent + '</span>'; });
+
+/* =========================================================================
+ * Driver level: every run earns XP; each level up pays coins
+ * ========================================================================= */
+const xpNeed = L => 150 + 110 * (L - 1);
+function grantXP(amount) {
+  const before = { lvl: save.plevel, xp: save.xp };
+  save.xp += amount;
+  const ups = [];
+  while (save.xp >= xpNeed(save.plevel)) {
+    save.xp -= xpNeed(save.plevel);
+    save.plevel++;
+    const reward = 30 + 10 * save.plevel;
+    save.coins += reward;
+    ups.push(reward);
+  }
+  persist();
+  return { amount, before, ups };
+}
+// animate the XP bar on a results panel: fill, roll over on level up, settle
+function showXP(id, g) {
+  const box = $('#' + id);
+  const lvl = box.querySelector('[data-xp-lvl]'), bar = box.querySelector('[data-xp-bar]'), up = box.querySelector('[data-xp-up]');
+  box.querySelector('[data-xp-amt]').textContent = '+' + fmt(g.amount) + ' XP';
+  lvl.textContent = g.before.lvl; up.textContent = ''; box.classList.remove('leveled');
+  bar.style.transition = 'none'; bar.style.width = (g.before.xp / xpNeed(g.before.lvl) * 100) + '%';
+  void bar.offsetWidth; bar.style.transition = '';
+  setTimeout(() => {
+    if (g.ups.length) {
+      bar.style.width = '100%';
+      setTimeout(() => {
+        lvl.textContent = save.plevel;
+        up.textContent = `LEVEL UP! +${fmt(g.ups.reduce((a, b) => a + b, 0))} coins`;
+        box.classList.add('leveled');
+        Sound.mission();
+        bar.style.transition = 'none'; bar.style.width = '0%'; void bar.offsetWidth; bar.style.transition = '';
+        bar.style.width = (save.xp / xpNeed(save.plevel) * 100) + '%';
+        updateCoinsUI();
+      }, 650);
+    } else bar.style.width = (save.xp / xpNeed(save.plevel) * 100) + '%';
+  }, 500);
+}
+function refreshProfile() {
+  const need = xpNeed(save.plevel);
+  $('#pf-level').textContent = save.plevel;
+  $('#pf-xp-bar').style.width = (save.xp / need * 100) + '%';
+  $('#pf-xp').textContent = `${fmt(save.xp)} / ${fmt(need)} XP`;
 }
 
 /* =========================================================================
@@ -3198,6 +3298,7 @@ const MISSION_POOL = [
   { type: 'runs', text: n => `Play ${n} runs today`, ns: [3, 5, 8], r: [30, 50, 80] }
 ];
 const ACHIEVEMENTS = [
+  { id: 'drv10', name: 'Seasoned Driver', desc: 'Reach driver level 10', val: () => save.plevel, goal: 10, r: 200 },
   { id: 'first', name: 'First Drift', desc: 'Finish your first run', val: () => save.runs, goal: 1, r: 25 },
   { id: 'coins1', name: 'Pocket Change', desc: 'Collect 500 coins in total', val: () => save.totalCoins, goal: 500, r: 60 },
   { id: 'coins2', name: 'Coin Collector', desc: 'Collect 2,500 coins in total', val: () => save.totalCoins, goal: 2500, r: 150 },
@@ -3299,7 +3400,7 @@ function renderMissions() {
     $('#missions-note').textContent = `New missions in ${Math.floor(msLeft / 3600000)}h ${Math.floor(msLeft % 3600000 / 60000)}m` + (m.swapped ? '' : ' · you can swap one mission today');
     m.list.forEach((it, i) => {
       const def = MISSION_POOL.find(p => p.type === it.type);
-      const d = row(`<div class="item-ico">${ICONS.target}</div>
+      const d = row(`<div class="item-ico t-mission">${ICONS.target}</div>
         <div class="item-body"><b>${def.text(it.n)}</b>${bar(it.prog, it.n)}</div>
         <div class="item-buy">${it.claimed ? '<span class="m-done">Claimed</span>' : it.done ? `<button class="btn ui" data-c>Claim ${priceHTML(it.reward)}</button>` : `<span class="m-rew">${priceHTML(it.reward)}</span>${m.swapped ? '' : '<button class="btn small ui" data-s>Swap</button>'}`}</div>`);
       const c = d.querySelector('[data-c]');
@@ -3308,7 +3409,7 @@ function renderMissions() {
       if (sw) sw.onclick = () => { if (Missions.swap(i)) { Sound.click(); renderMissions(); } };
     });
     const allClaimed = m.list.every(x => x.claimed);
-    const chest = row(`<div class="item-ico chest">${ICONS.box}</div>
+    const chest = row(`<div class="item-ico t-gold">${ICONS.box}</div>
       <div class="item-body"><b>Daily Chest</b><p>Claim all three missions to open it.</p>${bar(m.list.filter(x => x.claimed).length, 3)}</div>
       <div class="item-buy">${m.chest ? '<span class="m-done">Opened</span>' : `<button class="btn ui${allClaimed ? '' : ' disabled'}" data-chest>Open ${priceHTML(CHEST_REWARD)}</button>`}</div>`);
     const cb = chest.querySelector('[data-chest]');
@@ -3320,7 +3421,7 @@ function renderMissions() {
     const rank = a => save.ach[a.id] ? 2 : a.val() >= a.goal ? 0 : 1;
     ACHIEVEMENTS.slice().sort((a, b) => rank(a) - rank(b)).forEach(a => {
       const v = a.val(), ready = v >= a.goal, claimed = !!save.ach[a.id];
-      const d = row(`<div class="item-ico${claimed ? ' got' : ''}">${ICONS.trophy}</div>
+      const d = row(`<div class="item-ico t-trophy${claimed ? ' got' : ''}">${ICONS.trophy}</div>
         <div class="item-body"><b>${a.name}</b><p>${a.desc}</p>${bar(v, a.goal)}</div>
         <div class="item-buy">${claimed ? '<span class="m-done">Claimed</span>' : ready ? `<button class="btn ui" data-a>Claim ${priceHTML(a.r)}</button>` : `<span class="m-rew">${priceHTML(a.r)}</span>`}</div>`);
       const b = d.querySelector('[data-a]');
@@ -3459,7 +3560,7 @@ const CAR_TAGS = {
   ridgeback: ['Crew cab', 'Short bed', 'Lowered stance', 'LED light bar'],
   nightfin: ['Twin bubble canopies', 'Turbine flame', 'Red pinstripes', 'Flashing beacon']
 };
-const garage = { scene: new T.Scene(), cam: new T.PerspectiveCamera(34, 1, 0.1, 100), holder: new T.Group(), idx: 0, model: null, active: false, rot: 0.6, pop: 1, thumbs: null, filter: 'all', drag: null, dragT: -9 };
+const garage = { scene: new T.Scene(), cam: new T.PerspectiveCamera(34, 1, 0.1, 100), holder: new T.Group(), idx: 0, model: null, active: false, rot: 0.6, pop: 1, thumbs: null, filter: 'all', tier: -1, sort: 'price', drag: null, dragT: -9 };
 (function buildGarage() {
   const g = garage.scene;
   const bg = document.createElement('canvas'); bg.width = 16; bg.height = 256;
@@ -3515,21 +3616,41 @@ function renderGarageGrid() {
   const wrap = $('#g-thumbs');
   wrap.innerHTML = '';
   $$('[data-gfilter]').forEach(b => b.classList.toggle('active', b.dataset.gfilter === garage.filter));
-  CARS.forEach((def, i) => {
-    const owned = save.owned.includes(def.id);
-    if (garage.filter === 'owned' && !owned) return;
-    if (garage.filter === 'locked' && owned) return;
+  $('#g-sort').textContent = garage.sort === 'rarity' ? 'Rarity' : 'Price';
+  // rarity chips with per-rarity collection counts
+  const tiers = $('#g-tiers');
+  tiers.innerHTML = '';
+  [-1, 0, 1, 2, 3, 4, 5].forEach(t => {
+    const pool = CARS.filter(c => t < 0 || c.tier === t);
+    const own = pool.filter(c => save.owned.includes(c.id)).length;
     const b = document.createElement('button');
-    const eq = save.car === def.id;
-    b.className = 'gcar ui' + (owned ? '' : ' locked') + (i === garage.idx ? ' active' : '') + (eq ? ' equipped' : '');
+    b.className = 'tchip ui' + (garage.tier === t ? ' active' : '');
+    if (t >= 0) b.style.setProperty('--tier', TIERS[t].color);
+    b.innerHTML = (t < 0 ? 'All rarities' : `<i class="gem"></i>${TIERS[t].name.charAt(0) + TIERS[t].name.slice(1).toLowerCase()}`) + ` <em>${own}/${pool.length}</em>`;
+    b.onclick = () => { garage.tier = t; Sound.click(); renderGarageGrid(); };
+    tiers.appendChild(b);
+  });
+  let list = CARS.map((def, i) => ({ def, i }));
+  list = list.filter(({ def }) => {
+    const owned = save.owned.includes(def.id);
+    if (garage.filter === 'owned' && !owned) return false;
+    if (garage.filter === 'locked' && owned) return false;
+    return garage.tier < 0 || def.tier === garage.tier;
+  });
+  if (garage.sort === 'rarity') list.sort((a, b) => b.def.tier - a.def.tier || b.def.price - a.def.price);
+  list.forEach(({ def, i }) => {
+    const owned = save.owned.includes(def.id), eq = save.car === def.id, afford = !owned && def.price <= save.coins;
+    const b = document.createElement('button');
+    b.className = 'gcar ui' + (owned ? '' : ' locked') + (i === garage.idx ? ' active' : '') + (eq ? ' equipped' : '') + (afford ? ' afford' : '');
     b.dataset.i = i;
     b.style.setProperty('--tier', TIERS[def.tier].color);
-    b.innerHTML = (garage.thumbs && garage.thumbs[i] ? `<img alt="" decoding="async" src="${garage.thumbs[i]}">` : '<span class="ph"></span>') +
+    b.innerHTML = '<i class="gem"></i>' + (garage.thumbs && garage.thumbs[i] ? `<img alt="" decoding="async" src="${garage.thumbs[i]}">` : '<span class="ph"></span>') +
       `<span class="gc-name">${def.name}</span>` +
       `<span class="gc-price">${eq ? 'Equipped' : owned ? 'Owned' : `${fmt(def.price)} <i class="coin"></i>`}</span>`;
     b.onclick = () => { garage.idx = i; Sound.click(); showGarageCar(false); };
     wrap.appendChild(b);
   });
+  if (!list.length) wrap.innerHTML = '<p class="g-empty">No cars match these filters.</p>';
   const act = wrap.querySelector('.active');
   if (act) act.scrollIntoView({ block: 'nearest' });
 }
@@ -3544,7 +3665,7 @@ function showGarageCar(instant) {
   const owned = save.owned.includes(def.id), eq = save.car === def.id;
   const tier = TIERS[def.tier];
   const tierEl = $('#g-tier');
-  tierEl.textContent = tier.name; tierEl.style.color = tier.color; tierEl.style.borderColor = tier.color;
+  tierEl.querySelector('span').textContent = tier.name; tierEl.style.color = tier.color; tierEl.style.borderColor = tier.color;
   garage.ring.material.color.set(tier.color);
   garage.glow.material.color.set(tier.color);
   $('#g-status').textContent = eq ? 'Equipped' : owned ? 'Owned' : 'Locked';
@@ -3557,7 +3678,12 @@ function showGarageCar(instant) {
   if (eq) { btn.innerHTML = 'Equipped'; btn.classList.add('disabled'); }
   else if (owned) btn.innerHTML = 'Select';
   else { btn.innerHTML = `Unlock &middot; ${priceHTML(def.price)}`; if (save.coins < def.price) btn.classList.add('disabled'); }
-  $('#g-need').textContent = !owned && save.coins < def.price ? `You need ${fmt(def.price - save.coins)} more coins` : '';
+  // a goal to aim for: what is affordable now, or the cheapest car still locked
+  const locked = CARS.filter(c => !save.owned.includes(c.id));
+  const canBuy = locked.filter(c => c.price <= save.coins).pop();
+  $('#g-need').textContent = !owned && save.coins < def.price ? `You need ${fmt(def.price - save.coins)} more coins`
+    : canBuy && canBuy.id !== def.id ? `You can afford ${canBuy.name} (${fmt(canBuy.price)})`
+    : locked.length && locked[0].id !== def.id ? `Next goal: ${locked[0].name} (${fmt(locked[0].price)})` : '';
   $('#g-count').textContent = `${save.owned.length} / ${CARS.length} cars`;
   $('#g-count-bar').style.width = (save.owned.length / CARS.length * 100) + '%';
   renderGarageGrid();
@@ -3656,9 +3782,31 @@ function refreshMenu() {
   $('#nav-garage-sub').textContent = save.owned.length + '/' + CARS.length;
   $('#nav-spin-sub').textContent = freeSpinReady() ? 'Free spin!' : 'Try your luck';
   refreshBadge();
+  refreshProfile();
+  refreshSide();
   renderMenuBoosters();
   updateCoinsUI();
   $('#spin-badge').classList.toggle('on', freeSpinReady());
+}
+function refreshSide() {
+  const m = Missions.ensure();
+  const msLeft = (m.day + 1) * 86400000 - Date.now();
+  $('#side-reset').textContent = `resets in ${Math.floor(msLeft / 3600000)}h ${Math.floor(msLeft % 3600000 / 60000)}m`;
+  $('#side-missions').innerHTML = m.list.map(it => {
+    const def = MISSION_POOL.find(p => p.type === it.type);
+    return `<div class="sm-row${it.done ? ' done' : ''}"><span class="sm-txt">${def.text(it.n)}</span>
+      <span class="sm-bar"><i style="width:${Math.min(100, it.prog / it.n * 100)}%"></i></span>
+      <span class="sm-rew">${it.claimed ? '&#10003;' : it.done ? 'Claim!' : fmt(it.reward) + ' <i class="coin"></i>'}</span></div>`;
+  }).join('');
+  if (freeSpinReady()) $('#side-spin').textContent = 'Free spin ready!';
+  else { const ms = FREE_SPIN_MS - (Date.now() - save.lastSpin); $('#side-spin').textContent = `Free spin in ${Math.floor(ms / 3600000)}h ${Math.floor(ms % 3600000 / 60000)}m`; }
+  const d = dailyDeal();
+  $('#side-deal-ico').className = 'side-ico t-' + d.b.id; $('#side-deal-ico').innerHTML = ICONS[d.b.id];
+  $('#side-deal').textContent = `${d.qty}\u00d7 ${d.b.name}`;
+  $('#side-deal-sub').innerHTML = save.dealDay === d.day ? 'Claimed today' : `Daily deal &middot; ${fmt(d.price)} <i class="coin"></i>`;
+  let stars = 0; for (const k in save.levelStars) stars += save.levelStars[k];
+  $('#side-level-t').textContent = 'Level ' + save.level;
+  $('#side-level-s').textContent = `${stars} of ${(save.level - 1) * 3} stars earned`;
 }
 function cycleOwned(dir) {
   const owned = CARS.filter(c => save.owned.includes(c.id));
@@ -3718,7 +3866,8 @@ window.addEventListener('contextmenu', e => e.preventDefault());
 const on = (sel, fn) => $(sel).addEventListener('click', e => { e.stopPropagation(); fn(e); });
 on('#btn-endless', () => { Sound.click(); startRun('endless'); });
 on('#btn-levels', () => { Sound.ensure(); Sound.click(); showScreen('levels'); });
-on('#btn-level-continue', () => { Sound.click(); startRun('level', save.level); });
+on('#btn-level-continue', () => { Sound.click(); startRun('level', selLevel); });
+on('#side-level', () => { Sound.ensure(); Sound.click(); showScreen('levels'); });
 on('#btn-cp-next', () => { Sound.click(); startRun('level', currentLevel + 1); });
 on('#btn-cp-replay', () => { Sound.click(); startRun('level', currentLevel); });
 on('#btn-cp-menu', () => { Sound.click(); goMenu(); });
@@ -3734,6 +3883,7 @@ on('#g-prev', () => { garage.idx = (garage.idx - 1 + CARS.length) % CARS.length;
 on('#g-next', () => { garage.idx = (garage.idx + 1) % CARS.length; Sound.click(); showGarageCar(false); });
 on('#g-action', garageAction);
 $$('#missions .tab').forEach(t => t.addEventListener('click', () => { missionTab = t.dataset.mtab; Sound.click(); renderMissions(); }));
+on('#g-sort', () => { garage.sort = garage.sort === 'price' ? 'rarity' : 'price'; Sound.click(); renderGarageGrid(); });
 $$('[data-gfilter]').forEach(b => b.addEventListener('click', () => { garage.filter = b.dataset.gfilter; Sound.click(); renderGarageGrid(); }));
 window.addEventListener('keydown', e => {
   if (!garage.active) return;
