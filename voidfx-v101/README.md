@@ -6,8 +6,8 @@ It is here because the session that made the edit could not push to voidfx: atta
 
 | Path | What it is |
 |---|---|
-| `voidfx-v101.bundle` | A git bundle with the v101 commit for voidfx: the edit, engine fixes and doc updates. It builds on voidfx `claude/gallant-planck-pqpczp` (f1ea39d) and has two commits: the edit, then the review notes. |
-| `docs/` | The updated voidfx `CLAUDE.md`, `studio/VOIDFX_STUDIO.md` and `docs/TOOLKIT.md` with the owner's v101 review recorded (style rejected, real lip-sync only, WARMPOP-style captions, the liked transitions). They are also in the bundle. |
+| `voidfx-v101.bundle` | A git bundle with the v101 commit for voidfx: the edit, engine fixes and doc updates. It builds on voidfx `claude/gallant-planck-pqpczp` (f1ea39d) and has three commits: the v101 edit, the owner's review notes, and the S4 scene packs (p9, p10) plus `tools/lipcheck.py`. |
+| `docs/`, `tools/` | The updated voidfx `CLAUDE.md`, `studio/VOIDFX_STUDIO.md`, `studio/SCENE_PACKS.md` (now with the S4 packs), `studio/src_manifest.json`, `docs/TOOLKIT.md`, `tools/lipcheck.py` and `tools/setup_studio.sh` with the owner's v101 review recorded (style rejected, real lip-sync only, WARMPOP-style captions, the liked transitions). They are also in the bundle. |
 | `v101/` | A plain, browsable copy of the edit folder: EDL, renderer, look/transitions source, sound design, QC, shot lists, transcripts, face tracks, the Fraunces font. `v101/README.md` has the full write-up. |
 | `out/` (not in git) | The rendered TikTok upload MP4 and the CRF 11 master MOV, kept in the session only. They contain copyrighted footage and music, so they stay out of git like every voidfx edit. |
 

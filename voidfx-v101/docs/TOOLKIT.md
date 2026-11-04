@@ -12,6 +12,7 @@ Timings were measured on this 4-core box for a 26 s edit.
 | Map the song | `python3 tools/song_map.py src/SONG.mp3 vN/work` | 3 s |
 | Shot lists | `python3 vN/work/analyze.py src/PACK.mp4 TAG` (contact sheets, per-shot stats) | ~1 min per pack |
 | Dialogue / lyrics | `python3 tools/transcribe.py vN NAME MEDIA [--vad] [--start S --dur D]` | 1–3 min |
+| **Is he really saying it?** | `python3 tools/lipcheck.py SRC t0 t1 OUT.jpg --vocals STEM.wav [--stem-t0 S]`: face and lip crops every 0.1 s with the speech level; lips must move with the bars before a line is used as lip-synced | ~20 s |
 | Voice under score | `python3 -m demucs -n htdemucs --two-stems=vocals -o vN/audio/sep CLIP.wav` | 15 s per 30 s clip |
 | Tracks and mattes | `bash tools/build.sh N prep` | ~35 s |
 | **Every-cut review sheets** | `bash tools/build.sh N auto` → `vN/frames/cuts_*.jpg` | ~35 s |
