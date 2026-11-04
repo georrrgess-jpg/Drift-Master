@@ -1,5 +1,7 @@
 # LET GO — The Flash × Ark Patrol "Let Go" (ft. Veronika Redd) (voidfx v102, 9:16)
 
+> **Owner review: liked and complete, but lacklustre compared with the other builds and the Dexter edits.** The owner wants every edit to go above and beyond. That bar is now `studio/VOIDFX_STUDIO.md` §5a.
+
 A 23.42 s, 1080×1920, 60 fps TikTok edit that loops. It is built on the v7 engine plus the v5 Flash toolkit, with a new look, new transitions and new graphics.
 
 - Upload file: `v102/out/let_go_flash_voidfx_9x16.mp4` (H.264 + AAC, fast-start)

@@ -30,6 +30,14 @@
   2. a visual review of contact sheets around every transition and title;
   3. a fix-and-re-render for anything weak;
   4. a final pull of key frames from the encoded file.
+- **Go above and beyond (owner, after v102):** v102 LET GO was liked and judged complete, but rated *lacklustre* next to the other builds and the Dexter edits. Every edit must clear the bar in `studio/VOIDFX_STUDIO.md` §5a before delivery:
+  - at least 3 multi-stage signature set pieces, including the hero transition on the drop;
+  - at least 16 designed transitions, mostly new;
+  - montage moves every 2–4 half-beats;
+  - at least 4 designed text moments;
+  - depth or world graphics in most shots;
+  - effects visible at phone size;
+  - an honest benchmark comparison against v6 and v7.
 - **What v6 got right (do this every time):**
   - one concept tying picture, sound and text together;
   - the song's best part (where the full mix or bass returns) lands on the biggest transition;

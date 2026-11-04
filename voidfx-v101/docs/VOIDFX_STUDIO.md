@@ -87,6 +87,27 @@ Every new edit must **match or exceed** these. It must **not copy their look**: 
   - simple, clean transitions: streetlight sweep, windscreen wiper, whip pans, plastic wrap, an impact frame, a rain focus pull, a lamp switching on;
   - from v101, *some* transitions were good (the owner did not like the edit overall).
 
+- **v102 LET GO (The Flash): liked and judged complete, but rated *lacklustre* next to the other builds and the Dexter edits.** The owner's words: *"I like this edit and I honestly think it's good. It's complete. However … in comparison to your other builds and dexter edits in general this one was lack luster, I want you to go above and beyond with these edits."*
+  - The studio's own reading of why it fell short of v6 and v7:
+    - fewer shots (14) and long 2.2 s holds through the cold open;
+    - most effects were subtle (sparks, eye arcs, edge arcs) rather than "how did they do that" moments;
+    - only two text moments;
+    - about half the transitions were reworked v5 ones;
+    - no built world or multi-stage set piece on the scale of the v6 CRT dive or the v7 slide box and plastic burst;
+    - the hero strike was mostly 2D flashes.
+  - **Going "above and beyond" is now the bar for every edit.** See §5a.
+
+## 5a. The bar: above and beyond (from the owner's v102 note)
+
+"Complete and good" is not enough. Before the first full render, the studio checks the plan against this list, and again on the encoded file:
+- **At least 3 signature set pieces.** Each is a multi-stage, designed sequence of 1–2 s that builds a space or object and moves the camera through it, like the v7 slide box or plastic burst, or the v6 CRT dive into the vapor world. One of them is the hero transition on the drop. Flashes and overlays alone don't count.
+- **At least 16 designed transitions, mostly new.** At most a third may be reused, and only when reworked for the edit's world. None may repeat.
+- **Pacing:** in the montage, a cut or designed move every 2–4 half-beats. Cold-open holds over about 1.5 s are kept only when they carry a line, a lyric or a hero image.
+- **At least 4 text moments**, each with its own designed animation (bold WARMPOP-style captions plus at least one material or title treatment). Each must stay readable.
+- **Graphics that build depth or a world** (matte layers, a set, an object) in most shots, not just accents.
+- **Effects strong enough to see at phone size.** If a thumbnail doesn't show it, push it or cut it.
+- **A benchmark comparison before delivery.** Pull matching moments from v6 and v7 (their write-ups and frames) and honestly check that this edit's opening, hero transition, text and ending equal or beat them. If one is weaker, rework it before shipping.
+
 ## 4. What the owner rejected: never do these
 
 | Rejected | Edit | Lesson |
