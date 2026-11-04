@@ -78,6 +78,16 @@ Each transition goes through something and has its own sound in `audioN.py` (`if
 | `papertear` (v101) | The outgoing shot tears down the middle (fibrous paper edge), the halves are pulled apart | — | Paper rip |
 | `oilwheel` (v101) | Liquid-light (oil wheel) cells with iridescent walls swirl over the frame; the next shot is revealed cell by cell | — | Phaser swirl, bubbles |
 | `tout="reel_end"` (v101) | The film flutters, runs out of the gate, the lamp flickers through the flapping tail, black (loops into `projector_on`) | — | Projector wind-down, tail flap |
+| `rewind_in` + `tout="rewind_end"` (v102) | The loop as time travel: the last bar plays the whole edit backwards (35× at its peak, picture and sound together, via `rew_pos`) and lands on frame 0, whose `rewind_in` flash and smear settle into the first shot | — | The song runs backwards (band-limited), tape scrub, crackle |
+| `bolt_link` (v102) | A bolt jumps out of the outgoing face's eye (YuNet landmarks) and splits the frame open along itself | Face track | Zap, crack, whoosh |
+| `overcharge` (v102) | The shot's own lightning floods the frame; the next shot burns in brightest-first through gold (no flat white frame) | — | Electric swell, zap |
+| `whip` (v102 `whip_bolt`) | Whip pan with a bolt riding it | — | Whoosh, zap |
+| `strike` (v102) | HERO: with the outgoing shot frozen (`freeze=True` + a hold in its `tmap`), a leader bolt comes down through the face; then two impact frames (gold negative, hard silhouette), a shockwave and residual bolt | Previous shot `freeze=True`, `E.T_FREEZE` | Time-stop suck-in, thunder, sub |
+| `emblem` (v102 `emblem_tr`) | The Flash emblem slams over the frame and draws itself in lightning; the camera flies through the bolt | — | Hum, zap, whoosh |
+| `remnant` (v102 `remnant_soft`) | Converging time-remnants (gold / crimson), weighted so bright shots don't blow out | — | Shimmer, whoosh |
+| `passby` (v102) | He passes the lens: his motion smears the frame off; the next shot drags in | — | Doppler whoosh |
+| `bolt_split` / `shockwave` / `impact` (v102 wrappers) | v5 lightning split; v5 face-centred shockwave ring; a two-frame impact frame (gold negative, hard silhouette) | Face track (shockwave) | Zap + crack / whoosh + boom / hit + zap |
+| `smear` (v102) | The frame stretches into horizontal light streaks; the next shot resolves out of them (replaces the row-sliced v5 smear, which read as blocky artifacts) | — | Whoosh |
 
 The older v4/v5 transitions are still in the file and work as `tin` values: `kaleido`, `rewind`, `flash`, `tiles`, `neon_trace`, `ripple`, `pixel_sort`, `vhs_roll`. Add new transitions to `TR2` as `fn(A, B, j, f, sa, sb)` with `(fn, frames_before, frames_after)`:
 - `j < 0`: A is the live outgoing shot and B is the incoming shot's first frame.
@@ -90,6 +100,16 @@ The older v4/v5 transitions are still in the file and work as `tin` values: `kal
   - `prism=True` (+ `seg=True`): prism silhouettes (amber / oxblood / plum) radiate behind the person on the bassline accents (`E.ACCENTS`);
   - film finish: gate weave, exposure flicker, red-orange halation, two-scale film grain, dust and the odd hair, warm light leaks on the montage downbeats, gentle unsharp for 720p upscales;
   - type: Fraunces Soft (OFL, `v101/fonts/`), `cap` two-line eased captions, `title` 70s layered shadow-stack letters filled with flowing liquid light that drop in on bass notes and melt out, `better` (the closing word on a freeze).
+- **v102 (The Flash) graphics** (shot flags; most need `seg=True`):
+  - `sarcs=amt`: lightning that hugs the silhouette (arcs crawl along the person matte's edge, with leaps off the body), pulsing on `E.CHOPS` before the drop and `E.ACCENTS` after;
+  - `echoes=True` (+ `trail=-1|1`): gold / ember / crimson afterimages of the subject from earlier frames, behind his clean silhouette;
+  - `motes=True`: frozen-time sparks in three depth layers (behind the matte, and out-of-focus bokeh in front);
+  - `eyespark=True`: tiny arcs off the YuNet eye landmarks on the vocal chops;
+  - `freeze=True`: from `E.T_FREEZE` the colour drains to cold steel and arcs crawl over him;
+  - `rot=True`: the source is rotated 90° and fills 9:16 natively (a sideways wall run becomes running up the frame);
+  - `title=True`: a slammed, electrified two-word title (lightning crawls along the letter outlines), from `E.TEXT` style `title`;
+  - captions (`E.TEXT` style `cap`): bold, high-contrast two-line WARMPOP-style lockups in Inter Display Black Italic with crimson + gold echoes.
+- **Lip-sync check:** `tools/lipcheck.py`, run before using a line on camera (v102: "How's this for power?" was confirmed on camera).
 - **Per-shot knobs (v101):** `target=` exposure target (high-key shots 0.75–0.8), `warm=` pulls a cold shot into the warm stock.
 
 - **Captions** (`CAPS`): two-line retro lockups. Each word eases in on its spoken time (fade, rise, blur-to-sharp) with pink and cyan echoes; emphasis words are chrome. The `vanish` style dissolves into pixels.

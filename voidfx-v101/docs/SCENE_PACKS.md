@@ -268,6 +268,24 @@ Proven shots (fb):
 
 **Avoid:** the slow-mo run at the camera, and the floating shot.
 
+More proven fb shots (v102; face widths from YuNet):
+- unmasked close-up, calm 37.12–38.55 (w259);
+- lightning crawling over unmasked Barry 83.80–85.08 (w161);
+- cowl pull 68.63–71.85 (w261);
+- **"How's this for power?"** 110.96–112.00 on the masked close-up 109.68–112.47 (w233). **On camera** (lip sheet `v102/frames/lip_power.jpg`); the dialogue stem is Demucs of fb 100–140 s;
+- lightning throw 124.17–124.78 (one take; the detector splits it at 124.37 on the flash);
+- the scream with the lightning blast 127.63–129.15 (w218–247; a 9:16 crop loses most of the blast);
+- lightning climbing his body in the garage 112.48–116.48;
+- street run into the lens 64.73–68.62 (one take, split by lightning flashes; framing locked at x≈745);
+- sideways wall run 80.82–82.27 (`rot=True` fills 9:16);
+- lightning on his face 89.70–91.98 (lit white, so use `target≈0.33`);
+- dark, lit by his own lightning 52.82–54.35;
+- grin 56.05–58.32 (w315);
+- glowing eyes 116.50–119.38 (w337);
+- lateral sprint 4.28–6.22 (w~190).
+
+For a consistent Barry, avoid the other speedsters and suits: the yellow suit (124.8–127.5), purple and green lightning (129–148), and the black suit with the blue chest (42–53).
+
 ---
 
 ## Songs (`src/`)
@@ -280,6 +298,7 @@ Proven shots (fb):
 | `duvet.mp3` | `B_a_-_Duvet_Lyrics.mp3` | 93 BPM, P=0.32211, offset 0.2085. Lyric is "you don't even **feel** a thing" |
 | `blood_theme.mp3` | `Blood_Theme_Instrumental.mp3` | Dexter theme; hard stop at 113.047 s |
 | `less_i_know.mp3` | `Tame_Impala_-_The_Less_I_Know_The_Better_Audio.mp3` | 116.99 BPM, half-beat P=0.25644 s, offset 0.0833; beats fall on the ODD half-beats. Drums enter 1.877 s (h7), bassline + band drop 10.084 s (h39), bass drops out and vocals start ~24.7 s. Bass-stem accents listed in `v101/work/edl101.py` (`ACCENTS`) |
+| `let_go.mp3` | `Ark_Patrol_-_Let_Go_Lyrics_ft._Veronika_Redd_and_now_you_wont_let_go.mp3` | 163.96 BPM, P=0.18297, offset 0.0366. Drop 1 at 52.73 s, **drop 2 at 140.56 s (+31 dB)**; breakdowns (bass + vocal chops) at 35.2 and 123.0 s, risers at 49.8 and 137.6 s. Hook "but now you won't let go" at 32.4–33.5 s. The riser chops are ambiguous to Whisper, so don't caption them |
 | `matrix_funk_slowed.mp3` | `MATRIX_FUNK_SLOWED.mp3` | Slow again by ×1.12644 (vinyl) → 102.8 BPM |
 
 ## Other assets

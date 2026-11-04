@@ -233,6 +233,7 @@ Only then deliver.
 | v6 WARMPOP | pastel vapor + VHS (chroma bleed, scanlines, CRT, neon) |
 | v7 HIM ALL ALONG | forensic noir (drained cold colour, blood red only, UV luminol, case-file type) |
 | v101 THE LESS YOU KNOW | 16 mm psychedelic reel (oxblood / amber / plum, liquid-light projections, halation, grain, gate weave, Fraunces Soft 70s type). **Rejected by the owner: don't reuse.** |
+| v102 LET GO (The Flash) | storm: crimson suit, gold lightning with white-hot cores, steel-blue shadows, gold halation, anamorphic flares, bold Black Italic captions |
 
 Fresh directions for future edits:
 - 16 mm film burn / home movie (Harry flashbacks);
@@ -256,6 +257,7 @@ Fresh directions for future edits:
 | v6 | George Clanton "Warmpop" | 90 BPM | half-beats 416–496 (2:18.9–2:45.5) | 2:29.5, full mix returns → CRT dive |
 | v7 | Gunna "Him All Along" | 130 BPM | half-beats 528–640 (2:01.9–2:27.8, 14 bars) | 2:13.0, +17 dB return → plastic burst |
 | v101 | Tame Impala "The Less I Know The Better" | 117 BPM | half-beats 7–95 (0:01.9–0:24.4, 11 bars), last half bar = the song's own intro pickup (h3–h7) so the loop wraps onto the first downbeat | 0:10.08, the bassline and full band enter after the 4-bar drum intro → film burn-through |
+| v102 | Ark Patrol "Let Go" (ft. Veronika Redd) | 164 BPM | half-beats 720–848 (2:11.8–2:35.2, 16 bars), the last 6 half-beats are a rewind back to the start | 2:20.56, drop 2 (+31 dB) → the strike |
 
 ## 11. Communication
 
