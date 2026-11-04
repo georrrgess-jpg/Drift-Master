@@ -13,8 +13,9 @@ Read this first. Then read `SCENE_PACKS.md` (the sources), `/docs/TOOLKIT.md` (t
 | **HIM ALL ALONG** (Dexter × Gunna, rev 2) | `v7/` | Approved as a standard: *"The transitions were creative and well animated."* Physical, themed, Dexter-specific transitions (blood-slide box, plastic burst, body-bag zipper, blood on the lens, M99 blink, magnifier → pupil loop), and a hero transition on the song's drop. |
 | **WARMPOP** (Dexter × George Clanton, rev 3) | `v6/` | Approved as a standard: *"wonderful transitions, animations, graphics, while maintaining the style that I like … I like how the music correlates to the edit. I like the text."* The amount of designed motion per second, the music-led structure, the eased two-line captions and the depth graphics. |
 | **SURPRISE** (Doakes × Need It, v4) | `v4/` | The first approved standard. A dialogue-led cold open that plays as **one continuous take**, the barrel → scope fly-through, and the pupil → iris loop. |
+| **WISH YOU WELL** (Dexter × Brent Faiyaz "Wish You Well") | *not in this repo yet* | Named by the owner as a comparison benchmark for the pre-render check (§5a). Its folder and render haven't been added here. Ask the owner for them, and until then compare against the owner's notes on it. |
 
-Every new edit must **match or exceed** these. It must **not copy their look**: each edit gets its own grade, type and transition mix.
+Every new edit must **clearly beat** these. Before the first render, write the comparison against WARMPOP, HIM ALL ALONG and WISH YOU WELL (§5a). It must **not copy their look**: each edit gets its own grade, type and transition mix.
 
 ---
 
@@ -97,17 +98,6 @@ Every new edit must **match or exceed** these. It must **not copy their look**: 
     - the hero strike was mostly 2D flashes.
   - **Going "above and beyond" is now the bar for every edit.** See §5a.
 
-## 5a. The bar: above and beyond (from the owner's v102 note)
-
-"Complete and good" is not enough. Before the first full render, the studio checks the plan against this list, and again on the encoded file:
-- **At least 3 signature set pieces.** Each is a multi-stage, designed sequence of 1–2 s that builds a space or object and moves the camera through it, like the v7 slide box or plastic burst, or the v6 CRT dive into the vapor world. One of them is the hero transition on the drop. Flashes and overlays alone don't count.
-- **At least 16 designed transitions, mostly new.** At most a third may be reused, and only when reworked for the edit's world. None may repeat.
-- **Pacing:** in the montage, a cut or designed move every 2–4 half-beats. Cold-open holds over about 1.5 s are kept only when they carry a line, a lyric or a hero image.
-- **At least 4 text moments**, each with its own designed animation (bold WARMPOP-style captions plus at least one material or title treatment). Each must stay readable.
-- **Graphics that build depth or a world** (matte layers, a set, an object) in most shots, not just accents.
-- **Effects strong enough to see at phone size.** If a thumbnail doesn't show it, push it or cut it.
-- **A benchmark comparison before delivery.** Pull matching moments from v6 and v7 (their write-ups and frames) and honestly check that this edit's opening, hero transition, text and ending equal or beat them. If one is weaker, rework it before shipping.
-
 ## 4. What the owner rejected: never do these
 
 | Rejected | Edit | Lesson |
@@ -181,6 +171,31 @@ Every new edit must **match or exceed** these. It must **not copy their look**: 
 - A sub drop and riser into the drop.
 - The ending: a tape-stop, rewind or heartbeat into the loop.
 
+## 5a. The pre-render check: above and beyond (required)
+
+From the owner's v102 note ("complete and good" was not enough). **Every edit must pass this check before its first full render.** Write the answers into the edit's `vN/README.md` under "Pre-render check", then run the check again on the encoded file before delivery.
+
+1. **A concept rooted in Dexter's world.** One sentence that ties picture, sound and text together and could only belong to Dexter: his rituals, his tools, his code, his double life, Miami, the Dark Passenger. Not a generic mood. For another show, root it in that character's world in the same way.
+2. **At least three multi-stage, Dexter-themed showpieces: one on the drop, one on the hook and one on the loop.**
+   - Each is a designed sequence of about 1–2 s, in several stages, that builds a physical object or space from his world and moves the camera through it.
+   - Models: the blood-slide box, the kill-room plastic burst and the body-bag zipper (v7); the CRT dive into the vapor world (v6); the barrel → scope (v4).
+   - Flashes, overlays and single-effect wipes don't count as showpieces.
+3. **Designed text and graphics in every section:** cold open, hook, drop, montage and ending.
+   - Text: bold, high-contrast two-line captions in the WARMPOP style, plus at least one material or title treatment.
+   - Graphics: depth or world layers (matte layers, a set, an object), not just accents. Every effect has to read at phone size; if a thumbnail doesn't show it, push it or cut it.
+4. **A written comparison against WARMPOP (v6), HIM ALL ALONG (v7) and WISH YOU WELL.**
+   - For each, compare the opening, the hook moment, the hero transition on the drop, the text and the ending side by side with the plan.
+   - **If the plan doesn't clearly beat all three, redesign it before rendering.**
+   - WISH YOU WELL's edit folder and render aren't in this repo yet (it is a Brent Faiyaz "Wish You Well" edit, per the owner). Compare against the owner's notes on it, and ask the owner for the file or its folder.
+5. **Review passes that ask "what would make this unforgettable?", not just "is anything broken?".**
+   - Every review pass (stills, every-cut sheets, the encoded-file sign-off) lists the weakest moment and the change that would make it unforgettable, and makes that change.
+   - Fixing defects is the minimum, not the goal.
+
+**Supporting standards** (they help meet the check):
+- at least 16 designed transitions, mostly new (at most a third reused, and only when reworked for the edit's world), none repeated;
+- in the montage, a cut or designed move every 2–4 half-beats;
+- cold-open holds over about 1.5 s only when they carry a line, a lyric or a hero image.
+
 ## 6. What doesn't work: technical pitfalls
 
 The full list is in `/docs/TOOLKIT.md` §4. The most expensive ones:
@@ -211,7 +226,9 @@ The full list is in `/docs/TOOLKIT.md` §4. The most expensive ones:
 Then the **visual sign-off**:
 - pull frames from the **encoded** file around every transition, title, the drop and the loop;
 - look at them;
-- fix and re-render anything weak.
+- fix and re-render anything weak;
+- ask **"what would make this unforgettable?"**: name the weakest moment and make it the change for this pass, not just the defects;
+- re-check the pre-render check (§5a) against the encoded file, including the comparison with WARMPOP, HIM ALL ALONG and WISH YOU WELL.
 
 Only then deliver.
 
