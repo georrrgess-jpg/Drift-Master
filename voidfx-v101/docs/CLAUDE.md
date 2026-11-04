@@ -1,0 +1,64 @@
+# voidfx edit standard
+
+**Benchmarks (all approved by the user as the standard for new edits; match or exceed them):**
+- `v7/`, *HIM ALL ALONG* (Dexter × Gunna "Him All Along", rev 2): the newest engine, and the reference for **creative, well-animated, character-themed transitions** (blood-slide box, plastic burst on the drop, body-bag zipper, blood on the lens, M99 blink, magnifier → pupil loop). The user: "The transitions were creative and well animated."
+- `v6/`, *WARMPOP* (Dexter × George Clanton "Warmpop", 9:16): the reference for the **amount and quality of designed transitions, animations and graphics**, how the music drives the structure, and the text. The user: "wonderful transitions, animations, graphics, while maintaining the style that I like… I like how the music correlates to the edit. I like the text."
+- `v4/`, *SURPRISE* (Doakes × Need It, 9:16): the reference for dialogue-led openings that play as one continuous take.
+
+**Start with `studio/VOIDFX_STUDIO.md`.** It holds every preference, like, dislike and lesson, the benchmarks, the style bank and the fast workflow. Then read `studio/SCENE_PACKS.md` (every source, the proven shots and dialogue timecodes) and **`docs/TOOLKIT.md`** (engine, transition catalog, pitfalls). Build every new edit on the newest benchmark engine with `python3 tools/new_edit.py N SLUG "TITLE"`, which copies `render7.py`, `audio7.py`, `qc7.py`, `facetrack.py` and `analyze.py`, wired to a new EDL; it carries every v4–v7 transition. Rewrite the edit's own `render()` frame function, grade, text and finish. Don't start from scratch, and **don't reuse a benchmark's look**: each edit needs its own style. For a second studio session, see `studio/NEW_STUDIO_SETUP.md`.
+
+## User preferences (learned over several revisions)
+
+- **Format:** 9:16, 1080×1920, 60 fps, TikTok-ready H.264 + AAC with fast-start, plus a high-quality master. About 20–26 s; don't run long.
+- **Framing:** faces always centred and never cut off. Face-track every shot (YuNet). Leave out shots whose face is wider than the 9:16 window.
+- **Opening:** start strong. Dialogue from the source can open the edit or tie heavily into it. It must play as **one continuous take**: J-cuts, dissolves, a matched-angle morph. Never several clips that feel glued together.
+- **No labels:** no name tags, speaker chips or "who is who" graphics. No stamps sitting on top of captions.
+- **Text:** every word eases in (fade + rise + blur-to-sharp). Nothing just pops on. Each title or lyric moment gets its own designed animation, and it must be clearly readable (size, contrast, time on screen).
+  - Approved examples: footage-in-letters knockout type; a title that fills with blood and drips, then shatters with the glass; light-sweep reveal; fly-in from the camera.
+  - Keep text clear of faces and of TikTok's UI areas.
+- **Branding:** no constant watermark and no outro card. The voidfx logo (`src/voidfx_logo.webp`) appears **once, as a transition** (e.g. flying through the "o"). **Never recolour, retheme or restyle the logo** (no neon/UV/tint versions). Use the supplied image as-is (`logo_through` / `tin="logo_orig"`) unless the user explicitly asks for a change.
+- **Transitions:** pronounced and designed, the kind where the viewer wonders "how did they do that". They should feel like **going through something**: barrel, scope, shattering glass, an eye or pupil, a shadow, the logo's "o", a photo on the wall, a knife slash.
+  - Avoid plain hard cuts in quiet or dialogue sections.
+  - Every transition gets its own sound.
+- **Loop:** the edit must loop seamlessly for TikTok, in picture (e.g. into the pupil to black → iris open from black) and in sound. For sound: room tone and drone continue across the wrap, the timeline is built circularly, mastering runs on a wrapped copy, and audio and video are exactly the same length. An outro card breaks the loop, so don't use one.
+- **Sound:** smooth and clean.
+  - Dialogue is cleaned and levelled, with equal-power fades at every join.
+  - The song is edited on its beat grid; a tape-stop or dead stop is fine for an ending.
+  - Mastered to about −13 LUFS with true peak ≤ −2.5 dBTP, measured **after** AAC encoding.
+- **Workflow:** the user wants built-in review passes, not repeated rounds of feedback. Before delivering, always run:
+  1. automated QC on the **encoded** file (`qcN.py`, from the v6 engine): format/decode, loudness, face centering, text vs faces, cuts, freezes, black frames, audio clicks at every edit, loop seam;
+  2. a visual review of contact sheets around every transition and title;
+  3. a fix-and-re-render for anything weak;
+  4. a final pull of key frames from the encoded file.
+- **What v6 got right (do this every time):**
+  - one concept tying picture, sound and text together;
+  - the song's best part (where the full mix or bass returns) lands on the biggest transition;
+  - 15+ designed transitions with no plain cuts;
+  - the character's own words as two-line eased captions;
+  - graphics that add depth (vapor world tune-in, palm shadows, bokeh, neon light spill, VHS pause).
+- **Avoid:** foreign-language subtitle lines (CJK) and on-screen counters or timecodes (the VHS "SP" timer). The user removed both as clutter.
+- **Captions:** bold, high-contrast two-line captions like WARMPOP (v6). Avoid thin, spaced-out lyric lines, fancy serif emphasis words and letter-by-letter fades (owner, after v101).
+- **Lip-sync must be real:** only present a line as spoken on screen when his mouth actually matches it. Dexter's lines are often inner-monologue narration; v101 put the narrated "I'm gonna tell you something…" over a shot where he isn't speaking, and the owner disliked it. Check lip movement on frames first.
+- **v101's style was rejected** (16 mm psychedelic reel, liquid light, 70s serif type). Some of its transitions were fine. Keep doing: the freeze → comma becomes a blood drop → blood blooming in water; the rear-view-mirror open and loop; simple clean transitions (streetlight sweep, wiper, whip pan, plastic wrap, impact frame, rain focus pull, lamp switching on).
+- **Dialogue: less is more.** In v7 the user cut rapid single-word dialogue runs ("Dramatic. Cryptic. Playful."), a talking "jar of blood" shot, and an ending where Dexter just states "I'm a serial killer". Use at most one or two short lines that set up the song (e.g. "Could it be him?" answered by the hook). Let the visuals carry the ending.
+- **No "gimmick on the face" effects** (e.g. lines converging on his face with a target ring). Transitions should be physical and themed (slide box, plastic burst, zipper, blood on the lens), not overlays on his face.
+- **Efficiency:** the user asks for quality *and* efficiency. Use the fast loop in `docs/TOOLKIT.md`:
+  1. song map;
+  2. EDL;
+  3. `build.sh N prep auto` (review sheets of every cut);
+  4. `clip:A:B` for motion;
+  5. `audio`;
+  6. **one** `video qc` per revision.
+  - Check the pitfalls list there before building transitions.
+- **Honesty:** you cannot watch or listen. Report what was verified by frames and measurement, and ask the user to watch once with sound.
+- **Communication:** short progress updates; no long code in chat.
+
+## Project conventions
+
+- Sources go in `src/` (read-only copies). Each edit gets its own folder (`vN/work`, `vN/out`, ...).
+- One EDL file per edit holds every decision, and the renderer reads only that file. The EDL also sets `VER`, `SLUG` and `SONG`, plus the engine knobs (`DROP_TITLE`, `MONTAGE`, `VANISH_T0`, `VO_STEM`, `CAPS`, `END_CAP`); the template is `tools/edl_template.py`.
+- Tools: `tools/new_edit.py` (scaffold), `tools/song_map.py` (beat grid, drops, candidate windows), `tools/transcribe.py` (word times), `tools/check_sources.py` (source-range audit), `tools/build.sh` (prep / auto / audio / clip / preview / video / qc), `tools/setup_studio.sh` (deps, models, source-library check).
+- Two studios: each works on its own branch with its own version range (Studio 1 `v8+`, Studio 2 `v101+`); see `studio/NEW_STUDIO_SETUP.md`.
+- Media (`src/`, audio, frames, outputs, models) stays out of git. Commit the code, EDL, transcripts, tracks and README, then push to the session's branch.
+- Models are downloaded at runtime: YuNet (`v3/models/face_detection_yunet_2023mar.onnx`), MODNet (`Xenova/modnet`), and faster-whisper large-v3 for dialogue and lyric timing.
+- The older guide `7b769aa4-TIKTOK_EDITING_GUIDE.md` (the beat-grid, colour and QC methods) still applies where it doesn't conflict with this file.

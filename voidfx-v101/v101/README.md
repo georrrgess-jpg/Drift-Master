@@ -1,5 +1,7 @@
 # THE LESS YOU KNOW — Dexter × Tame Impala "The Less I Know The Better" (voidfx v101, 9:16)
 
+> **Owner review: not approved.** The owner largely disliked the style (the 16 mm psychedelic look and the type) and the confession shot: the line is narration, so Dexter is not actually speaking it on screen. Some transitions were liked. The lessons are in `studio/VOIDFX_STUDIO.md` §4 and `CLAUDE.md`. Don't use this edit's look or text as a reference.
+
 A 22.57 s, 1080×1920, 60 fps TikTok edit that loops, built on the v7 engine with a new look, new transitions and new type. Benchmarks: v7 HIM ALL ALONG, v6 WARMPOP, v4 SURPRISE.
 
 - Upload file: `v101/out/less_i_know_dexter_voidfx_9x16.mp4` (H.264 + AAC, fast-start)
