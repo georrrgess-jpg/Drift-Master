@@ -1,6 +1,6 @@
 # voidfx toolkit: how an edit gets made (fast)
 
-The engine lives in the newest benchmark edit, `v7/work/` (HIM ALL ALONG). It contains every v4–v7 transition and graphic. New edits copy it with `tools/new_edit.py`, then write their EDL and **their own frame function** (`render()` at the end of the renderer: grade, text, graphics, finish) and sound design. **Copy the engine, not the look.** Every edit gets its own grade, type and transition mix. Owner preferences and lessons: `studio/VOIDFX_STUDIO.md`; sources: `studio/SCENE_PACKS.md`.
+The engine lives in the newest edit, `v9/work/` (NIGHT BLOOM; `v7/` and `v6/` remain the benchmarks). It contains every v4–v9 transition and graphic. New edits copy it with `tools/new_edit.py`, then write their EDL and **their own frame function** (`render()` at the end of the renderer: grade, text, graphics, finish) and sound design. **Copy the engine, not the look.** Every edit gets its own grade, type and transition mix. Owner preferences and lessons: `studio/VOIDFX_STUDIO.md`; sources: `studio/SCENE_PACKS.md`.
 
 ## 1. Pipeline and timings
 
@@ -12,7 +12,6 @@ Timings were measured on this 4-core box for a 26 s edit.
 | Map the song | `python3 tools/song_map.py src/SONG.mp3 vN/work` | 3 s |
 | Shot lists | `python3 vN/work/analyze.py src/PACK.mp4 TAG` (contact sheets, per-shot stats) | ~1 min per pack |
 | Dialogue / lyrics | `python3 tools/transcribe.py vN NAME MEDIA [--vad] [--start S --dur D]` | 1–3 min |
-| **Is he really saying it?** | `python3 tools/lipcheck.py SRC t0 t1 OUT.jpg --vocals STEM.wav [--stem-t0 S]`: face and lip crops every 0.1 s with the speech level; lips must move with the bars before a line is used as lip-synced | ~20 s |
 | Voice under score | `python3 -m demucs -n htdemucs --two-stems=vocals -o vN/audio/sep CLIP.wav` | 15 s per 30 s clip |
 | Tracks and mattes | `bash tools/build.sh N prep` | ~35 s |
 | **Every-cut review sheets** | `bash tools/build.sh N auto` → `vN/frames/cuts_*.jpg` | ~35 s |
@@ -65,29 +64,21 @@ Each transition goes through something and has its own sound in `audioN.py` (`if
 | `mag_sweep` (v7) | A magnifying glass sweeps in; inside it is the next shot, and the glass becomes the frame (`lensframe=True` on the next shot) | — | Whoosh, glass chime |
 | `logo_orig` | The voidfx logo exactly as supplied, slammed in and flown through the "o" | — | Impact, shimmer, whoosh |
 | `tout="rewind_end"` | The last shot rewinds at 8× → static → loops into `tape_in` | — | Tape scrub, the song scrubs backwards |
-| `projector_on` (v101) | 16 mm projector strikes up from black: lamp flicker, the frame line rolls into place (the loop entry) | — | Lamp thunk, claw ticks |
-| `latex` (v101) | The frame is stretched like a glove being pulled on, rips open in a ragged slit, snaps onto the next shot with an elastic wobble | — | Rubber squeak, snap |
-| `frameslip` (v101) | The film loses its loop: judder, then the strip rolls up one frame (frame line + sprocket holes) onto the next shot | — | Projector clatter burst, slip, clack |
-| `filmmelt` (v101) | HERO: the projector stalls, the frame scorches and blisters, burn holes with char rims and embers eat through, the white lamp light becomes the next shot on the drop. Text drawn before it burns with it (`burn=True`) | — | Crackle, sizzle, whoomp, sub impact |
-| `whip` (v101) | Horizontal whip pan with speed-matched blur and chroma split | — | Whoosh |
-| `hooddark` (v101) | A hood is pulled down over the lens (curved fabric rim, cast shadow) and lifts off the next shot | — | Cloth swish, thump |
-| `scalpel` | The v6 blade-streak slash | — | Swish, steel ring |
-| `lavalamp` (v101) | Glossy blood metaballs rise and swallow the frame, refracting it, then rise off the next shot | — | Bubbles, swell |
-| `slidewipe` (v101) | A blood slide's glass slides across; the next shot is seen through the glass (magnified, smeared, frosted end) | — | Glass scrape, chime |
-| `newsspin` (v101) | The next shot (a newspaper) spins in from the centre and slams down | — | Spin whoosh, paper slap, thump |
-| `papertear` (v101) | The outgoing shot tears down the middle (fibrous paper edge), the halves are pulled apart | — | Paper rip |
-| `oilwheel` (v101) | Liquid-light (oil wheel) cells with iridescent walls swirl over the frame; the next shot is revealed cell by cell | — | Phaser swirl, bubbles |
-| `tout="reel_end"` (v101) | The film flutters, runs out of the gate, the lamp flickers through the flapping tail, black (loops into `projector_on`) | — | Projector wind-down, tail flap |
-| `rewind_in` + `tout="rewind_end"` (v102) | The loop as time travel: the last bar plays the whole edit backwards (35× at its peak, picture and sound together, via `rew_pos`) and lands on frame 0, whose `rewind_in` flash and smear settle into the first shot | — | The song runs backwards (band-limited), tape scrub, crackle |
-| `bolt_link` (v102) | A bolt jumps out of the outgoing face's eye (YuNet landmarks) and splits the frame open along itself | Face track | Zap, crack, whoosh |
-| `overcharge` (v102) | The shot's own lightning floods the frame; the next shot burns in brightest-first through gold (no flat white frame) | — | Electric swell, zap |
-| `whip` (v102 `whip_bolt`) | Whip pan with a bolt riding it | — | Whoosh, zap |
-| `strike` (v102) | HERO: with the outgoing shot frozen (`freeze=True` + a hold in its `tmap`), a leader bolt comes down through the face; then two impact frames (gold negative, hard silhouette), a shockwave and residual bolt | Previous shot `freeze=True`, `E.T_FREEZE` | Time-stop suck-in, thunder, sub |
-| `emblem` (v102 `emblem_tr`) | The Flash emblem slams over the frame and draws itself in lightning; the camera flies through the bolt | — | Hum, zap, whoosh |
-| `remnant` (v102 `remnant_soft`) | Converging time-remnants (gold / crimson), weighted so bright shots don't blow out | — | Shimmer, whoosh |
-| `passby` (v102) | He passes the lens: his motion smears the frame off; the next shot drags in | — | Doppler whoosh |
-| `bolt_split` / `shockwave` / `impact` (v102 wrappers) | v5 lightning split; v5 face-centred shockwave ring; a two-frame impact frame (gold negative, hard silhouette) | Face track (shockwave) | Zap + crack / whoosh + boom / hit + zap |
-| `smear` (v102) | The frame stretches into horizontal light streaks; the next shot resolves out of them (replaces the row-sliced v5 smear, which read as blocky artifacts) | — | Whoosh |
+| `mirror_in` / `tout="mirror_out"` (v8) | Push into a rear-view mirror in a dark rainy car / pull back into it (the loop) | `rain=True` | Streetlight hum, whoosh, chime |
+| `light_sweep`, `wiper`, `whip`, `whip_up`, `light_leak`, `wrap`, `impact`, `rainfocus`, `lamp_on`, `slam`, `knife_pass` (v8) | The "basic" set the owner liked (streetlight band, windshield wiper, whip pans, plastic wrap, one-frame negative, rain focus pull, lamp switching on), plus the knife roll and pass | — | each has its own sound in `audio8.py` |
+| `loop_in` / `tout="drop_moon"` (v9) | The last shot pushes through the drop of blood on a slide until the frame is red; frame 0 pulls back out of the blood moon | `spot=(x, y)` source px of the blood | Plunge, bloop, heartbeat, low-pass "night closes" |
+| `tilt` (v9) | One eased vertical camera move: the moon slides up, the shot rises in from below | — | Low air move |
+| `foliage` (v9) | The lens passes behind a moonlit bush with white blossoms (a feathered 3.4×W strip) | — | Leaf rustle |
+| `petals` (v9) | A gust of jasmine petals blows across the lens, densest on the cut | — | Wind gust, petal flutter, chimes |
+| `bloom` (v9 hero) | The (frozen) frame bursts into image-carrying petal cells from its heart outward; they tumble toward the lens, showing their white backs; the next shot is behind | `BLOOM_C` | Breath-in swell, sub boom, a burst of petal flutter |
+| `strobe` (v9) | Two soft strobe hits across the cut (never full black or white) | — | Zaps, sub |
+| `beam` (v9) | The brightest point (a torch) swings into the lens and whites out; the next shot comes up brightest-first | — | Click, light swell, shimmer |
+| `blinds` (v9) | Backlit venetian slats rotate shut, then open on the next shot (staggered top to bottom) | — | Slat rattle ×2 |
+| `roll` (v9) | The world rolls 90° with rotational blur (lands on an upside-down shot) | — | Doppler whoosh, floor thud |
+| `smear` (v9) | Step-printed long-exposure echoes drag the frame, then settle | — | Tape-warble whoosh |
+| `projector_on`, `latex`, `frameslip`, `filmmelt`, `whip`, `hooddark`, `lavalamp`, `slidewipe`, `newsspin`, `papertear`, `oilwheel`, `tout="reel_end"` (v101, in `v101/work/fx101.py`) | 16 mm psych reel: projector strike-up and run-out (loop), a glove-stretch tear, a frame slip in the gate, a film burn-through (hero), a hood over the lens, lava-lamp blood blobs, a blood-slide glass wipe, a newspaper spin and tear, an oil-wheel light show. **v101's look was rejected; reuse transitions only if reworked** | — | Each has its own in `audio101.py` |
+| `rewind_in` + `tout="rewind_end"` (v102, in `v102/work/fx102.py`) | The loop as time travel: the last bar plays the whole edit backwards (35× at its peak, picture and sound together via `rew_pos`) and lands on frame 0, whose flash and smear settle into the first shot | — | The song runs backwards (band-limited), tape scrub, crackle |
+| `bolt_link`, `overcharge`, `strike`, `emblem`, `passby`, `smear` (light streaks), `impact`, `remnant` (soft) (v102) | A bolt out of the outgoing face's eye splits the frame; his own lightning floods the frame and the next shot burns in through gold; HERO strike (a frozen frame, a leader bolt, two impact frames, a shockwave); the emblem drawn in lightning, fly through the bolt; he passes the lens as a motion wipe; horizontal light streaks; a two-frame impact frame; converging time-remnants | Face track (`bolt_link`, `strike`); previous shot `freeze=True` (`strike`) | Zap / swell / thunder + time-stop / hum + whoosh / doppler / whoosh / hit / shimmer |
 
 The older v4/v5 transitions are still in the file and work as `tin` values: `kaleido`, `rewind`, `flash`, `tiles`, `neon_trace`, `ripple`, `pixel_sort`, `vhs_roll`. Add new transitions to `TR2` as `fn(A, B, j, f, sa, sb)` with `(fn, frames_before, frames_after)`:
 - `j < 0`: A is the live outgoing shot and B is the incoming shot's first frame.
@@ -95,22 +86,14 @@ The older v4/v5 transitions are still in the file and work as `tin` values: `kal
 
 ## 3. Graphics and text
 
-- **v101 (16 mm psych) graphics** (the owner rejected v101's overall look and type; the transitions and tools stay available, so don't reuse the look):
-  - `liquid=True` (+ `seg=True`): a liquid-light show (oil-wheel cells, oxblood / plum) projected on the background behind the person matte, building through the shot;
-  - `prism=True` (+ `seg=True`): prism silhouettes (amber / oxblood / plum) radiate behind the person on the bassline accents (`E.ACCENTS`);
-  - film finish: gate weave, exposure flicker, red-orange halation, two-scale film grain, dust and the odd hair, warm light leaks on the montage downbeats, gentle unsharp for 720p upscales;
-  - type: Fraunces Soft (OFL, `v101/fonts/`), `cap` two-line eased captions, `title` 70s layered shadow-stack letters filled with flowing liquid light that drop in on bass notes and melt out, `better` (the closing word on a freeze).
-- **v102 (The Flash) graphics** (shot flags; most need `seg=True`):
-  - `sarcs=amt`: lightning that hugs the silhouette (arcs crawl along the person matte's edge, with leaps off the body), pulsing on `E.CHOPS` before the drop and `E.ACCENTS` after;
-  - `echoes=True` (+ `trail=-1|1`): gold / ember / crimson afterimages of the subject from earlier frames, behind his clean silhouette;
-  - `motes=True`: frozen-time sparks in three depth layers (behind the matte, and out-of-focus bokeh in front);
-  - `eyespark=True`: tiny arcs off the YuNet eye landmarks on the vocal chops;
-  - `freeze=True`: from `E.T_FREEZE` the colour drains to cold steel and arcs crawl over him;
-  - `rot=True`: the source is rotated 90° and fills 9:16 natively (a sideways wall run becomes running up the frame);
-  - `title=True`: a slammed, electrified two-word title (lightning crawls along the letter outlines), from `E.TEXT` style `title`;
-  - captions (`E.TEXT` style `cap`): bold, high-contrast two-line WARMPOP-style lockups in Inter Display Black Italic with crimson + gold echoes.
-- **Lip-sync check:** `tools/lipcheck.py`, run before using a line on camera (v102: "How's this for power?" was confirmed on camera).
-- **Per-shot knobs (v101):** `target=` exposure target (high-key shots 0.75–0.8), `warm=` pulls a cold shot into the warm stock.
+- **v9 graphics and type** (`render9.py`, end of file):
+  - `freeze_e=E` on a shot: a dead freeze on the song's silence with 2.5-D parallax (matte vs. background), violet drain and a moonlight rim;
+  - `petals=density`: a jasmine-petal depth field (behind the person matte, soft bokeh in front that keeps off the face; it freezes with the picture);
+  - `graphic="moon"`: a still blood moon on a generated night sky with moonlit wisps;
+  - TEXT style `cap` (**the approved standard text, "it was perfect"**): bold two-line captions with a dark keyline and soft shadow, auto-fit to 940 px, red emphasis (`emph`), optional `from` and `big`;
+  - TEXT style `hero`: per-letter bloom-in on a shared baseline; line 2 floods crimson from the bottom; the exit blows the letters away as petals;
+  - `accents9`: soft strobe lifts on every clap after the drop.
+
 
 - **Captions** (`CAPS`): two-line retro lockups. Each word eases in on its spoken time (fade, rise, blur-to-sharp) with pink and cyan echoes; emphasis words are chrome. The `vanish` style dissolves into pixels.
 - **Drop title** (`DROP_TITLE`): a chrome word sweeps in from the left, with a light sweep.
@@ -131,6 +114,18 @@ The older v4/v5 transitions are still in the file and work as `tin` values: `kal
   - `vanish`: pixel-dust dissolve, timed by `VANISH_T0`.
 - **Montage** (`MONTAGE` half-beat range): beat bounce, glints, light leaks and hits on the downbeats.
 - **Finish:** bloom, anamorphic streak, VHS chroma bleed and scanlines, vignette, grain. The OSD is limited to PLAY ▶ at the start, ◀◀ REW at the end and ‖ PAUSE. **No SP counter or timecode.**
+
+- **v101 / v102 graphics (Studio 2).** These are built on the v7 engine, not v9: port a piece into the v9 engine before reusing it.
+  - v101 (look rejected): a liquid-light projection behind the person matte; prism silhouette echoes on bass accents; a 16 mm film finish.
+  - v102 (The Flash):
+    - `sarcs` lightning that hugs the silhouette (person-matte contour);
+    - `echoes` matte afterimages;
+    - `motes` frozen-time sparks in depth;
+    - `eyespark` arcs off the YuNet eye landmarks;
+    - `freeze` (a colour drain on a held frame);
+    - `rot` (a sideways source rotated to fill 9:16);
+    - an electrified slammed title.
+- **Is he really saying it?** Run `python3 tools/lipcheck.py SRC t0 t1 OUT.jpg --vocals STEM.wav [--stem-t0 S]`. It draws face and lip crops every 0.1 s with the speech level under them. The lips must move with the bars before a line is used as lip-synced. (An automatic mouth-motion score disagreed with known cases, so judge it by eye.)
 
 ## 4. Pitfalls that cost time in v6 (check these first)
 

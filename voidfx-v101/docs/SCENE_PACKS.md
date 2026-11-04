@@ -4,16 +4,110 @@ Every file lives in `src/` under the name in the first column. That folder is no
 
 All times are **seconds in that file**. "w" is the YuNet face width in source pixels on a 1280×720 frame. Above roughly 400 the face is too wide for a 9:16 crop, and text has nowhere to go.
 
-**Cached analysis** (copy it into a new edit instead of re-running):
-- shot lists: `v2/work/shots_p2.json`, `shots_p3.json`; `v3/work/shots_p4.json`, `shots_p5.json`, `shots_dk.json`; `v6/work/shots_p6.json`; `v7/work/shots_p7.json`, `shots_p8.json`; `v5/work/shots_fa.json`, `shots_fb.json`;
-- transcripts: `v3/work/doakes_transcript.json`, `v6/work/tr_pack6.json`, `v7/work/tr_p8.json`, `v5/work/tr_pack_*.json`, `v101/work/tr_p10.json` (pack 10, Demucs vocal stem);
-- S4 packs: `v101/work/shots_p9.json`, `shots_p10.json`; `v101/work/shots_p1.json` (scenepack, 134 shots).
+**Lip-sync rule:** many lines in these packs are Dexter's inner-monologue narration. Before presenting a line as spoken on screen, run `python3 tools/lipcheck.py SRC t0 t1 OUT.jpg --vocals STEM.wav` and look at the sheet. If his lips don't move with the speech bars, it's voice-over (v101 was rejected for this).
 
-**Lip-sync rule:** many lines in these packs are Dexter's inner-monologue narration. Before presenting a line as spoken on screen, run `python3 tools/lipcheck.py SRC t0 t1 OUT.jpg --vocals STEM.wav` and look at the sheet: if his lips don't move with the speech bars, it is voice-over.
+**Cached analysis** (copy it into a new edit instead of re-running):
+- shot lists: `studio/packs/shots_p9.json`, `shots_p10.json`, `v9/work/shots_tg.json`; `v2/work/shots_p2.json`, `shots_p3.json`; `v3/work/shots_p4.json`, `shots_p5.json`, `shots_dk.json`; `v6/work/shots_p6.json`; `v7/work/shots_p7.json`, `shots_p8.json`; `v5/work/shots_fa.json`, `shots_fb.json`;
+- transcripts: `studio/packs/tr_p9.json` (p10 has no audio); `v3/work/doakes_transcript.json`, `v6/work/tr_pack6.json`, `v7/work/tr_p8.json`, `v5/work/tr_pack_*.json`.
 
 ---
 
 ## Dexter scene packs
+
+### `trinity_goodbye.mp4` (key `tg`): "Trinity Finds Out Who Dexter Is (Goodbye Dexter Morgan)", 1280×720, 60 fps, 1:49, 36 shots
+
+Uploaded as `Trinity_Finds_Out_Who_Dexter_Is_Goodbye_Dexter_Morgan_.mp4` (S4E11, Miami Metro). Shot list: `v9/work/shots_tg.json`. Most of the close-ups are too wide for 9:16 (w400–580); the ones that fit:
+
+| Time | Shot | Notes |
+|---|---|---|
+| **99.75–105.15** | **Arthur Mitchell in a doorway, chin up, a cold stare at Dexter** | w153, fits 9:16 with room for text. **103.4 is clean** (a passer-by blurs the foreground before 102; a door frame enters the right edge after 103.8). v9 "Hello, Arthur Mitchell." freeze |
+| 53.5–55.5 | Trinity, medium close-up, looking off right | w322–335 |
+| 81.7–85.3 | Trinity, close, side light, a slight smile | w455, too wide |
+| 29.4–34.5 | Trinity talking to camera | w465, too wide |
+| 85.3–89.7, 63.0–68.4 | Dexter's reaction close-ups | w394–404, borderline |
+| 106.9–108.9 | CapCut end card | Don't use |
+
+### `pack9_s4_best.mp4` (key `p9`): S4 "all best and most popular clips" (Trinity season), 1280×720, 60 fps container, 4:03, 102 shots
+
+Uploaded as `Dexter_S4_4k_Scenepack_Dexter_Morgan_All_Best__Most_Popular_Clips_1.mp4`. The footage is **24p inside 60 fps** (near-repeat ratio 0.68, like p8), so use `interp="hold"` and don't slow it with flow. It is dense in S4 kills, night exteriors and Trinity. Shot list: `studio/packs/shots_p9.json`. Very dark shots (index): 0, 10, 44, 47, 49, 52.
+
+| Time | Shot | Notes |
+|---|---|---|
+| 0.00–5.03 | Red-lit close-up, driving at night | w301, tight; little room for text. Under "Tonight's the night." |
+| 21.60–26.52 | Boxing ring | |
+| 26.53–31.12 | Blue night exterior | |
+| 40.97–42.02 | Grin | Short beat |
+| 46.85–50.90 | Grin beside a police car | |
+| 73.70–78.30 | Night dock | Moody plate |
+| 80.87–84.25 | Night garden | |
+| 88.07–93.03 | In the car at night | Drive plate (pairs with p8 night drives) |
+| 93.05–97.85 | Gun to the head | |
+| 98.52–102.87 | Through the blinds | Light-slat transition candidate |
+| **102.88–107.57** | **Plastic-wrapped table kill** | Kill-room centrepiece |
+| 117.43–120.58 | Night stare | |
+| 120.60–124.28 | Camera / photo beat | Shutter or flash transition candidate |
+| 124.30–129.20 | Upside-down face | Rotation or flip transition candidate |
+| 134.15–139.05 | Woods at night with a shovel | |
+| 139.07–145.77 | Run of 0.1–0.4 s micro-shots | Flash-cut montage only; `check_sources.py` will flag ranges that cross them |
+| 145.78–146.73 | Silhouette at the light table | Graphic silhouette |
+| 157.05–160.98 | Double face in a reflection | Mirror/reflection transition candidate |
+| 164.00–167.65 | Attack | Fast action |
+| 177.30–180.12 | Knife | |
+| 180.13–182.83 | Hammer | Trinity's weapon |
+| 182.85–184.55 | Trinity wrapped in plastic | |
+| 184.57–188.30 | Flashlight in the dark | Light-beam reveal candidate |
+| 189.83–196.55 | Trinity at Miami Metro: the office stare-down | Cuts at 191.17, 192.58 and 194.43. 189.83–191.15 is Trinity's own close-up |
+| 196.57–198.30 | Close-up | **w426, too wide for 9:16** |
+| 198.32–199.25 | Car | |
+| 203.23–211.72 | Parking-garage fight | Many short cuts |
+| 222.12–225.37 | Gloved at night, holding Trinity's hammer, low angle | Under "Hello, Arthur Mitchell." |
+| 226.57–229.95 | Kill | |
+| 229.97–230.55 | Moon | Short; good loop or transition plate |
+| 230.57–234.05 | Looks up | |
+| 238.20–239.80 | Baby in the blood (the S4 finale) | Heavy; use with care |
+
+**Dialogue lines** (Whisper on the pack audio, `studio/packs/tr_p9.json`). The pack has music under the voices, so these times are approximate, especially where Whisper spread one segment over many seconds. Before cutting a line, transcribe the Demucs vocal stem of that range (`tools/transcribe.py … --start S --dur D`).
+
+| Time | Line | Notes |
+|---|---|---|
+| 0.2–1.4 | "Tonight's the night." | |
+| 64.2–68.7 | "Loners are looked upon with suspicion. Those of us who prefer to work by ourselves…" | Whisper heard "Long are" |
+| 84.5–86.5 | "Monsters come in all shapes and sizes." | Strong hook-setter; over him at Miami Metro |
+| 118.6–120.2 | "…pieces of the puzzle were missing." | |
+| **129.7–133.4** | **"I had to evolve. It was the only way to survive."** | Clean, tight timing; over him hugging Rita |
+| ~138–144.5 | "Nothing lasts forever." | Words spread out; check the stem |
+| ~155.2–156.3 | "I really do need to stab something." | Check the stem |
+| 161.0–162.4 | "This is his solution to remorse: suicide." | |
+| ~189–193 | "Hello, Dexter Morgan." (Trinity) | Over the office stare-down; spread timing, check the stem |
+| **212.8–214.8** | **"How is it I can kill people and feel no regret…"** | |
+| **223.0–224.0** | **"Hello, Arthur Mitchell."** | Over the gloved night shot (222.12–225.37), before the Trinity kill. Dexter's lips stay closed on that shot (Studio 2's lip sheet), so it's voice-over there; v9 rev 2 shows Arthur Mitchell instead |
+| **230.9–233.4** | **"I wonder if Rita's looking at this same moon."** | Over the moon (229.97) and looks-up (230.57) shots: a ready-made ending or loop line |
+
+### `pack10_s4_24p.mp4` (key `p10`): S4 scene pack, 1280×720, **native 24 fps**, 3:04, 59 shots
+
+Uploaded as `Dexter_Morgan_Dexter_S4_Scenepack_4K_1.mp4`. **Its audio track is digital silence**, so it's picture only and has no dialogue. A true 24p file: play it at its own cadence (`interp="hold"`, the renderer repeats frames at 60) and never flow-interpolate it. Longer shots than p9, with more lab, boat and daylight Miami material. Shot list: `studio/packs/shots_p10.json`.
+
+| Time | Shot | Notes |
+|---|---|---|
+| 4.83–9.25 | Lab | |
+| 19.42–23.38 | Neck brace | **w355, too wide for text** |
+| 31.42–36.08 | Lab | |
+| 36.12–36.62 | Gloved hand | Short insert |
+| 62.04–67.96 | Night interiors | |
+| 87.83–91.21 | Drink | |
+| 91.25–93.00 | Kneeling | |
+| 93.04–94.38 | Boat, red shirt | |
+| 101.29–105.75 | Woods | Two shots (cut at 102.88) |
+| 111.00–112.38 | Dark shot | |
+| 113.75–115.88 | Boat | |
+| 130.33–132.67 | Pink shirt, palms | Miami daylight |
+| 160.29–163.58 | Flashlight | |
+| **163.62–165.79** | **Blood slide** | w267; slide-box transition plate (v7) |
+| 165.83–168.58 | Plastic room | Cut at 167.42 |
+| 178.54–180.92 | Photo wall | "Through a photo on the wall" transition |
+| 180.96–183.83 | Under a lamp | |
+
+**No dialogue: the audio track is digital silence** (−91 dB). Use it for picture only, and take sound from the song, room-tone beds or another pack.
 
 ### `pack8_s1.mp4` (key `p8`): S1 "best and most popular scenes", 1280×720, 60 fps, 6:47, 120 shots
 
@@ -60,82 +154,6 @@ Uploaded as `Dexter_4k_60fps_All_Scenes_Dexter_Morgan_S1_Best__Most_Popular_Scen
 | 336.9–337.8 | **"Could it be him?"** (used in v7) |
 | 344.3–348.6 | "Harry's first rule was don't get emotionally involved. I think this is why." |
 | 369.6 | "Surprise, motherfucker!" (Doakes) |
-
-### `pack9_s4a.mp4` (key `p9`): S4 scene pack, 1280×720, **native 24 fps**, 3:04, 59 shots
-
-Uploaded as `Dexter_Morgan_Dexter_S4_Scenepack_4K_1.mp4`. **Its audio track is silent** (digital zero), so it's picture only and has no dialogue. Being native 24p, slow-mo means flow interpolation; prefer 1:1 or `interp="hold"`.
-
-| Time | Shot | Notes |
-|---|---|---|
-| 19.42–23.38 | Lying back in a car seat, eyes half shut (after the crash) | w344, tight |
-| 36.12–36.62 | **Gloved hand raised into the kill-room lamp**, looks up | w208; short, strong insert |
-| 43.46–50.71 | Walks through a dark room past a lamp | dark |
-| 62.04–66.29 | Profile in the dark, lit pink-red | very dark |
-| 87.83–91.21 | Sunlit smile, coffee cup | w~250 |
-| 93.04–94.38 | Red polo on the boat, blue sea | w175 |
-| 111.00–112.38 | Night on the boat, gloved, bag at his feet | w208, blue |
-| **113.75–115.88** | **Laughing on the boat at speed, wake and Miami skyline behind** | w148; great daylight energy |
-| **130.33–132.67** | **Pink shirt framed by palm fronds**, stare | w216; strong portrait |
-| 138.75–141.75 | Holding red roses by a rose bush, on the phone | w95 |
-| 152.42–156.42 | Face in the dark lit by a strip of light | w297, tight |
-| **163.62–165.79** | **Latex gloves going on, held up by his face** | w251; the glove-snap moment |
-| 165.83–167.38 | Kill-room plastic, lamp flare, bending over the table | w101 |
-| 167.42–168.58 | Plastic sheeting, face shield up | w113 (a plastic-wrap transition source) |
-| 177.21–178.50 | Hands spreading white plastic sheeting | no face |
-| **178.54–180.92** | **Seated before a wall of photos** (research wall) | w126 |
-| 180.96–183.83 | Kill-room lamp overhead, gloves, eyes down | w230 |
-
-### `pack10_s4b.mp4` (key `p10`): S4 "all best and most popular clips", 1280×720, 60 fps container, 4:03, 102 shots
-
-Uploaded as `Dexter_S4_4k_Scenepack_Dexter_Morgan_All_Best__Most_Popular_Clips_1.mp4`. **68% of the frames are repeats** (24p content in a 60p file), so the sampler de-duplicates it to roughly 20 unique frames per second; avoid slow-mo. 139–143.5 s is a run of near-black flash frames: avoid it.
-
-| Time | Shot | Notes |
-|---|---|---|
-| 0.00–5.03 | Red-lit face in the dark (car) | w294; under "Tonight's the night" (VO) |
-| 24.08–26.52 | Tank top, warm light, looks up | w161 |
-| 35.95–38.15 | Gloved hands to his mouth | w194 |
-| 38.17–40.95 | Over the wrapped kill table, lamp | |
-| 40.97–42.02 / 43.23–44.93 | Sly smiles (blue shirt) | w293 |
-| **45.88–46.83** | **Sinister grin in daylight** | w331, tight |
-| 66.27–69.40 | Red-striped shirt, grin | w448, **too wide** |
-| 73.70–78.30 | Walks at night on a boardwalk | w104 |
-| 80.87–84.25 | Night garden walk toward camera | w133 |
-| 102.88–107.57 | Kill table, gloves | |
-| 120.60–124.28 | Points a video camera at the lens | w212 |
-| **124.30–129.20** | **Lying on the floor, upside down to camera** | w245; a striking flip / rotate transition source |
-| 143.47–145.77 | Blue-lit face, light falling across it | |
-| **145.78–146.73** | **Overhead: a body's silhouette on a glowing white square** | no face; a graphic insert |
-| 148.10–152.97 | Walks a corridor toward camera with his bag | w62 |
-| 157.05–160.98 | Warm-lit close by a mirror (double face) | w259 |
-| **184.57–188.30** | **Dark blue room, flashlight beam into the lens** | w162; a light-flare transition source |
-| **191.17–192.57** | **Dead-centre stare straight into the lens (lab)** | w390, at the limit |
-| 196.57–198.30 | Close, looking off | |
-| 198.32–199.25 | Driving | |
-| 222.12–225.37 | Night, gloved, holding a tool, looking down at camera | w172 |
-| 226.57–229.95 | Gloved hand close, sliding a glove on | w431, too wide |
-| **229.97–230.55** | **Full orange moon** | no face; "Tonight's the night" / loop insert |
-| 230.57–234.05 | Red-lit, looks up at the moon | w202 |
-| 238.20–239.80 | Harrison in the blood (S4 finale) | **disturbing; use with care** |
-
-**Dialogue lines** (Whisper on the Demucs vocal stem, `v101/work/tr_p10.json`; word times approximate, so check the stem before use). **Most of these are inner-monologue voice-over: run `tools/lipcheck.py` before presenting one as spoken.**
-
-| Time | Line | On camera? |
-|---|---|---|
-| 0.18–1.32 | "Tonight's the night." | VO over the red-lit car shot |
-| 66.2–68.7 | "Those of us who prefer to work by ourselves are looked upon with suspicion." | unverified |
-| 79.4–80.4 | "Have a nice day." | unverified |
-| 81.6–83.3 | "This neighborhood's gonna kill me." | VO (night garden walk) |
-| 83.5–86.8 | "Monsters come in all shapes and sizes." | unverified |
-| 129.7–133.5 | "I had to evolve. It was the only way to survive." | unverified |
-| ~145.5–157 | "I really do need to stab something." | unverified (times stretched over the dark run) |
-| 164.8–167.3 | "I should have fucking killed you when I had the chance." | another character? check |
-| 177.0–184.3 | "You'll be sorry that you ever crossed me." | another character? check |
-| 189.2–193.9 | "Hello, Dexter Morgan." | Trinity (not Dexter) |
-| 209.4–210.8 | "So much for diplomacy." | unverified |
-| 212.3–215.1 | "How is it I can kill people and feel no regret…" | unverified |
-| 222.9–224.4 | "Hello, Arthur Mitchell." | **VO on the 222.12 shot** (checked with the lip sheet: lips closed) |
-| 224.4–226.4 | "Is this who you are?" | VO on the same shot |
-| 230.8–233.7 | "I wonder if Rita's looking at this same moon." | VO over the moon / red-lit look-up |
 
 ### `pack7_4k.mp4` (key `p7`): "4K 60 fps scene pack for edit", 1280×720, 60 fps, 35 s, 14 shots
 
@@ -268,21 +286,21 @@ Proven shots (fb):
 
 **Avoid:** the slow-mo run at the camera, and the floating shot.
 
-More proven fb shots (v102; face widths from YuNet):
+More proven fb shots (v102; YuNet face widths):
 - unmasked close-up, calm 37.12–38.55 (w259);
 - lightning crawling over unmasked Barry 83.80–85.08 (w161);
 - cowl pull 68.63–71.85 (w261);
-- **"How's this for power?"** 110.96–112.00 on the masked close-up 109.68–112.47 (w233). **On camera** (lip sheet `v102/frames/lip_power.jpg`); the dialogue stem is Demucs of fb 100–140 s;
-- lightning throw 124.17–124.78 (one take; the detector splits it at 124.37 on the flash);
-- the scream with the lightning blast 127.63–129.15 (w218–247; a 9:16 crop loses most of the blast);
-- lightning climbing his body in the garage 112.48–116.48;
-- street run into the lens 64.73–68.62 (one take, split by lightning flashes; framing locked at x≈745);
+- **"How's this for power?"** 110.96–112.00 on the masked close-up 109.68–112.47 (w233). **On camera** (lip sheet `v102/frames/lip_power.jpg`); dialogue stem = Demucs of fb 100–140 s;
+- lightning throw 124.17–124.78 (one take, split by the detector at 124.37 on the flash);
+- scream with the lightning blast 127.63–129.15 (a 9:16 crop loses most of the blast);
+- lightning climbing his body (garage) 112.48–116.48;
+- street run into the lens 64.73–68.62 (one take split by lightning flashes; lock framing at x≈745);
 - sideways wall run 80.82–82.27 (`rot=True` fills 9:16);
-- lightning on his face 89.70–91.98 (lit white, so use `target≈0.33`);
+- lightning on his face 89.70–91.98 (lit white; `target≈0.33`);
 - dark, lit by his own lightning 52.82–54.35;
 - grin 56.05–58.32 (w315);
 - glowing eyes 116.50–119.38 (w337);
-- lateral sprint 4.28–6.22 (w~190).
+- lateral sprint 4.28–6.22.
 
 For a consistent Barry, avoid the other speedsters and suits: the yellow suit (124.8–127.5), purple and green lightning (129–148), and the black suit with the blue chest (42–53).
 
@@ -292,13 +310,16 @@ For a consistent Barry, avoid the other speedsters and suits: the yellow suit (1
 
 | File | Uploaded as | Notes |
 |---|---|---|
+| `night_blooming_jasmine.mp3` | `fakemink_-_Night__Blooming_Jasmine_._official_music_video.mp3` | 102.8 BPM, P=0.29185. The second half is on its own grid (HB_OFF 0.1673: h482 = the drop at 140.839). Filtered breakdown 112–137.8 s, build 137.78, **dead silence 139.38–140.83, drop 140.84 (+26 dB)**. The instrumental repeats on a 4-bar cycle (bar h506 = bar h634). Hook *"night bloom jasmine, second name Yasmin"* at 74.8 and 187.12 (v9) |
+| `paint_it_black.mp3` | `The_Rolling_Stones_-_Paint_It_Black_Official_Lyric_Video.mp3` | 160 BPM, P=0.18748, offset 0.0469. Sitar intro; **drums enter at 7.55 s (+22 dB)**; "I see a red door…" 14.0; bridge dip 87–96.5 → return 97.54; climax "painted, painted black" 157.4–175.7. Map and lyrics in `studio/songs/paint_it_black/` (not used yet) |
+| `wish_you_well_rec.wav` | extracted from the screen recording `wish_you_well_screenrec.mov` | Brent Faiyaz "Wish You Well", 36 s. 138.05 BPM, P=0.21731, offset 0.0489. Beat returns at 19.17 s; break 27.86; "Darling," 30.04; **drop 33.08**; hook "I don't wish you well" 34.16–35.12 (v8) |
 | `him_all_along.mp3` | `Gunna_-_Him_All_Along_Official_Visualizer.mp3` | 130 BPM, half-beat P=0.23075 s, offset 0.0808. Good part: 2:01.9 breakdown → **2:13.0 return (+17 dB)**. Hook "HIM ALL ALONG" at 131.92–132.30 |
 | `warmpop.mp3` | `ESPRIT____George_Clanton_-_Warmpop.mp3` | 90 BPM, P=0.33335, offset 0.1883. Filtered build 117–148.5 s; **full mix returns at 149.54 s** |
 | `need_it.mp3` | `Migos_-_Need_It…mp3` | 74 BPM (v3/v4) |
 | `duvet.mp3` | `B_a_-_Duvet_Lyrics.mp3` | 93 BPM, P=0.32211, offset 0.2085. Lyric is "you don't even **feel** a thing" |
 | `blood_theme.mp3` | `Blood_Theme_Instrumental.mp3` | Dexter theme; hard stop at 113.047 s |
-| `less_i_know.mp3` | `Tame_Impala_-_The_Less_I_Know_The_Better_Audio.mp3` | 116.99 BPM, half-beat P=0.25644 s, offset 0.0833; beats fall on the ODD half-beats. Drums enter 1.877 s (h7), bassline + band drop 10.084 s (h39), bass drops out and vocals start ~24.7 s. Bass-stem accents listed in `v101/work/edl101.py` (`ACCENTS`) |
-| `let_go.mp3` | `Ark_Patrol_-_Let_Go_Lyrics_ft._Veronika_Redd_and_now_you_wont_let_go.mp3` | 163.96 BPM, P=0.18297, offset 0.0366. Drop 1 at 52.73 s, **drop 2 at 140.56 s (+31 dB)**; breakdowns (bass + vocal chops) at 35.2 and 123.0 s, risers at 49.8 and 137.6 s. Hook "but now you won't let go" at 32.4–33.5 s. The riser chops are ambiguous to Whisper, so don't caption them |
+| `less_i_know.mp3` | `Tame_Impala_-_The_Less_I_Know_The_Better_Audio.mp3` | 116.99 BPM, P=0.25644, offset 0.0833; beats on the ODD half-beats. Drums enter 1.877 s (h7), bassline + band drop 10.084 s (h39), vocals from ~24.7 s (v101) |
+| `let_go.mp3` | `Ark_Patrol_-_Let_Go_Lyrics_ft._Veronika_Redd_and_now_you_wont_let_go.mp3` | 163.96 BPM, P=0.18297, offset 0.0366. Drop 1 at 52.73 s, **drop 2 at 140.56 s (+31 dB)**; breakdowns (bass + vocal chops) at 35.2 / 123.0 s, risers at 49.8 / 137.6 s. Hook "but now you won't let go" 32.4–33.5 s; the riser chops are ambiguous to Whisper, so don't caption them (v102) |
 | `matrix_funk_slowed.mp3` | `MATRIX_FUNK_SLOWED.mp3` | Slow again by ×1.12644 (vinyl) → 102.8 BPM |
 
 ## Other assets

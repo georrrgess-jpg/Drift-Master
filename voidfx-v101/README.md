@@ -1,24 +1,23 @@
 # voidfx studio 2: transfer copy (v101 THE LESS YOU KNOW, v102 LET GO)
 
-This folder holds the editable project for the voidfx edit **v101 THE LESS YOU KNOW** (Dexter × Tame Impala "The Less I Know The Better"). It belongs to the **`georrrgess-jpg/voidfx`** repository, not to Drift Master.
-
-It is here because the session that made the edit could not push to voidfx: attaching voidfx with push access was refused by the session's permission check. Nothing in this folder touches the game.
+This folder holds Studio 2's work for the **`georrrgess-jpg/voidfx`** repository, not for Drift Master. It's here because this session can't push to voidfx: attaching voidfx with push access was refused by the session's permission check. Nothing in this folder touches the game.
 
 | Path | What it is |
 |---|---|
-| `voidfx-v101.bundle` | A git bundle with the v101 commit for voidfx: the edit, engine fixes and doc updates. It builds on voidfx `claude/gallant-planck-pqpczp` (f1ea39d) and has six commits: the v101 edit, the owner's v101 review notes, the S4 scene packs (p9, p10) plus `tools/lipcheck.py`, **v102 LET GO** (The Flash × Ark Patrol), the owner's v102 review, and the **pre-render check** (handbook §5a, also in the start brief). |
-| `docs/`, `tools/` | The updated voidfx `CLAUDE.md`, `studio/VOIDFX_STUDIO.md`, `studio/START_PROMPT.md`, `studio/SCENE_PACKS.md` (now with the S4 packs), `studio/src_manifest.json`, `docs/TOOLKIT.md`, `tools/lipcheck.py` and `tools/setup_studio.sh` with the owner's v101 review recorded (style rejected, real lip-sync only, WARMPOP-style captions, the liked transitions). They are also in the bundle. |
-| `v102/` | A browsable copy of the v102 edit folder (The Flash × Ark Patrol "Let Go"). `v102/README.md` has the concept, song section, timeline and checkpoint log. |
-| `v101/` | A plain, browsable copy of the edit folder: EDL, renderer, look/transitions source, sound design, QC, shot lists, transcripts, face tracks, the Fraunces font. `v101/README.md` has the full write-up. |
-| `out/` (not in git) | The rendered TikTok upload MP4 and the CRF 11 master MOV, kept in the session only. They contain copyrighted footage and music, so they stay out of git like every voidfx edit. |
+| `voidfx-v101.bundle` | A git bundle with Studio 2's two commits, **rebased onto Studio 1's `claude/gallant-planck-pqpczp` at `daff0de`** (v9 NIGHT BLOOM and the approved v9 text standard). Commit 1: the v101 and v102 edit folders, `tools/lipcheck.py`, the YuNet download fix, and the two songs in the manifest. Commit 2: Studio 2's reviews and catalogue notes added to Studio 1's docs. Studio 2's duplicates were dropped: its S4 pack catalogue (Studio 1's `p9 = pack9_s4_best`, `p10 = pack10_s4_24p` stands) and its version of the §5a gate (Studio 1's stands). |
+| `docs/`, `tools/` | Browsable copies of the voidfx docs and tools as they are in the bundle. |
+| `v101/` | The v101 edit folder (Dexter × Tame Impala). The owner largely disliked the style and the narrated line shown as spoken. |
+| `v102/` | The v102 edit folder (The Flash × Ark Patrol "Let Go"): good and complete, but lacklustre. |
+| `out/` (not in git) | The rendered MP4s and the master MOV, kept in the session only. They contain copyrighted footage and music. |
 
 ## Moving it into voidfx
 
-From a clone of `georrrgess-jpg/voidfx` that has `claude/gallant-planck-pqpczp`:
+From a clone of `georrrgess-jpg/voidfx` whose `claude/gallant-planck-pqpczp` is at `daff0de`:
 
 ```bash
-git fetch /path/to/voidfx-v101.bundle claude/beautiful-volta-wjki7k:studio2/v101-less-i-know
-git push -u origin studio2/v101-less-i-know      # then open a PR into the main studio branch
+git fetch /path/to/voidfx-v101.bundle claude/beautiful-volta-wjki7k:studio2/v101-v102
+git checkout claude/gallant-planck-pqpczp && git merge --ff-only studio2/v101-v102   # a fast-forward: no conflicts
+git push origin claude/gallant-planck-pqpczp
 ```
 
-Then rebuild locally with `bash tools/setup_studio.sh`. Add `src/less_i_know.mp3` (the uploaded Tame Impala audio, listed in `studio/src_manifest.json`) and then run `bash tools/build.sh 101 prep audio video qc`.
+To rebuild an edit, run `bash tools/setup_studio.sh`, add the songs listed in `studio/src_manifest.json` (`less_i_know.mp3`, `let_go.mp3`), then run `bash tools/build.sh 101|102 prep audio video qc`.

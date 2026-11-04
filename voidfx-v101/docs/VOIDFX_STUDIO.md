@@ -13,9 +13,8 @@ Read this first. Then read `SCENE_PACKS.md` (the sources), `/docs/TOOLKIT.md` (t
 | **HIM ALL ALONG** (Dexter × Gunna, rev 2) | `v7/` | Approved as a standard: *"The transitions were creative and well animated."* Physical, themed, Dexter-specific transitions (blood-slide box, plastic burst, body-bag zipper, blood on the lens, M99 blink, magnifier → pupil loop), and a hero transition on the song's drop. |
 | **WARMPOP** (Dexter × George Clanton, rev 3) | `v6/` | Approved as a standard: *"wonderful transitions, animations, graphics, while maintaining the style that I like … I like how the music correlates to the edit. I like the text."* The amount of designed motion per second, the music-led structure, the eased two-line captions and the depth graphics. |
 | **SURPRISE** (Doakes × Need It, v4) | `v4/` | The first approved standard. A dialogue-led cold open that plays as **one continuous take**, the barrel → scope fly-through, and the pupil → iris loop. |
-| **WISH YOU WELL** (Dexter × Brent Faiyaz "Wish You Well") | *not in this repo yet* | Named by the owner as a comparison benchmark for the pre-render check (§5a). Its folder and render haven't been added here. Ask the owner for them, and until then compare against the owner's notes on it. |
 
-Every new edit must **clearly beat** these. Before the first render, write the comparison against WARMPOP, HIM ALL ALONG and WISH YOU WELL (§5a). It must **not copy their look**: each edit gets its own grade, type and transition mix.
+Every new edit must **match or exceed** these. It must **not copy their look**: each edit gets its own grade, type and transition mix.
 
 ---
 
@@ -82,21 +81,32 @@ Every new edit must **clearly beat** these. Before the first render, write the c
 - **A strong opening**, either dialogue-led as one continuous take (v4) or a striking visual hook (the magnifier on his eye, the VHS tape load).
 - **Polish:** halation and bloom, grain, anamorphic streaks, colour grades with a clear identity, and smooth sound.
 - **Built-in review passes.** He wants the studio to catch problems itself rather than rely on rounds of feedback, and to judge whether the edit is ready to ship before it is sent.
-- **Liked and to keep doing** (owner notes after v101; the moments below come from an edit the owner reviewed alongside v101, not from v101 itself):
-  - the "Darling," moment: a freeze, the comma becoming a blood drop, the blood blooming in water;
-  - the rear-view-mirror open and the loop through it;
-  - simple, clean transitions: streetlight sweep, windscreen wiper, whip pans, plastic wrap, an impact frame, a rain focus pull, a lamp switching on;
-  - from v101, *some* transitions were good (the owner did not like the edit overall).
 
-- **v102 LET GO (The Flash): liked and judged complete, but rated *lacklustre* next to the other builds and the Dexter edits.** The owner's words: *"I like this edit and I honestly think it's good. It's complete. However … in comparison to your other builds and dexter edits in general this one was lack luster, I want you to go above and beyond with these edits."*
-  - The studio's own reading of why it fell short of v6 and v7:
-    - fewer shots (14) and long 2.2 s holds through the cold open;
-    - most effects were subtle (sparks, eye arcs, edge arcs) rather than "how did they do that" moments;
-    - only two text moments;
-    - about half the transitions were reworked v5 ones;
-    - no built world or multi-stage set piece on the scale of the v6 CRT dive or the v7 slide box and plastic burst;
-    - the hero strike was mostly 2D flashes.
-  - **Going "above and beyond" is now the bar for every edit.** See §5a.
+- **v8 WISH YOU WELL** (owner: *"I like this edit, I think it did most things well"*):
+  - **The "Darling," sequence (liked):** a freeze-frame where the room drains to indigo, the word written on in red script with a swash, the comma swelling into a drop of blood that falls in slow motion with Dexter refracted inside it, then blooms in water on the drop.
+  - **The rear-view-mirror open and loop (liked):** a mirror in a dark rainy car, push into it, and pull back into it at the end.
+  - **The "basic" transitions were good:**
+    - streetlight sweep;
+    - windshield wiper;
+    - whip pans, horizontal and vertical;
+    - plastic sheet wrapping the lens;
+    - one-frame impact negative;
+    - rain-on-glass focus pull;
+    - lamp switching on;
+    - one cut per syllable on the hook.
+
+- **v9 NIGHT BLOOM: the text was "perfect"** (owner, after calling the edit good but lacklustre overall). **This is the standard text style for every edit.** The code is in `v9/work/render9.py` and new edits inherit it:
+  - **Captions** (`text_cap` + `cap_word`, TEXT style `cap`):
+    - Inter Display Black, all caps, two lines (line 1 about 88 px, line 2 about 114 px, a little larger), centred in the 1240–1640 band.
+    - White face; a dark keyline about 7 % of the size; a soft drop shadow; a light dark scrim behind the band.
+    - **Emphasis words in bright red** (BGR 0.20, 0.17, 1.00) with a soft red glow, so they hold on any background, even a red sky.
+    - Each word eases in on its spoken time (fade, 30 px rise, blur to sharp, 0.17 s). The exit is a fade, a slight blur and a 14 px drift up.
+    - Lines auto-fit to 940 px. A second lockup can wait (`from`) so the first stays readable.
+  - **Hero title** (`text_hero`, TEXT style `hero`):
+    - Per-letter build on a shared baseline. Each letter blooms open from a point (scale 0.3 → 1 with a small overshoot, a ±24° twist, blur to sharp, a soft white flare behind it), staggered about 35 ms and timed to the sung words.
+    - Line 2 lands bigger, white-hot, then floods crimson from the bottom like blood.
+    - On the exit, the letters loosen and blow away as particles (petals in v9; use the edit's own motif: blood droplets, ash, glass).
+  - Keep the construction and motion; change only the palette, the emphasis colour and the exit particles to fit each edit.
 
 ## 4. What the owner rejected: never do these
 
@@ -120,9 +130,27 @@ Every new edit must **clearly beat** these. Before the first render, write the c
 | STAY STRONG plus red strings converging on his face with a target ring | v7 | No gimmick overlays on the face. |
 | The voidfx logo turned blue (UV recolour) | v7 | **Never restyle the logo.** |
 | Plain steel doors for CLOSE | v7 | Make the big text moments **character-themed and detailed** (the rosewood blood-slide box with an engraved brass plate was the fix). |
-| The overall style of v101: the 16 mm psychedelic reel (oxblood / amber / plum liquid-light projections, 70s soft-serif type) | v101 | **Owner largely disliked it.** Don't reuse it. Stay closer to the dark, clean looks of the approved benchmarks. |
-| Dexter's voice over a shot where he isn't actually speaking (v101 confession: the line is narration, his mouth doesn't match) | v101 | **Only show a speaker when his lips match the line.** Otherwise play the voice-over over a shot where he is visibly not talking, or don't use the line. Check lip movement on frames before calling a line "lip-synced". |
-| Thin, spaced-out lyric lines, fancy serif emphasis words, letter-by-letter fades | v101 review | Go back to the **bold, high-contrast two-line captions** of WARMPOP (v6). |
+| The **text appearance in v8**: thin, wide-tracked sans lyric lines with sodium serif-italic emphasis words, letter-by-letter fades, underlines; big extruded words behind his head; elegant serif-italic script | v8 | That "elegant / editorial" type look didn't land. Go back toward what was praised in v6: bold, high-contrast, two-line captions with a clear designed treatment per moment. Keep script handwriting for at most one hero word. |
+| v9 NIGHT BLOOM overall: *"good… complete"*, but **lacklustre** next to the other builds and Dexter edits in general | v9 | **Go above and beyond.** The petal/moon concept came from the song title, not from Dexter's world, and read soft instead of dark and intense. The montage leaned on quick generic moves (strobe, beam, blinds, roll, smear) with one real set piece (the bloom). Root every concept in Dexter, build at least three signature set pieces, and add more graphics (the v9 text itself was "perfect"; keep it). See §5a. |
+| v101 THE LESS YOU KNOW (Studio 2) overall: *"I do not like this edit … I largely disliked the style"*; some transitions were good | v101 | The 16 mm psychedelic look (oxblood / amber / plum liquid light, 70s soft-serif type) didn't land. Don't reuse it. |
+| v101: Dexter's narrated line shown as if he were saying it (*"the scene with Dexter speaking where he wasn't actually speaking"*) | v101 | **Only present a line as spoken when his lips match it.** Many of his lines are inner-monologue narration. Check with `tools/lipcheck.py` and on frames, or play the line as voice-over over a shot where he isn't talking. |
+| v102 LET GO (Studio 2, The Flash) overall: *"I like this edit and I honestly think it's good. It's complete"*, but **lacklustre** next to the other builds and the Dexter edits | v102 | **Go above and beyond** (the §5a gate). The remaining gaps were the **concept** (built around the lyric "let go" rather than a moment from his world), the **number of standout set pieces** (the strike on the drop was the only one; the rest were quick reworked v5 moves), and the **graphics** (subtle sparks and arcs that don't read at phone size). |
+
+## 5a. Raising the bar (after v9): the pre-build gate
+
+The owner's standard after v9: *"go above and beyond with these edits."* "Technically clean and on time" is not enough; every edit has to **visibly exceed** v6, v7 and v8. Clear this gate **before** the first render:
+
+1. **Concept from Dexter's world.** One sentence, rooted in the character (kill room, plastic, blood slides, tools, the Code, Harry, the Dark Passenger, the victims, the season's villain). The song shapes the rhythm and mood; it doesn't supply the imagery.
+2. **Three or more signature set pieces**, each multi-stage (anticipation, action, payoff), physical, character-themed and with its own layered sound:
+   - one on the drop;
+   - one on the hook;
+   - one on the loop.
+   They're on the level of v7's slide box, plastic burst and zipper, and v8's "Darling," freeze into the falling drop. Quick moves (whips, strobes, flashes) only connect the set pieces; they don't count toward the three.
+3. **Text in the approved v9 style** (§3: "it was perfect"): keyline captions for dialogue and lyrics, plus at least two designed title moments in the hero-title style that act out their meaning.
+4. **Graphics in every section**, not only the cold open: depth layers, themed overlays (evidence, slides, plastic, blood), beat-synced accents in the montage.
+5. **Shot strength.** Every shot earns its place by expression, motion or composition in 9:16. Swap weak, soft or awkward crops early (v9 lost three planned shots to the crop).
+6. **Benchmark comparison, written down:** for each section, say what the plan does that v6/v7/v8 didn't. If a section has no answer, redesign it.
+7. **Ambition in review.** Review passes must also ask "what would make this moment unforgettable?", not only "is anything broken?".
 
 ## 5. What works: craft lessons
 
@@ -136,6 +164,9 @@ Every new edit must **clearly beat** these. Before the first render, write the c
 - Use the **good part**: the drop or hook where the full mix or bass returns.
 - `tools/song_map.py` finds it in 3 s (biggest section change, whole-bar windows of 20–27 s with the drop at 33–47%).
 - A breakdown or filtered build before the drop gives a natural cold open for dialogue or titles.
+- **A dead-silence gap before a drop** is the strongest place for one short line and a freeze-frame (v9: *"Hello, Arthur Mitchell."* alone in the 1.45 s silence, then the petal bloom on the drop).
+- **When the hook is far from the drop, splice the song on its beat grid** (v9). Find a bar in the later section whose instrumental matches the bar you leave (spectral correlation of whole bars; house and trap loops repeat on 4-bar cycles). End the outgoing vocal on a breath, fill to the splice with the Demucs instrumental stem, crossfade 12 ms on the downbeat, and hide the join under a designed transition with its own sound. Check the sample step at the splice.
+- **Check the grid on both sides of a silence.** A gap that is not a whole number of beats shifts the grid; fit the half-beat phase locally (v9: HB_OFF puts the drop exactly on h482).
 
 **Structure:**
 - **Cold open (35–45%):** a hook shot, a line or lyric, two or three investigation or build shots, the title or hook text.
@@ -171,36 +202,13 @@ Every new edit must **clearly beat** these. Before the first render, write the c
 - A sub drop and riser into the drop.
 - The ending: a tape-stop, rewind or heartbeat into the loop.
 
-## 5a. The pre-render check: above and beyond (required)
-
-From the owner's v102 note ("complete and good" was not enough). **Every edit must pass this check before its first full render.** Write the answers into the edit's `vN/README.md` under "Pre-render check", then run the check again on the encoded file before delivery.
-
-1. **A concept rooted in Dexter's world.** One sentence that ties picture, sound and text together and could only belong to Dexter: his rituals, his tools, his code, his double life, Miami, the Dark Passenger. Not a generic mood. For another show, root it in that character's world in the same way.
-2. **At least three multi-stage, Dexter-themed showpieces: one on the drop, one on the hook and one on the loop.**
-   - Each is a designed sequence of about 1–2 s, in several stages, that builds a physical object or space from his world and moves the camera through it.
-   - Models: the blood-slide box, the kill-room plastic burst and the body-bag zipper (v7); the CRT dive into the vapor world (v6); the barrel → scope (v4).
-   - Flashes, overlays and single-effect wipes don't count as showpieces.
-3. **Designed text and graphics in every section:** cold open, hook, drop, montage and ending.
-   - Text: bold, high-contrast two-line captions in the WARMPOP style, plus at least one material or title treatment.
-   - Graphics: depth or world layers (matte layers, a set, an object), not just accents. Every effect has to read at phone size; if a thumbnail doesn't show it, push it or cut it.
-4. **A written comparison against WARMPOP (v6), HIM ALL ALONG (v7) and WISH YOU WELL.**
-   - For each, compare the opening, the hook moment, the hero transition on the drop, the text and the ending side by side with the plan.
-   - **If the plan doesn't clearly beat all three, redesign it before rendering.**
-   - WISH YOU WELL's edit folder and render aren't in this repo yet (it is a Brent Faiyaz "Wish You Well" edit, per the owner). Compare against the owner's notes on it, and ask the owner for the file or its folder.
-5. **Review passes that ask "what would make this unforgettable?", not just "is anything broken?".**
-   - Every review pass (stills, every-cut sheets, the encoded-file sign-off) lists the weakest moment and the change that would make it unforgettable, and makes that change.
-   - Fixing defects is the minimum, not the goal.
-
-**Supporting standards** (they help meet the check):
-- at least 16 designed transitions, mostly new (at most a third reused, and only when reworked for the edit's world), none repeated;
-- in the montage, a cut or designed move every 2–4 half-beats;
-- cold-open holds over about 1.5 s only when they carry a line, a lyric or a hero image.
-
 ## 6. What doesn't work: technical pitfalls
 
 The full list is in `/docs/TOOLKIT.md` §4. The most expensive ones:
 - **Packs hide cuts.** Jump cuts the shot detector misses cause ghost frames, and source ranges running past a cut put another actor on screen. `tools/check_sources.py` (run by `build.sh prep`) catches both. The sampler never interpolates across hard cuts.
 - **Text over very tight close-ups:** swap the shot; don't shrink the type.
+- **Particles over a big close-up:** a person matte that fills the frame hides every "behind" particle, and "front" particles land on the face. Give close-ups a few placed hero particles that frame the face instead (v9 freeze).
+- **9:16 kills two-subject shots:** a reflection or two-shot whose subjects are more than about 400 source px apart can't keep both in the crop. Check before building a transition around it.
 - **Distortion transitions** (bulges, barrels) must not warp titles. Weight the distortion to the centre.
 - **Particles** (blood spray, dust) must move fast and fade, or they read as blobs.
 - **The last `render()` in the file wins.** Insert routing in the active one.
@@ -226,9 +234,7 @@ The full list is in `/docs/TOOLKIT.md` §4. The most expensive ones:
 Then the **visual sign-off**:
 - pull frames from the **encoded** file around every transition, title, the drop and the loop;
 - look at them;
-- fix and re-render anything weak;
-- ask **"what would make this unforgettable?"**: name the weakest moment and make it the change for this pass, not just the defects;
-- re-check the pre-render check (§5a) against the encoded file, including the comparison with WARMPOP, HIM ALL ALONG and WISH YOU WELL.
+- fix and re-render anything weak.
 
 Only then deliver.
 
@@ -270,8 +276,10 @@ Only then deliver.
 | v5 FASTEST | amber/gold lightning over deep teal (The Flash) |
 | v6 WARMPOP | pastel vapor + VHS (chroma bleed, scanlines, CRT, neon) |
 | v7 HIM ALL ALONG | forensic noir (drained cold colour, blood red only, UV luminol, case-file type) |
-| v101 THE LESS YOU KNOW | 16 mm psychedelic reel (oxblood / amber / plum, liquid-light projections, halation, grain, gate weave, Fraunces Soft 70s type). **Rejected by the owner: don't reuse.** |
-| v102 LET GO (The Flash) | storm: crimson suit, gold lightning with white-hot cores, steel-blue shadows, gold halation, anamorphic flares, bold Black Italic captions |
+| v8 WISH YOU WELL | sodium nocturne (indigo shadows, sodium-vapour highlights, rain on glass, streetlight sweeps, warm halation) |
+| v9 NIGHT BLOOM | moonbloom (violet-black night, moon-silver highlights, white Pro-Mist bloom, jasmine petals in depth, a blood moon; bold keyline captions) |
+| v101 THE LESS YOU KNOW | 16 mm psychedelic reel (oxblood / amber / plum liquid light, film burn, 70s soft-serif type). **Rejected: don't reuse** |
+| v102 LET GO (The Flash) | storm (crimson suit, gold lightning with white-hot cores, steel-blue shadows, gold halation, anamorphic flares) |
 
 Fresh directions for future edits:
 - 16 mm film burn / home movie (Harry flashbacks);
@@ -294,8 +302,10 @@ Fresh directions for future edits:
 | v5 | bôa "Duvet" | 93 BPM | half-beats 208–288 (10 bars) | "I am falling" |
 | v6 | George Clanton "Warmpop" | 90 BPM | half-beats 416–496 (2:18.9–2:45.5) | 2:29.5, full mix returns → CRT dive |
 | v7 | Gunna "Him All Along" | 130 BPM | half-beats 528–640 (2:01.9–2:27.8, 14 bars) | 2:13.0, +17 dB return → plastic burst |
-| v101 | Tame Impala "The Less I Know The Better" | 117 BPM | half-beats 7–95 (0:01.9–0:24.4, 11 bars), last half bar = the song's own intro pickup (h3–h7) so the loop wraps onto the first downbeat | 0:10.08, the bassline and full band enter after the 4-bar drum intro → film burn-through |
-| v102 | Ark Patrol "Let Go" (ft. Veronika Redd) | 164 BPM | half-beats 720–848 (2:11.8–2:35.2, 16 bars), the last 6 half-beats are a rewind back to the start | 2:20.56, drop 2 (+31 dB) → the strike |
+| v8 | Brent Faiyaz "Wish You Well" (screen recording) | 138 BPM | half-beats 64–164 (13.96–35.69 s) | 33.08 drop → blood blooms in water |
+| v9 | fakemink "Night, Blooming Jasmine" | 102.8 BPM | h448–h506 + h634–h650, spliced on the 4-bar cycle (2:10.9–2:27.8 + 3:05.2–3:09.9) | 2:19.38 dead silence → freeze; 2:20.84 drop → petal bloom |
+| v101 | Tame Impala "The Less I Know The Better" | 117 BPM | half-beats 7–95 (0:01.9–0:24.4, 11 bars); the last half bar is the song's own intro pickup, so the loop wraps onto the first downbeat | 0:10.08, the bassline enters after the 4-bar drum intro → film burn-through |
+| v102 | Ark Patrol "Let Go" | 164 BPM | half-beats 720–848 (2:11.8–2:35.2, 16 bars); the last 6 half-beats rewind the whole edit back to the start | 2:20.56, drop 2 (+31 dB) → the strike |
 
 ## 11. Communication
 
