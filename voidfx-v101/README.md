@@ -15,21 +15,22 @@ This folder holds Studio 2's work for the **`georrrgess-jpg/voidfx`** repository
 
 ## Moving it into voidfx
 
-The bundle is based on `daff0de`. **Studio 1 has committed since then** (at least the Flash benchmark, recorded in its CLAUDE.md, handbook, toolkit and start prompt), so a fast-forward is no longer possible. Merge instead:
+The bundle is based on `daff0de`. **Studio 1 has committed since then:** its branch was read at `122013b`, with v10 LET IT HAPPEN, v11 BOP as its newest standard and base engine, and `tools/sr_prep.py` and `srnet.py`. A fast-forward is no longer possible, so merge instead:
 
 ```bash
 git fetch /path/to/voidfx-v101.bundle claude/beautiful-volta-wjki7k:studio2/work
 git checkout claude/gallant-planck-pqpczp && git pull
-git merge studio2/work        # expect conflicts in the shared docs (see below)
+git merge studio2/work        # expect conflicts in the shared docs and the scaffold (see below)
 git push origin claude/gallant-planck-pqpczp
 ```
 
 **Expected conflicts:**
 - **The docs:** `CLAUDE.md`, `studio/VOIDFX_STUDIO.md`, `studio/START_PROMPT.md` and `docs/TOOLKIT.md` were edited by both studios. Keep both sides:
-  - Studio 1's Flash benchmark, as written by Studio 1, rather than Studio 2's summary of the notes;
-  - Studio 2's standards (§0: v105 DRACULA, v104 THE PASSENGER and v103 FOREVER), its "no headspace" and "clip quality" rules, and its v103/v104/v105 rows and lessons.
-- **The scaffold:** `tools/new_edit.py` and `tools/edl_template.py` may conflict if Studio 1 changed the scaffold. Decide with the owner which edit new work starts from (Studio 2 points it at v105).
-- **`studio/SCENE_PACKS.md` and `studio/src_manifest.json`:** Studio 2 added the two Flash packs that came with the v105 brief (`flash_s4.mp4`, `reverse_flash.mp4`); keep both sides if Studio 1 added packs too.
-- **No other conflicts expected:** the edit folders (`v101`–`v105`) are Studio 2-only.
+  - Studio 1's v10 and v11 entries and rules, as written by Studio 1, rather than Studio 2's record of them;
+  - Studio 2's standards (§0: v105 DRACULA, v104 THE PASSENGER, v103 FOREVER), its "no headspace" and "clip quality" rules, and its v103/v104/v105 rows and lessons.
+- **The scaffold:** `tools/new_edit.py` and `tools/edl_template.py` were changed by both. Studio 1 points them at v11 (with `E_BEAT`, `E_DIP`, `E_LOOP`); Studio 2 points them at v105. **Decide with the owner which engine new work starts from.** The engines are separate files, so one option is Flash edits from v11 and Dexter edits from v105. `tools/setup_studio.sh` (Studio 1 added a v11 load check) and `.gitignore` (both added version folders) should merge by keeping both sides.
+- **`studio/SCENE_PACKS.md` and `studio/src_manifest.json`:** both studios catalogued the same two Flash packs (`flash_s4.mp4`, `reverse_flash.mp4`). Studio 1 keys flash_s4 as `s4` and used it in v11; Studio 2 keys it as `fs4`. Keep Studio 1's entries and add Studio 2's notes only where they add something (the watermark and title-card times). Studio 2's shot lists stay in `studio/packs/shots_fs4.json` and `shots_rf.json`.
+- **Studio 2's new tools merge cleanly:** `tools/sharpness.py` (clip quality) and the flash report in `v105/work/qc105.py`. After the merge, run Studio 1's `tools/sr_prep.py` for new edits; it's the fix for the owner's clip-quality note.
+- **No other conflicts expected:** the edit folders (`v101`–`v105` for Studio 2; `v10`, `v11` for Studio 1) don't overlap.
 
 To rebuild an edit, run `bash tools/setup_studio.sh`, add the songs listed in `studio/src_manifest.json` (`less_i_know.mp3`, `let_go.mp3`), then run `bash tools/build.sh 101|102|103|104|105 prep audio video qc` (v103 needs `everlong.mp3`; v104 needs `still_love_you_rec.wav`; v105 needs `dracula.mp3`, `scenepack3_24fps.mp4`, `pack6_s5.mp4` and `doakes.mp4`).
