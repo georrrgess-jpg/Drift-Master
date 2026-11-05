@@ -18,7 +18,7 @@ Studio 2. Built from the v104 THE PASSENGER standard (`tools/new_edit.py`), with
 **1. A concept rooted in Dexter's world: SUNDOWN.** By day he wears the mask: sunny Miami, the boat, the smile, the ice cream, the badge. The song's last chorus is *"run from the sun like Dracula"*, so the sun sets across the song's one-bar drop-out and night slams in on the drop, the biggest change in the song. Night is the hunt. At the end the sun comes up and burns him white, the way sunlight ends a vampire, and the loop opens in that same light.
 
 **2. Set pieces (multi-stage, themed, each with its own sound), one on every phrase start:**
-- **SUNDOWN (k24–32).** The sun sets down the right edge of two shots (off his face), its rays stretching. The grade slides from day to dusk to night, and the camera holds still for the drop-out bar. A descending sun glide and a heartbeat play under the bar.
+- **SUNDOWN (k24–32).** The sun sets down the right edge of two shots (off his face), its rays stretching, and the grade slides from day to dusk to night. On the second shot he looks up at the darkening sky. A descending sun glide and a heartbeat play under the song's drop-out bar.
 - **THE BAT BURST + "DRACULA" (the drop, k32).** A cloud of bats pours out of the sky above him in 3D, toward the lens. On the downbeat it blacks out the frame against a crimson flash, then flies past the camera (near bats soft, far ones sharp) to reveal him at night. "DRACULA" builds letter by letter, floods red and breaks into crimson bats that scatter away from his face. Sound: a reverse swell, a sub impact, a burst of wings, bat chirps.
 - **THE BLOOD MOON (k48, the second "Dracula").** A moon iris opens on him; behind his MODNet cut-out a procedural blood moon rises, with craters, maria, limb darkening, drifting cloud and bats crossing. It lights a red rim on his edge and pulses on the word. Sound: a church-bell toll on B-flat.
 - **THE COFFIN (k64, the third "Dracula").** A lacquered mahogany coffin lid with a brass cross, lit from a height map (bevel, raised panel, specular), falls toward the lens. It slams shut over him (the frame jolts, dust kicks up) and lifts away on the next shot. Sound: a hinge creak, a wood thud with its own resonances, dust.
@@ -80,7 +80,7 @@ Studio 2. Built from the v104 THE PASSENGER standard (`tools/new_edit.py`), with
 - **The longest shots:**
   - the drop shot, 1.57 s (bat burst, then the title, then its exit);
   - the moon shot, 1.57 s (iris, rising moon, pulse, caption, bats);
-  - the sunset, 1.30 s (the sun setting through it);
+  - the looks-up shot, 1.30 s (the sun setting through it, the lyric, the bats arriving);
   - the rest, 0.52–1.04 s.
 
 **6. Flash rules (CLAUDE.md).**
@@ -145,6 +145,52 @@ Each pass asked "what would make this unforgettable?", not just "what's broken?"
 9. **Text over the face:** the third "DRACULA" sat on his chin in the container shot, so it moved below (band 1570–1785).
 10. **Sound levels:** the song is mastered loud (−9 to −11 dBFS RMS), so the first design sat 20–25 dB under it. The design is now 9 dB hotter, and the music ducks 3 dB under the three big hits.
 
-## Checkpoint
+## Full render 1: 9/10, not shipped
 
-(filled in after the render)
+| Check | Result |
+|---|---|
+| Format | 1080×1920, 60 fps, 1378 frames (22.97 s), H.264 + AAC |
+| Loudness after AAC | −13.0 LUFS, true peak −4.2 dBTP |
+| Clicks | 0 at the 25 cuts; loop seam clean by the QC rule |
+| Loop seam picture | blurred difference 3.92 (frame 0 against the last frame) |
+| **Faces** | **FAIL:** in the sunset shot (frames 420–432) he leans in and his face, about 900 px wide, no longer fits the 9:16 crop |
+| Text over faces | pass |
+| Black frames | 844–847 (the designed lamp-on blackout) and 1111–1112 (the eye dive's black pupil), both by design |
+| Length | audio and video within 9.3 ms |
+
+**Visual sign-off of render 1** (the encoded MP4, every 22nd frame):
+- the blinds and lamp shots were close to black;
+- the opening boat shot was milky (a hazy source under the bleached day grade);
+- the sunset was the face failure above.
+
+**Fixes for render 2:**
+11. **Sunset:** it now ends before he leans in (405.95–406.62, k24–27). The looks-up shot takes the rest of the bar (k27–32, 1:1), so he looks up at the sky as it darkens.
+12. **Exposure:** the blinds shot gets +0.6 EV and the lamp shot +0.55 EV (a new per-shot `ev`), so both read at night.
+13. **The hook:** the boat shot gets a contrast curve (a new per-shot `con`), so frame 0 has a blue sky, a white sun and a readable face rather than a milky haze.
+
+## Checkpoint: render 2, 10/10 PASS, visual sign-off PASS (shipped)
+
+| Check | Result |
+|---|---|
+| Format | 1080×1920, 60 fps, 1378 frames (22.97 s), H.264 + AAC, fast-start |
+| Loudness after AAC | −13.0 LUFS, true peak −4.3 dBTP |
+| Clicks | 0 at the 25 cuts; loop seam clean by the QC rule |
+| Loop seam picture | blurred difference 4.16: the last frames come out of the white into frame 0's own image |
+| Faces | centred in every shot (one borderline frame each in the sunset and dawn shots, within the tolerance); 0 text-over-face frames. Frames 116 (the ice cream cone) and 970 (the upside-down shot) were checked visually: the detection is low, and there's no text there |
+| Black frames | 844–847 (the lamp-on blackout) and 1111–1112 (the eye dive's pupil), both by design |
+| Frozen runs | none |
+| Length | audio and video within 9.3 ms |
+
+**Visual sign-off** was done on frames pulled from the encoded MP4. It covered:
+- the whole edit, every 22nd frame;
+- the bat burst frame by frame (494–520);
+- the title and its bats (566–596);
+- the moon iris and the blood moon;
+- the coffin (996–1013);
+- the swarm (1058–1070);
+- the flagged frames;
+- the loop seam (1360–1377 → 0–6).
+
+The renderer's frame 0 and the MP4's frame 0 were also compared: they match (mean colour within 3 levels).
+
+**Not verified:** watching and listening in real time. The sound was checked by measurement only (levels per section, effects against the music at every set piece, clicks, the loop).

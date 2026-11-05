@@ -61,7 +61,7 @@ def shot(n, src, k0, k1, a, b=None, **kw):
     d.update(kw); S.append(d)
 
 # ---- DAY (k0-24): the mask. "Saw this moment coming from afar."
-shot("boat", "p6", 0, 3, 17.20, tin=None, look="day", sun=(0.78, 0.13), z=[(0, 1.06), (1, 1.00)])
+shot("boat", "p6", 0, 3, 17.20, tin=None, look="day", sun=(0.78, 0.13), z=[(0, 1.06), (1, 1.00)], con=0.7)
 shot("hood", "p3", 3, 6, 24.30, 25.08, tin="sun_flare", look="day", sun=(0.85, 0.10))
 shot("icecream", "p1", 6, 9, 69.25, 70.20, tmap=[(0, 69.25), (0.55, 69.80), (1, 70.20)], tin="whip", look="day")
 shot("badge", "p7", 9, 12, 14.60, tin="burn", look="day", sun=(0.15, 0.08))
@@ -70,17 +70,17 @@ shot("lollipop", "p8", 15, 18, 117.70, tin="tilt", look="day")
 shot("boatgrin", "p1", 18, 21, 70.90, tin="quarter_roll", look="day", sun=(0.12, 0.10))
 shot("palms", "p10", 21, 24, 130.60, tin="smear", look="day", sun=(0.80, 0.10))
 # ---- SUNDOWN (k24-32): the drop-out bar. "Run from the sun like ..."
-shot("sunset", "p8", 24, 29, 405.95, 407.25, tin="light_sweep", look="dusk", sun=(0.70, 0.12), z=[(0, 1.00), (1, 1.10)])
-shot("looksup", "p9", 29, 32, 230.60, 231.40, tin="whip_up", look="dusk", z=[(0, 1.00), (1, 1.08)])
+shot("sunset", "p8", 24, 27, 405.95, 406.62, tin="light_sweep", look="dusk", sun=(0.70, 0.12), z=[(0, 1.00), (1, 1.03)])   # ends before he leans out of the crop
+shot("looksup", "p9", 27, 32, 230.60, 231.90, tin="whip_up", look="dusk", z=[(0, 1.00), (1, 1.10)])
 # ---- NIGHT (k32-84): DRACULA. The bats burst on the drop.
 shot("scope", "dk", 32, 38, 46.20, 47.80, tin="bat_burst", z=[(0, 1.12), (1, 1.02)], fog=0.8)
 shot("redrive", "p9", 38, 41, 0.40, 1.20, tin="strobe", redthr=0.05)
-shot("blinds", "p9", 41, 44, 101.30, 102.10, tin="impact")
+shot("blinds", "p9", 41, 44, 101.30, 102.10, tin="impact", ev=0.6)
 shot("lighttable", "p9", 44, 46, 145.95, 146.45, tin="torch_blind", face=None, cx=(640, 360))
 shot("gloving", "p1", 46, 48, 102.20, 102.72, tin="whip")
 # THE BLOOD MOON (the 2nd "Dracula", k48.5): his cut-out against a rising crimson moon, bats across it
 shot("moon", "p1", 48, 54, 186.50, 187.70, tin="moon_iris", seg=True, bloodmoon=dict(k0=48, k1=54), z=[(0, 1.00), (1, 1.06)])
-shot("lamp", "p10", 54, 57, 181.10, tin="lamp_on", flare=0.7)
+shot("lamp", "p10", 54, 57, 181.10, tin="lamp_on", flare=0.7, ev=0.55)
 shot("garage", "p9", 57, 60, 203.30, 204.40, tmap=[(0, 203.30), (0.35, 203.95), (1, 204.40)], tin="logo_orig", ghost=0.25)
 shot("flip", "p9", 60, 64, 125.00, tin="roll", spin=(0.0, -4.0), redthr=0.45)            # he hangs upside down like a bat
 # THE COFFIN (the 3rd "Dracula", k64.6): a lid slams shut over him and opens on the next

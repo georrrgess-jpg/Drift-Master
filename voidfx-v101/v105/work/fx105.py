@@ -1315,14 +1315,18 @@ def dusk_u(s, f):
 def grade(img, s, f):
     g, gains = correction(s)
     x = np.clip(img * gains, 0, 1) ** g
+    if s.get("ev"): x = np.clip(x * 2 ** s["ev"], 0, 1)                                 # per-shot exposure (dark night sources)
     look = s.get("look", "night")
-    if look == "day": return day_grade(x)
-    if look == "night": return night_grade(x, s)
-    u = dusk_u(s, f); d = day_grade(x); n = night_grade(x, s)
-    mid = math.sin(math.pi * u) ** 1.2
-    o = d * (1 - u) + n * u
-    L = lum(o)[..., None]
-    return np.clip(o * (1 - 0.55 * mid) + L * DUSKC * 1.25 * 0.55 * mid, 0, 1)                     # golden hour -> blood orange -> night
+    if look == "day": o = day_grade(x)
+    elif look == "night": o = night_grade(x, s)
+    else:
+        u = dusk_u(s, f); d = day_grade(x); n = night_grade(x, s)
+        mid = math.sin(math.pi * u) ** 1.2
+        o = d * (1 - u) + n * u
+        L = lum(o)[..., None]
+        o = np.clip(o * (1 - 0.55 * mid) + L * DUSKC * 1.25 * 0.55 * mid, 0, 1)                    # golden hour -> blood orange -> night
+    if s.get("con"): o = o + (o * o * (3 - 2 * o) - o) * s["con"]                       # per-shot contrast (hazy sources)
+    return np.clip(o, 0, 1)
 
 # ---------------------------------------------------------------------------- the sun, with light rays and lens ghosts
 def sun_fx(out, f, sx, sy, amt=1.0, col=SUNC, r=70.0):
