@@ -5,7 +5,7 @@ This folder holds Studio 2's work for the **`georrrgess-jpg/voidfx`** repository
 | Path | What it is |
 |---|---|
 | `voidfx-v101.bundle` | A git bundle with Studio 2's commits (v101/v102, docs, **v103 FOREVER** with its revisions 2 to 5, **v104 THE PASSENGER**, and their doc rows), **rebased onto Studio 1's `claude/gallant-planck-pqpczp` at `daff0de`** (v9 NIGHT BLOOM and the approved v9 text standard). Commit 1: the v101 and v102 edit folders, `tools/lipcheck.py`, the YuNet download fix, and the two songs in the manifest. Commit 2: Studio 2's reviews and catalogue notes added to Studio 1's docs. Studio 2's duplicates were dropped: its S4 pack catalogue (Studio 1's `p9 = pack9_s4_best`, `p10 = pack10_s4_24p` stands) and its version of the §5a gate (Studio 1's stands). |
-| `docs/`, `tools/` | Browsable copies of the voidfx docs and tools as they are in the bundle, including the standard (handbook §0, CLAUDE.md), `tools/new_edit.py` (now scaffolds from v103) and `tools/lyrics.py` (lyric recognition). |
+| `docs/`, `tools/` | Browsable copies of the voidfx docs and tools as they are in the bundle, including the standards (handbook §0, CLAUDE.md), Studio 1's Flash benchmark and its rules (as recorded from the owner's notes), `tools/new_edit.py` (now scaffolds from v104) and `tools/lyrics.py` (lyric recognition). |
 | `v101/` | The v101 edit folder (Dexter × Tame Impala). The owner largely disliked the style and the narrated line shown as spoken. |
 | `v103/` | The v103 edit folder (Dexter × Foo Fighters "Everlong"), **approved as the standard** after rev 5. `v103/README.md` has the pre-render check, the song section, the review log and the checkpoints. |
 | `v102/` | The v102 edit folder (The Flash × Ark Patrol "Let Go"): good and complete, but lacklustre. |
@@ -14,12 +14,20 @@ This folder holds Studio 2's work for the **`georrrgess-jpg/voidfx`** repository
 
 ## Moving it into voidfx
 
-From a clone of `georrrgess-jpg/voidfx` whose `claude/gallant-planck-pqpczp` is at `daff0de`:
+The bundle is based on `daff0de`. **Studio 1 has committed since then** (at least the Flash benchmark, recorded in its CLAUDE.md, handbook, toolkit and start prompt), so a fast-forward is no longer possible. Merge instead:
 
 ```bash
-git fetch /path/to/voidfx-v101.bundle claude/beautiful-volta-wjki7k:studio2/v101-v102
-git checkout claude/gallant-planck-pqpczp && git merge --ff-only studio2/v101-v102   # a fast-forward: no conflicts
+git fetch /path/to/voidfx-v101.bundle claude/beautiful-volta-wjki7k:studio2/work
+git checkout claude/gallant-planck-pqpczp && git pull
+git merge studio2/work        # expect conflicts in the shared docs (see below)
 git push origin claude/gallant-planck-pqpczp
 ```
 
-To rebuild an edit, run `bash tools/setup_studio.sh`, add the songs listed in `studio/src_manifest.json` (`less_i_know.mp3`, `let_go.mp3`), then run `bash tools/build.sh 101|102 prep audio video qc`.
+**Expected conflicts:**
+- **The docs:** `CLAUDE.md`, `studio/VOIDFX_STUDIO.md`, `studio/START_PROMPT.md` and `docs/TOOLKIT.md` were edited by both studios. Keep both sides:
+  - Studio 1's Flash benchmark, as written by Studio 1, rather than Studio 2's summary of the notes;
+  - Studio 2's standards (§0: v104 THE PASSENGER and v103 FOREVER), its "no headspace" rule, and its v103/v104 rows and lessons.
+- **The scaffold:** `tools/new_edit.py` and `tools/edl_template.py` may conflict if Studio 1 changed the scaffold. Decide with the owner which edit new work starts from (Studio 2 points it at v104).
+- **No other conflicts expected:** the edit folders (`v101`–`v104`) are Studio 2-only.
+
+To rebuild an edit, run `bash tools/setup_studio.sh`, add the songs listed in `studio/src_manifest.json` (`less_i_know.mp3`, `let_go.mp3`), then run `bash tools/build.sh 101|102|103|104 prep audio video qc` (v103 needs `everlong.mp3`; v104 needs `still_love_you_rec.wav`).
