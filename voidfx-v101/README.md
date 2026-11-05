@@ -9,7 +9,7 @@ This folder holds Studio 2's work for the **`georrrgess-jpg/voidfx`** repository
 | `v101/` | The v101 edit folder (Dexter × Tame Impala). The owner largely disliked the style and the narrated line shown as spoken. |
 | `v103/` | The v103 edit folder (Dexter × Foo Fighters "Everlong"), **approved as the standard** after rev 5. `v103/README.md` has the pre-render check, the song section, the review log and the checkpoints. |
 | `v102/` | The v102 edit folder (The Flash × Ark Patrol "Let Go"): good and complete, but lacklustre. |
-| `v105/` | The v105 edit folder (Dexter × Tame Impala "Dracula"): SUNDOWN, day turns to night on the drop (bat burst, blood moon, coffin, daybreak loop). `v105/README.md` has the pre-render check, the song section, the Flash-rule checklist, the review log and the checkpoint. |
+| `v105/` | The v105 edit folder (Dexter × Tame Impala "Dracula"): SUNDOWN, day turns to night on the drop (bat burst, blood moon, coffin, daybreak loop). Rev 2: the sun sits behind him (matte), plus cape, mist and great-bat transitions, sunlit dust, and he burns at daybreak. `v105/README.md` has the pre-render check, the song section, the Flash-rule checklist, the review log and the checkpoint. |
 | `v104/` | The v104 edit folder (Dexter × GLM-RST "still love you (super slowed + reverb)", the screen-recorded TikTok sound): THE PASSENGER, the SUMI ink look, **approved as the newest standard** (the scaffold starts from it). `v104/README.md` has the pre-render check, the song section, the review log and the checkpoint. |
 | `out/` (not in git) | The rendered MP4s and the master MOV, kept in the session only. They contain copyrighted footage and music. |
 
