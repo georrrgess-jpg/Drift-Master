@@ -121,3 +121,40 @@ Each pass asked "what would make this unforgettable?", not just "what's broken?"
 **Visual sign-off** was done on frames pulled from the encoded MP4: the whole edit every 22 frames, every cut (6 frames around each), all five set pieces frame by frame, the flagged frames and the seam.
 
 **Not verified:** watching and listening in real time. The sound was checked by measurement only.
+
+## Revision 2 (owner notes)
+
+The owner: *"I really like what you did with Dexter being upside down and that transition. I would like for you to do one more pass where you add more graphics, animations and polish the overall feel of the edit"*, plus any other improvements.
+
+1. **More of the upside-down moment.** The roll into the upside-down shot stays. The shot is a little longer (k66–72, now landing on a bass hit), and it keeps slowly turning through the hold. Rotation becomes a motif: a new **quarter-turn** transition (the red smirk rolls 90° into a rotational blur and the head-turn rolls out of it upright) replaces the smear at k126.
+2. **Animation polish:**
+   - a slow, breathing **camera float** on every hold (drift, a little rotation), so no frame sits dead;
+   - the **beat punches** get a short radial motion blur on the strong hits;
+   - **speed ramps** on the attack, the container grin, the head-turn and the police grin: fast with shutter blur into the hit, then slow;
+   - the **ink-bled vignette breathes in** on every phrase start.
+3. **More graphics:**
+   - **ink creeps in from the paper's corners** during the opening as the drop forms (none at frame 0, so the loop still matches);
+   - **ink ghost-trails** behind the motion on the attack, the container grin and the head-turn;
+   - a thin **red-ink edge** on the passenger's shadow so the figure reads;
+   - the **silhouette window** now shows the bright plastic kill room and its lamp (S4 p10) inside his body.
+4. **Sound:**
+   - soft paper foley under the opening;
+   - sub hits under the phrase starts (P2, P4, P5);
+   - risers into the spatter (P3) and into the finale (P5);
+   - a deep spin whoosh for both rotations.
+
+### Revision 2 checkpoint: 10/10 PASS on the first run, visual sign-off PASS
+
+| Check | Result |
+|---|---|
+| Format | 1080×1920, 60 fps, 1378 frames (22.97 s), H.264 + AAC, fast-start, 16 Mb/s cap |
+| Loudness after AAC | −13.3 LUFS, true peak about −4 dBTP |
+| Clicks | 0 at the 24 cuts; loop seam clean by the QC rule |
+| Loop seam picture | blurred difference 0.15 |
+| Faces | centred in every shot; 0 text-over-face frames. Frame 300 (his knee) and frame 964 (the title sits about 400 px below his chin; YuNet's box runs long) were checked on frames |
+| Black or frozen frames | none |
+| Length | audio and video within 9.3 ms |
+
+**Visual sign-off** was done on frames pulled from the encoded MP4: the opening seep, the roll and the turning upside-down hold, the speed-ramped trails, the passenger's red edge, the quarter-turn, the silhouette window, the ink-out and the seam.
+
+**Not verified:** watching and listening in real time.
