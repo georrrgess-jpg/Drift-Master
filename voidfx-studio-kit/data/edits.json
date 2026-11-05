@@ -1,0 +1,395 @@
+{
+ "note": "Every voidfx edit with its owner verdict, quotes, strengths and lessons. Studio 1 = v1-v11 (its own branch), Studio 2 = v101-v105. Verbatim Studio 2 messages: owner_messages_studio2.md.",
+ "edits": [
+  {
+   "id": "v1",
+   "studio": 1,
+   "title": "THE MASK SLIPS",
+   "show": "Dexter",
+   "song": "Blood Theme (instrumental)",
+   "tempo": "pulse grid 0.333 s",
+   "window": "22 s",
+   "hero_moment": "hard stop as the 'shh'",
+   "look": "warm cinematic, blood red",
+   "verdict": "early build (no recorded verdict)",
+   "folder": "(Studio 1 history)"
+  },
+  {
+   "id": "v2",
+   "studio": 1,
+   "title": "THE DARK PASSENGER",
+   "show": "Dexter",
+   "song": "Matrix Funk (slowed x1.126)",
+   "tempo": "102.8 BPM",
+   "window": "4 bars + drop",
+   "hero_moment": "drop after the bass-less intro",
+   "look": "comic-ink / halftone, 16:9 + 9:16",
+   "verdict": "early build (no recorded verdict)",
+   "folder": "repo/v2"
+  },
+  {
+   "id": "v3",
+   "studio": 1,
+   "title": "SURPRISE (first cut)",
+   "show": "Dexter (Doakes)",
+   "song": "Migos \"Need It\"",
+   "tempo": "74 BPM",
+   "window": "25 s",
+   "hero_moment": "11.06 s, the gunshot",
+   "look": "night thriller, scope / barrel, glass shatter, chrome-red type",
+   "verdict": "rejected in parts",
+   "owner_notes": [
+    "A sloppy, choppy opening; dialogue clips 'stuck together with Elmer's glue'",
+    "Name labels ('who is Doakes / who is Dexter'); a stamp under the captions",
+    "Text that just appears; TARGET ACQUIRED / I NEED IT 'off' and not pronounced",
+    "A constant watermark; an outro card that broke the loop"
+   ],
+   "lessons": [
+    "Dialogue plays as one continuous take",
+    "No labels, no stacked text",
+    "Every word eases in; big moments get big designed moves",
+    "Logo once as a transition; no outro card"
+   ],
+   "folder": "repo/v3"
+  },
+  {
+   "id": "v4",
+   "studio": 1,
+   "title": "SURPRISE",
+   "show": "Dexter (Doakes)",
+   "song": "Migos \"Need It\"",
+   "tempo": "74 BPM",
+   "window": "25 s",
+   "verdict": "approved: the first standard",
+   "strengths": [
+    "dialogue-led cold open as one continuous take",
+    "barrel -> scope fly-through",
+    "pupil -> iris loop",
+    "fly through the logo's 'o' (original colours)"
+   ],
+   "owner_notes": [
+    "Rev: the BLEED IT animation was invisible or weak; a sloppy cut before 'What can I say'"
+   ],
+   "folder": "repo/v4"
+  },
+  {
+   "id": "v5",
+   "studio": 1,
+   "title": "FASTEST",
+   "show": "The Flash",
+   "song": "bôa \"Duvet\"",
+   "tempo": "93 BPM",
+   "window": "half-beats 208-288 (10 bars)",
+   "hero_moment": "'I am falling'",
+   "look": "amber/gold lightning over deep teal",
+   "verdict": "mixed",
+   "owner_notes": [
+    "An explosion/starburst transition (rejected)",
+    "A title card 'THE FLASH: FASTEST MAN ALIVE' (rejected)",
+    "Slow-motion run-at-camera and floating shots (rejected)",
+    "Generic lyric words; a wrong lyric ('think a thing' for 'feel a thing')",
+    "Falling letters that weren't cool enough"
+   ],
+   "lessons": [
+    "No generic bursts unless physical and themed",
+    "No title cards",
+    "Cut weak footage even if on theme",
+    "Verify lyrics on the isolated vocal and the official lyrics",
+    "Detailed multi-stage text animation"
+   ],
+   "liked": [
+    "lyric keywords whose animation acts out the meaning (FALLING drops, FADING dissolves, DROWNING ripples)"
+   ],
+   "folder": "repo/v5"
+  },
+  {
+   "id": "v6",
+   "studio": 1,
+   "title": "WARMPOP",
+   "show": "Dexter",
+   "song": "George Clanton \"Warmpop\"",
+   "tempo": "90 BPM",
+   "window": "half-beats 416-496 (2:18.9-2:45.5)",
+   "hero_moment": "2:29.5 full mix returns -> CRT dive",
+   "look": "pastel vapor + VHS (chroma bleed, scanlines, CRT, neon)",
+   "verdict": "approved standard",
+   "owner_quotes": [
+    "wonderful transitions, animations, graphics, while maintaining the style that I like … I like how the music correlates to the edit. I like the text."
+   ],
+   "owner_notes": [
+    "Japanese subtitle lines (removed as clutter)",
+    "The VHS 'SP 0:00:10' timer (removed)"
+   ],
+   "strengths": [
+    "one concept ('a VHS Miami daydream: he disappears, the tape rewinds')",
+    "biggest transition on the song's biggest moment",
+    "15+ designed transitions, no plain cuts",
+    "character's own words as two-line eased captions",
+    "depth graphics: vapor-world tune-in behind the matte, palm shadows, bokeh, neon spill, VHS pause",
+    "approved transitions: CRT fly-through, cube, sun stripes, film strip"
+   ],
+   "folder": "repo/v6"
+  },
+  {
+   "id": "v7",
+   "studio": 1,
+   "title": "HIM ALL ALONG",
+   "show": "Dexter",
+   "song": "Gunna \"Him All Along\"",
+   "tempo": "130 BPM",
+   "window": "half-beats 528-640 (2:01.9-2:27.8, 14 bars)",
+   "hero_moment": "2:13.0 +17 dB return -> plastic burst",
+   "look": "forensic noir (drained cold colour, blood red only, UV luminol, case-file type)",
+   "verdict": "approved standard (rev 2)",
+   "owner_quotes": [
+    "The transitions were creative and well animated."
+   ],
+   "owner_notes": [
+    "Rapid dialogue run 'Dramatic. Cryptic. Playful.' (cut)",
+    "A talking 'jar of blood' shot: 'pointless, especially with him talking'",
+    "The ending where Dexter just says he's a serial killer",
+    "STAY STRONG + red strings converging on his face with a target ring (no gimmick overlays on the face)",
+    "The voidfx logo turned blue (never restyle the logo)",
+    "Plain steel doors for CLOSE (fixed with a rosewood blood-slide box with an engraved brass plate)"
+   ],
+   "strengths": [
+    "blood-slide box",
+    "plastic burst on the drop",
+    "body-bag zipper",
+    "blood on the lens",
+    "M99 blink",
+    "magnifier -> pupil loop",
+    "evidence markers and the CASE CLOSED stamp",
+    "'Could it be him?' answered by the hook HIM ALL ALONG"
+   ],
+   "folder": "repo/v7"
+  },
+  {
+   "id": "v8",
+   "studio": 1,
+   "title": "WISH YOU WELL",
+   "show": "Dexter",
+   "song": "Brent Faiyaz \"Wish You Well\" (screen recording)",
+   "tempo": "138 BPM",
+   "window": "half-beats 64-164 (13.96-35.69 s)",
+   "hero_moment": "33.08 drop -> blood blooms in water",
+   "look": "sodium nocturne (indigo shadows, sodium-vapour highlights, rain on glass, streetlight sweeps)",
+   "verdict": "liked: 'I think it did most things well'",
+   "liked": [
+    "the 'Darling,' freeze: comma swells into a blood drop that falls with Dexter refracted inside and blooms in water on the drop",
+    "rear-view-mirror open and loop",
+    "the basic transitions: streetlight sweep, wiper, whip pans, plastic wrap, impact negative, rain focus pull, lamp on, one cut per syllable on the hook"
+   ],
+   "owner_notes": [
+    "Text appearance disliked: thin wide-tracked sans, serif-italic emphasis, letter-by-letter fades, underlines, extruded words behind his head, elegant script"
+   ],
+   "folder": "repo/v8"
+  },
+  {
+   "id": "v9",
+   "studio": 1,
+   "title": "NIGHT BLOOM",
+   "show": "Dexter",
+   "song": "fakemink \"Night, Blooming Jasmine\"",
+   "tempo": "102.8 BPM",
+   "window": "h448-h506 + h634-h650, spliced on the 4-bar cycle",
+   "hero_moment": "2:19.38 dead silence -> freeze; 2:20.84 drop -> petal bloom",
+   "look": "moonbloom (violet-black night, moon-silver highlights, Pro-Mist bloom, jasmine petals, a blood moon)",
+   "verdict": "'good… complete' but lacklustre; the text was 'perfect' and became the standard text style",
+   "lessons": [
+    "Root the concept in the character's world, not the song title",
+    "At least three multi-stage character-themed set pieces",
+    "More depth graphics in the montage",
+    "Compare the plan with v6/v7/v8 before building ('go above and beyond')"
+   ],
+   "folder": "repo/v9"
+  },
+  {
+   "id": "v10",
+   "studio": 1,
+   "title": "LET IT HAPPEN",
+   "show": "The Flash",
+   "song": "Tame Impala \"Let It Happen\"",
+   "verdict": "approved standard (rev 5): motion and finish",
+   "owner_quotes": [
+    "I like this edit and would like for you to make it a standard."
+   ],
+   "strengths": [
+    "velocity ramps on every hook shot (a burst on each beat, optical-flow slow motion between, on restored 2x source)",
+    "camera moving with the music (zoom punches, rotation kicks, hit-frame blur)",
+    "light rays from the lightning",
+    "multi-stage set pieces (emblem dive into the drop wave, time particles, lens shatter, lightning branches, perimeter lap, phase, whirlwind)",
+    "bullet time in frozen holds",
+    "lyric text on sung onsets",
+    "the AROUND ring loop back to frame 0"
+   ],
+   "lessons": [
+    "Two rounds of 'lacklustre' were fixed by the motion pass, not by more effects",
+    "Restore 720p sources (tools/sr_prep.py)"
+   ],
+   "folder": "studio1/v10"
+  },
+  {
+   "id": "v11",
+   "studio": 1,
+   "title": "BOP",
+   "show": "The Flash",
+   "song": "DaBaby \"BOP\"",
+   "verdict": "approved standard (rev 4): concept, focal set piece, loop; Studio 1's base engine",
+   "owner_quotes": [
+    "I like this edit and would like for you to make it a standard."
+   ],
+   "strengths": [
+    "concept from the song's own words ('Harrison' -> the Reverse-Flash rivalry; red vs gold grades)",
+    "two designed titles only (LET'S GO, BOP) for explicit lyrics",
+    "THE RIFT focal set piece",
+    "detailed procedural emblem revealed by a coin flip on the real chest emblem",
+    "beat moments instead of just moving to the beat (aura, time remnants, charge-up)",
+    "loop lands on frame 0 (seam 0.11)",
+    "flash discipline (rim flash from mean luma 178 to 104)"
+   ],
+   "folder": "studio1/v11"
+  },
+  {
+   "id": "v101",
+   "studio": 2,
+   "title": "THE LESS YOU KNOW",
+   "show": "Dexter",
+   "song": "Tame Impala \"The Less I Know The Better\"",
+   "tempo": "117 BPM",
+   "window": "half-beats 7-95 (0:01.9-0:24.4)",
+   "look": "16 mm psychedelic reel (oxblood/amber/plum liquid light, film burn, 70s soft-serif type)",
+   "verdict": "rejected style: 'I do not like this edit … I largely disliked the style'; some transitions good",
+   "owner_notes": [
+    "A narrated line shown as if spoken where his lips didn't move"
+   ],
+   "lessons": [
+    "Only present a line as spoken when his lips match it (tools/lipcheck.py)",
+    "Don't reuse the 16 mm psychedelic look"
+   ],
+   "folder": "repo/v101"
+  },
+  {
+   "id": "v102",
+   "studio": 2,
+   "title": "LET GO",
+   "show": "The Flash",
+   "song": "Ark Patrol \"Let Go\"",
+   "tempo": "164 BPM",
+   "window": "half-beats 720-848 (2:11.8-2:35.2)",
+   "hero_moment": "2:20.56 drop 2 (+31 dB) -> the strike",
+   "look": "storm (crimson suit, gold lightning, steel-blue shadows)",
+   "verdict": "'good… complete' but lacklustre",
+   "lessons": [
+    "Concept from his world, not the lyric",
+    "More standout set pieces",
+    "Graphics must read at phone size"
+   ],
+   "folder": "repo/v102"
+  },
+  {
+   "id": "v103",
+   "studio": 2,
+   "title": "FOREVER",
+   "show": "Dexter",
+   "song": "Foo Fighters \"Everlong\"",
+   "tempo": "158 BPM",
+   "window": "h1000-h1080 + h1096-h1152 (two riff bars spliced out)",
+   "hero_moment": "3:20.51 full band returns -> THE RIP",
+   "look": "undertow (teal-black water, bone highlights, blood the only warm colour)",
+   "verdict": "approved standard after rev 5",
+   "owner_quotes": [
+    "I like this edit. I would like for you to make it a standard. I just have one note. I would like for there to be more animations and transitions moving forward and that lyric kind of recognition to happen."
+   ],
+   "set_pieces": [
+    "THE RIP (plastic tears open on the drop)",
+    "THE EVIDENCE PHOTOS (ring flash on 'IF', photo toss)",
+    "THE GULF STREAM (loop sinks and surfaces in the same water)"
+   ],
+   "transitions": 20,
+   "duration_s": 24.3,
+   "owner_notes": [
+    "Rev 1: VO's last word cut off; a low-quality shot; captions where the song wasn't singing",
+    "Rev 2-4: blood slides that stick around; random blood drips; the knife slicing across; the drawn slide animation; glass shatter and duct-tape strips",
+    "Clarified: 'I didn't necessarily hate the blood slide or the knife across the screen, I just don't like how it looked in this specific edit'"
+   ],
+   "lessons": [
+    "Props are fine when motivated, brief, physically lit, in the edit's look, off the face",
+    "Text only on clearly sung/spoken words (tools/lyrics.py)",
+    "24+ transitions per ~24 s, beat camera everywhere"
+   ],
+   "folder": "repo/v103"
+  },
+  {
+   "id": "v104",
+   "studio": 2,
+   "title": "THE PASSENGER",
+   "show": "Dexter",
+   "song": "GLM-RST \"still love you (super slowed + reverb)\" (TikTok sound, screen-recorded)",
+   "tempo": "112.19 BPM (fitted to sub-bass hits)",
+   "window": "the whole 23 s clip",
+   "look": "SUMI ink wash",
+   "verdict": "approved standard after rev 3",
+   "owner_quotes": [
+    "I really like what you did with Dexter being upside down and that transition.",
+    "I really like this edit and would like for it to be a standard. Only gripe I have is that one span of the edit had some headspace that definitely could have had an edit or a cool transition."
+   ],
+   "set_pieces": [
+    "THE INK DROP open",
+    "THE SPATTER",
+    "THE PASSENGER (shadow, ember eyes, lunge)",
+    "THE SILHOUETTE window",
+    "THE INK-OUT loop"
+   ],
+   "transitions": 26,
+   "duration_s": 22.97,
+   "lessons": [
+    "No headspace: nothing longer than ~1 s without a cut, transition or designed beat",
+    "Rotation motif (roll into upside-down) was the favourite"
+   ],
+   "folder": "repo/v104"
+  },
+  {
+   "id": "v105",
+   "studio": 2,
+   "title": "DRACULA",
+   "show": "Dexter",
+   "song": "Tame Impala \"Dracula\"",
+   "tempo": "114.99 BPM",
+   "window": "h592-h680 (2:34.6-2:57.5)",
+   "hero_moment": "2:40.8 drop-out -> SUNDOWN; 2:42.9 drop (+29.8 dB) -> THE BAT BURST",
+   "look": "SUNDOWN: bleached warm day with the sun behind him / cold moonlit night with crimson",
+   "verdict": "approved standard after rev 3 (newest Studio 2 standard)",
+   "owner_quotes": [
+    "I like the edit but what happened with the sun and the top right part of dexters head?",
+    "I would like for you to improve the transition/loop at the end and make it a more creative and unique transition.",
+    "I like this edit and would like for you to make it a standard. The only gripe I have is the quality of some of the clips."
+   ],
+   "set_pieces": [
+    "SUNDOWN + eclipse",
+    "THE BAT BURST + per-letter DRACULA into bats",
+    "THE BLOOD MOON",
+    "THE COFFIN",
+    "ASHES TO SUN loop"
+   ],
+   "transitions": 27,
+   "duration_s": 22.97,
+   "lessons": [
+    "Light sources go behind the subject (matte + light wrap)",
+    "Clip quality: check sharpness, avoid zoom on 720p, prefer high-bitrate packs, restore sources (sr_prep)",
+    "Library transitions carry old looks; restyle them per edit"
+   ],
+   "measured": {
+    "loudness_lufs": -13.1,
+    "true_peak_dbtp": -4.1,
+    "loop_seam_blurred_diff": 8.4,
+    "whiteouts": [
+     "687-692 peak 236",
+     "1360-1372 peak 223"
+    ],
+    "max_flashes_per_s": 2
+   },
+   "folder": "repo/v105"
+  }
+ ]
+}

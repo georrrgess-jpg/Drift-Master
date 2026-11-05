@@ -1,0 +1,74 @@
+{
+ "note": "The automated ship checkpoint (qcN.py on the ENCODED MP4) plus the human/visual gates. Implemented in repo/v105/work/qc105.py (Studio 2) and studio1/v11/work/qc11.py (Studio 1).",
+ "automated": [
+  {
+   "id": "format",
+   "check": "1080x1920, 60 fps, frame count == EDL DUR_F",
+   "fail": true
+  },
+  {
+   "id": "decode",
+   "check": "ffmpeg decodes without errors",
+   "fail": true
+  },
+  {
+   "id": "loudness",
+   "check": "-14 <= integrated LUFS <= -12 and true peak <= -2.5 dBTP, measured on the AAC file",
+   "fail": true
+  },
+  {
+   "id": "frozen",
+   "check": "no runs of >= 5 identical frames",
+   "fail": true
+  },
+  {
+   "id": "face_centering",
+   "check": "per shot, faces >= 120 px wide: CUT if >8% outside the frame, OFF if centre outside 18-82% of width; fail if > max(1, 10% of the shot's face frames)",
+   "fail": true
+  },
+  {
+   "id": "text_vs_faces",
+   "check": "face boxes reaching into active text bands; fail above 6 frames; low detections listed for visual check",
+   "fail": true
+  },
+  {
+   "id": "cuts_black",
+   "check": "intended cuts re-detected, near-black frames listed (by-design blackouts must be named)",
+   "fail": false
+  },
+  {
+   "id": "audio_clicks",
+   "check": "sample step at every cut and the loop seam vs local median: CHECK if > max(0.08, 12x median)",
+   "fail": true
+  },
+  {
+   "id": "loop_seam_picture",
+   "check": "blurred luma diff between last and first frame (< 12 to pass Studio 2's check; v11 standard aims <= 1)",
+   "fail": true
+  },
+  {
+   "id": "length",
+   "check": "audio and video lengths within one frame",
+   "fail": true
+  },
+  {
+   "id": "flashes",
+   "check": "white-out runs (mean luma >= 200) reported; flashes per second <= 3",
+   "fail": "rate only"
+  },
+  {
+   "id": "sharpness",
+   "check": "tools/sharpness.py: SOFT / ZOOM / LOWBIT per shot (report)",
+   "fail": false
+  }
+ ],
+ "visual_gates": [
+  "frames from the encoded file around every transition (6 per cut: -8,-4,-1,0,+3,+8)",
+  "every title and caption",
+  "every set piece frame by frame",
+  "every QC flag",
+  "the loop seam (last 18 frames -> first 6)",
+  "the whole edit every ~22 frames"
+ ],
+ "pre_build_gate": "repo/studio/VOIDFX_STUDIO.md \u00a75a (concept, set pieces, text, graphics, shot strength, written benchmark comparison, Studio 1 rules, density + headspace list, lyric recognition)"
+}

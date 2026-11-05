@@ -1,0 +1,1222 @@
+{
+ "studio2_v105_engine": {
+  "assemble": {
+   "fn": "assemble",
+   "pre": 0,
+   "post": 24,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "available"
+  },
+  "bat_burst": {
+   "fn": "bat_burst",
+   "pre": 6,
+   "post": 24,
+   "doc": "THE DROP: night falls at once. A cloud of bats pours out of the dark sky toward the lens, blacks out the frame against a crimson flash and flies past the camera (near ones soft, far ones sharp) to reveal him.",
+   "status": "approved"
+  },
+  "bat_pass": {
+   "fn": "bat_pass_tr",
+   "pre": 7,
+   "post": 9,
+   "doc": "one great bat flies out of the dark straight through the lens: it comes out of the top-right, grows, beats its wings, fills the frame (the cut happens in its shadow) and dives out under the camera to reveal the next shot.",
+   "status": "approved"
+  },
+  "bat_swarm": {
+   "fn": "bat_swarm",
+   "pre": 8,
+   "post": 12,
+   "doc": "a river of bats crosses the frame in depth (near ones big, fast and soft; far ones small and sharp); the next shot is behind it.",
+   "status": "approved"
+  },
+  "beam": {
+   "fn": "beam",
+   "pre": 8,
+   "post": 8,
+   "doc": "the music stops dead: a camera shutter (six gunmetal blades) snaps shut over the outgoing shot and opens on the frozen one, like the photograph of a moment.",
+   "status": "available"
+  },
+  "blinds": {
+   "fn": "blinds",
+   "pre": 7,
+   "post": 9,
+   "doc": "venetian blinds: backlit slats rotate shut over the frame, then open on the next shot (staggered top->bottom).",
+   "status": "available"
+  },
+  "blood_lens": {
+   "fn": "blood_lens",
+   "pre": 9,
+   "post": 18,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  },
+  "bloom": {
+   "fn": "bloom9",
+   "pre": 14,
+   "post": 26,
+   "doc": "HERO (the drop): the frozen frame bursts into jasmine petals from its heart outward; each petal carries its piece of the picture, tumbles toward the lens and shows its white back; the kill is behind them.",
+   "status": "available"
+  },
+  "board": {
+   "fn": "board",
+   "pre": 9,
+   "post": 9,
+   "doc": "forensic viewfinder: corner brackets + a measuring ruler (act 1).",
+   "status": "available"
+  },
+  "brush": {
+   "fn": "brush_tr",
+   "pre": 4,
+   "post": 10,
+   "doc": "a loaded sumi brush sweeps across the frame: a band of ink with a wet, ragged front and a dry, streaky tail; the next shot is under the paint behind it. brush=dict(ang, seed, red).",
+   "status": "approved"
+  },
+  "bubbles_up": {
+   "fn": "bubbles_tr",
+   "pre": 7,
+   "post": 12,
+   "doc": "a surge of rising bubbles sweeps up the frame; the next shot is behind them.",
+   "status": "available"
+  },
+  "burn": {
+   "fn": "burn",
+   "pre": 10,
+   "post": 8,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "available"
+  },
+  "burst": {
+   "fn": "burst",
+   "pre": 19,
+   "post": 18,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  },
+  "cape": {
+   "fn": "cape_tr",
+   "pre": 8,
+   "post": 10,
+   "doc": "a Dracula cape sweeps across the lens: black satin in broad moving folds with a soft sheen, a wide crimson lining turned out along its billowing leading edge, a soft shadow thrown ahead of it; the next shot is behind it.",
+   "status": "approved"
+  },
+  "card_flip": {
+   "fn": "card_flip",
+   "pre": 9,
+   "post": 11,
+   "doc": "a sunny card flip: the frame turns over in 3D around its vertical axis (a slight bow, a hot specular glint as it passes edge-on to the sun) against the bright blurred sky of both shots; the next shot is on its back.",
+   "status": "approved"
+  },
+  "coffin": {
+   "fn": "coffin_tr",
+   "pre": 8,
+   "post": 12,
+   "doc": "the lid falls toward the lens and slams shut over him (the frame jolts, dust kicks up), then lifts away on the next shot.",
+   "status": "approved"
+  },
+  "cube": {
+   "fn": "cube",
+   "pre": 9,
+   "post": 9,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "approved",
+   "note": "v6 version renders a purple synthwave grid behind it: restyle the background per edit"
+  },
+  "doors": {
+   "fn": "doors",
+   "pre": 38,
+   "post": 14,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "eclipse": {
+   "fn": "eclipse_tr",
+   "pre": 10,
+   "post": 14,
+   "doc": "the sun goes out: the moon's black disc slides across the frame with a blazing, streaming corona; the next shot (night) is inside it. A diamond-ring flash fires on its rim as it centres, then the disc swells until night fills the frame.",
+   "status": "approved"
+  },
+  "enso": {
+   "fn": "enso_tr",
+   "pre": 10,
+   "post": 12,
+   "doc": "an enso: one brush circle is drawn around the frame's centre, the next shot appears inside it, then it opens out.",
+   "status": "available"
+  },
+  "eye_dive": {
+   "fn": "eye_dive",
+   "pre": 14,
+   "post": 14,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "approved"
+  },
+  "facematch": {
+   "fn": "facematch",
+   "pre": 7,
+   "post": 7,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "available"
+  },
+  "filmstrip": {
+   "fn": "filmstrip",
+   "pre": 9,
+   "post": 9,
+   "doc": "pastel bokeh light specks drifting up through the sunny shots.",
+   "status": "approved"
+  },
+  "fingerprint": {
+   "fn": "fingerprint",
+   "pre": 5,
+   "post": 10,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "foliage": {
+   "fn": "foliage",
+   "pre": 10,
+   "post": 10,
+   "doc": "the camera passes behind a jasmine bush: out-of-focus leaves and white blossoms sweep across the lens.",
+   "status": "available",
+   "note": "v9 version is white jasmine flowers: restyle per edit"
+  },
+  "headlights": {
+   "fn": "headlights",
+   "pre": 12,
+   "post": 14,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "available"
+  },
+  "impact": {
+   "fn": "impact",
+   "pre": 3,
+   "post": 7,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "ink_bleed": {
+   "fn": "ink_bleed",
+   "pre": 12,
+   "post": 14,
+   "doc": "the cut on the downbeat: a two-frame red impact, then the shot (the spatter itself is spatter_fx on the shot).",
+   "status": "available"
+  },
+  "ink_bloom": {
+   "fn": "ink_bloom",
+   "pre": 0,
+   "post": 30,
+   "doc": "the drop hits on the bass: a crown of ink flies out, and the bloom spreads into him (the picture lives in the ink).",
+   "status": "approved"
+  },
+  "knife_pass": {
+   "fn": "knife_pass",
+   "pre": 28,
+   "post": 14,
+   "doc": "per-letter masks on a shared baseline: (pen origins, masks, mask x-offsets of the origin, total advance).",
+   "status": "execution_rejected_in_context",
+   "note": "the idea isn't banned; v103's unmotivated knife pass across the lens was rejected"
+  },
+  "lamp_on": {
+   "fn": "lamp_on",
+   "pre": 6,
+   "post": 16,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "lens": {
+   "fn": "lens_through",
+   "pre": 12,
+   "post": 9,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "available"
+  },
+  "lens_open": {
+   "fn": "lens_open",
+   "pre": 0,
+   "post": 16,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "light_leak": {
+   "fn": "light_leak",
+   "pre": 8,
+   "post": 10,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "available"
+  },
+  "light_sweep": {
+   "fn": "light_sweep",
+   "pre": 7,
+   "post": 7,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "lightstreak": {
+   "fn": "lightstreak",
+   "pre": 6,
+   "post": 8,
+   "doc": "forensic viewfinder: corner brackets + a measuring ruler (act 1).",
+   "status": "available"
+  },
+  "logo_orig": {
+   "fn": "logo_orig",
+   "pre": 12,
+   "post": 11,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  },
+  "logo_uv": {
+   "fn": "logo_uv",
+   "pre": 12,
+   "post": 10,
+   "doc": "forensic viewfinder: corner brackets + a measuring ruler (act 1).",
+   "status": "rejected",
+   "note": "the owner rejected the recoloured logo; use logo_orig only"
+  },
+  "m99": {
+   "fn": "m99",
+   "pre": 15,
+   "post": 12,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  },
+  "mag_sweep": {
+   "fn": "mag_sweep",
+   "pre": 11,
+   "post": 12,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  },
+  "microscope": {
+   "fn": "microscope",
+   "pre": 12,
+   "post": 12,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "mist": {
+   "fn": "mist_tr",
+   "pre": 10,
+   "post": 14,
+   "doc": "Dracula turns to mist: the shot softens and drifts upward as it breaks into slow billows of silver mist, the frame fills with fog, and the next shot condenses out of the mist (from soft to sharp).",
+   "status": "approved"
+  },
+  "moon_iris": {
+   "fn": "moon_iris",
+   "pre": 6,
+   "post": 12,
+   "doc": "a lacquered mahogany coffin lid, lit from a height map: a bevelled edge, a raised inner panel and a brass cross.",
+   "status": "approved"
+  },
+  "page_turn": {
+   "fn": "page_turn",
+   "pre": 6,
+   "post": 11,
+   "doc": "the sun with light rays and lens ghosts. With his matte m, the sun and its rays sit BEHIND him: the disc is hidden where he covers it, the rays stream out of the sky around his edges, and the light wraps a warm rim onto the side of him nearest it.",
+   "status": "approved"
+  },
+  "palm_sweep": {
+   "fn": "palm_sweep",
+   "pre": 9,
+   "post": 11,
+   "doc": "palm fronds sweep past the lens against the sun (near ones big and soft, far ones sharp); in their shadow the next shot comes in, warm light flickering through the leaves.",
+   "status": "approved"
+  },
+  "passenger": {
+   "fn": "passenger_tr",
+   "pre": 0,
+   "post": 16,
+   "doc": "out of the ink: the frame was swallowed by the shadow; the next shot surfaces through thinning, fibrous ink.",
+   "status": "approved"
+  },
+  "peel": {
+   "fn": "peel",
+   "pre": 8,
+   "post": 8,
+   "doc": "pastel bokeh light specks drifting up through the sunny shots.",
+   "status": "available"
+  },
+  "petals": {
+   "fn": "petal_gust",
+   "pre": 12,
+   "post": 14,
+   "doc": "a gust of jasmine petals blows across the lens, densest on the cut.",
+   "status": "available"
+  },
+  "plastic_rip": {
+   "fn": "plastic_rip",
+   "pre": 5,
+   "post": 16,
+   "doc": "forensic viewfinder: corner brackets + a measuring ruler (act 1).",
+   "status": "available"
+  },
+  "polaroid": {
+   "fn": "polaroid",
+   "pre": 6,
+   "post": 16,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "approved"
+  },
+  "pupil_dive": {
+   "fn": "pupil_dive",
+   "pre": 14,
+   "post": 14,
+   "doc": "into his eye: the camera dives at his eye, the pupil swallows the frame, and a round iris opens on the next shot.",
+   "status": "approved"
+  },
+  "quarter_roll": {
+   "fn": "quarter_roll",
+   "pre": 7,
+   "post": 9,
+   "doc": "a quarter turn: the frame rolls 90 degrees into a rotational blur and the next shot rolls out of it upright.",
+   "status": "approved"
+  },
+  "rainfocus": {
+   "fn": "rainfocus",
+   "pre": 8,
+   "post": 16,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "redact": {
+   "fn": "redact",
+   "pre": 5,
+   "post": 9,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "ripple": {
+   "fn": "ripple_tr",
+   "pre": 9,
+   "post": 16,
+   "doc": "rev 4: a clear drop of water falls into the frame: it hits, rings run outward refracting the picture, and the next shot opens behind the rings (no blood).",
+   "status": "available"
+  },
+  "roll": {
+   "fn": "roll",
+   "pre": 8,
+   "post": 9,
+   "doc": "the world rolls over: the knife shot spins 90 deg with rotational blur and lands upside down on the floor.",
+   "status": "approved"
+  },
+  "scan": {
+   "fn": "scan",
+   "pre": 6,
+   "post": 9,
+   "doc": "forensic viewfinder: corner brackets + a measuring ruler (act 1).",
+   "status": "available"
+  },
+  "shadow": {
+   "fn": "shadow_pass",
+   "pre": 10,
+   "post": 12,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "available"
+  },
+  "shutter": {
+   "fn": "shutter",
+   "pre": 5,
+   "post": 10,
+   "doc": "the music stops dead: a camera shutter (six gunmetal blades) snaps shut over the outgoing shot and opens on the frozen one, like the photograph of a moment.",
+   "status": "approved"
+  },
+  "slam": {
+   "fn": "slam",
+   "pre": 0,
+   "post": 5,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "available"
+  },
+  "slash": {
+   "fn": "slash",
+   "pre": 5,
+   "post": 14,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "execution_rejected_in_context",
+   "note": "use only when motivated by the shot"
+  },
+  "slidebox": {
+   "fn": "slidebox",
+   "pre": 10,
+   "post": 14,
+   "doc": "forensic viewfinder: corner brackets + a measuring ruler (act 1).",
+   "status": "approved"
+  },
+  "slidebox_close": {
+   "fn": "slidebox_close",
+   "pre": 50,
+   "post": 16,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  },
+  "smear": {
+   "fn": "smear",
+   "pre": 6,
+   "post": 12,
+   "doc": "step-printed smear (the song is \"smeared, strobing\"): the frame drags into long horizontal echoes, then settles.",
+   "status": "available"
+  },
+  "spatter": {
+   "fn": "spatter_tr",
+   "pre": 0,
+   "post": 4,
+   "doc": "the cut on the downbeat: a two-frame red impact, then the shot (the spatter itself is spatter_fx on the shot).",
+   "status": "approved"
+  },
+  "strings": {
+   "fn": "strings",
+   "pre": 11,
+   "post": 10,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "strobe": {
+   "fn": "strobe",
+   "pre": 3,
+   "post": 5,
+   "doc": "deep-house strobe: two soft strobe hits across the cut (never full black / white).",
+   "status": "available"
+  },
+  "sun": {
+   "fn": "sun_through",
+   "pre": 10,
+   "post": 10,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "approved",
+   "note": "v6 sun stripes (vaporwave sun): restyle per edit"
+  },
+  "sun_flare": {
+   "fn": "sun_flare_tr",
+   "pre": 6,
+   "post": 9,
+   "doc": "a lens flare crosses the frame along the sun's height and whites it out for a moment.",
+   "status": "approved"
+  },
+  "tape_snap": {
+   "fn": "tape_snap",
+   "pre": 7,
+   "post": 10,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "execution_rejected_in_context"
+  },
+  "tilt": {
+   "fn": "tilt",
+   "pre": 12,
+   "post": 16,
+   "doc": "the camera tilts down from the moon to Dexter looking up at it: one vertical strip, eased, with motion blur.",
+   "status": "available"
+  },
+  "torch_blind": {
+   "fn": "torch_blind",
+   "pre": 9,
+   "post": 12,
+   "doc": "the flashlight swings into the lens: its flare streaks out and whites out the frame; the next shot burns back in out of the glare, brightest parts first.",
+   "status": "approved"
+  },
+  "tv_off": {
+   "fn": "tv_off",
+   "pre": 14,
+   "post": 12,
+   "doc": "pastel bokeh light specks drifting up through the sunny shots.",
+   "status": "available"
+  },
+  "uv_sweep": {
+   "fn": "uv_sweep",
+   "pre": 8,
+   "post": 10,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "wave": {
+   "fn": "wave_tr",
+   "pre": 8,
+   "post": 12,
+   "doc": "a wave of sea spray washes across the lens (refraction, foam), leaving the next shot.",
+   "status": "available"
+  },
+  "whip": {
+   "fn": "whip",
+   "pre": 5,
+   "post": 6,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "whip_up": {
+   "fn": "whip_up",
+   "pre": 5,
+   "post": 7,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "wiper": {
+   "fn": "wiper",
+   "pre": 8,
+   "post": 10,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "available"
+  },
+  "wrap": {
+   "fn": "wrap",
+   "pre": 6,
+   "post": 10,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "zipper": {
+   "fn": "zipper",
+   "pre": 10,
+   "post": 12,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  }
+ },
+ "studio1_v11_engine": {
+  "arc_link": {
+   "fn": "arc_link",
+   "pre": 6,
+   "post": 9,
+   "doc": "a lightning arc leaps from him in the outgoing shot to him in the next; the cut hides in its flash.",
+   "status": "available"
+  },
+  "assemble": {
+   "fn": "assemble",
+   "pre": 0,
+   "post": 24,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "available"
+  },
+  "beam": {
+   "fn": "beam",
+   "pre": 8,
+   "post": 8,
+   "doc": "the music stops dead: a camera shutter (six gunmetal blades) snaps shut over the outgoing shot and opens on the frozen one, like the photograph of a moment.",
+   "status": "available"
+  },
+  "blinds": {
+   "fn": "blinds",
+   "pre": 7,
+   "post": 9,
+   "doc": "venetian blinds: backlit slats rotate shut over the frame, then open on the next shot (staggered top->bottom).",
+   "status": "available"
+  },
+  "blood_lens": {
+   "fn": "blood_lens",
+   "pre": 9,
+   "post": 18,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  },
+  "bloom": {
+   "fn": "bloom9",
+   "pre": 14,
+   "post": 26,
+   "doc": "HERO (the drop): the frozen frame bursts into jasmine petals from its heart outward; each petal carries its piece of the picture, tumbles toward the lens and shows its white back; the kill is behind them.",
+   "status": "available"
+  },
+  "board": {
+   "fn": "board",
+   "pre": 9,
+   "post": 9,
+   "doc": "forensic viewfinder: corner brackets + a measuring ruler (act 1).",
+   "status": "available"
+  },
+  "bolt_link": {
+   "fn": "bolt_link",
+   "pre": 7,
+   "post": 9,
+   "doc": "his thrown bolt keeps going: it tears across the cut and he is waiting at the other end.",
+   "status": "available"
+  },
+  "bolt_split": {
+   "fn": "bolt_split",
+   "pre": 22,
+   "post": 16,
+   "doc": "BOLT SPLIT (the drop): a lightning-bolt seam cracks down the frame on \"Let's go\"; the left side goes the rival's red, the right side Barry's gold; on the drop the gold side breaks through, the seam sweeps across like the emblem's bolt and the drop shot is behind it, a shockwave ringing out.",
+   "status": "available"
+  },
+  "bolt_strike": {
+   "fn": "bolt_strike",
+   "pre": 6,
+   "post": 12,
+   "doc": "lightning strikes: a bolt falls from the top of the frame onto him; white-gold flash; he is struck.",
+   "status": "available"
+  },
+  "bolt_tear": {
+   "fn": "bolt_tear",
+   "pre": 5,
+   "post": 12,
+   "doc": "a lightning bolt tears straight across his chest (never his face); the two halves fly apart; the next shot is behind.",
+   "status": "available"
+  },
+  "bolt_trace": {
+   "fn": "bolt_trace",
+   "pre": 10,
+   "post": 14,
+   "doc": "BOLT TRACE: a bolt zig-zags across the frame (below his face), and the next shot burns in along it, the edges glowing like embers.",
+   "status": "available"
+  },
+  "burn": {
+   "fn": "burn",
+   "pre": 10,
+   "post": 8,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "available"
+  },
+  "burst": {
+   "fn": "burst",
+   "pre": 19,
+   "post": 18,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  },
+  "clash": {
+   "fn": "clash",
+   "pre": 10,
+   "post": 14,
+   "doc": "CLASH: a red bolt from the left and a gold bolt from the right race toward each other and collide; sparks of both colours burst out and the punch lands behind a refracting shockwave.",
+   "status": "available"
+  },
+  "cube": {
+   "fn": "cube",
+   "pre": 9,
+   "post": 9,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "approved",
+   "note": "v6 version renders a purple synthwave grid behind it: restyle the background per edit"
+  },
+  "dolly": {
+   "fn": "dolly",
+   "pre": 8,
+   "post": 12,
+   "doc": "the calm before the drop: a focus pull. A drifts out of focus as the camera eases in; B racks into focus.",
+   "status": "available"
+  },
+  "doors": {
+   "fn": "doors",
+   "pre": 38,
+   "post": 14,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "emblem_flash": {
+   "fn": "emblem_flash",
+   "pre": 12,
+   "post": 12,
+   "doc": "the emblem reveal: the Flash emblem draws itself in light over the frame (the ring traced round, the bolt slashed in), flares, and the next shot opens through the ring.",
+   "status": "available"
+  },
+  "emblem_gate": {
+   "fn": "emblem_gate",
+   "pre": 20,
+   "post": 22,
+   "doc": "HERO 1 (the drop): his chest emblem flares, arcs crawl out across the suit, the camera dives into the bolt; on the drop the bolt becomes a gate and the next shot bursts through it.",
+   "status": "available"
+  },
+  "eye_dive": {
+   "fn": "eye_dive",
+   "pre": 14,
+   "post": 14,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "approved"
+  },
+  "facematch": {
+   "fn": "facematch",
+   "pre": 7,
+   "post": 7,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "available"
+  },
+  "filmstrip": {
+   "fn": "filmstrip",
+   "pre": 9,
+   "post": 9,
+   "doc": "pastel bokeh light specks drifting up through the sunny shots.",
+   "status": "approved"
+  },
+  "fingerprint": {
+   "fn": "fingerprint",
+   "pre": 5,
+   "post": 10,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "foliage": {
+   "fn": "foliage",
+   "pre": 10,
+   "post": 10,
+   "doc": "the camera passes behind a jasmine bush: out-of-focus leaves and white blossoms sweep across the lens.",
+   "status": "available",
+   "note": "v9 version is white jasmine flowers: restyle per edit"
+  },
+  "freeze_in": {
+   "fn": "freeze_in",
+   "pre": 4,
+   "post": 10,
+   "doc": "time stops: the colour drains out of the world in a wave from the centre while he stays lit.",
+   "status": "available"
+  },
+  "frozen_shatter": {
+   "fn": "frozen_shatter",
+   "pre": 6,
+   "post": 41,
+   "doc": "FROZEN SHATTER: in stopped time the frozen frame cracks like glass; the shards separate and hang in the air (the next frozen moment visible between them) and the beat that restarts time blows them away.",
+   "status": "available"
+  },
+  "gold_link": {
+   "fn": "arc_link",
+   "pre": 6,
+   "post": 9,
+   "doc": "a lightning arc leaps from him in the outgoing shot to him in the next; the cut hides in its flash.",
+   "status": "available"
+  },
+  "headlights": {
+   "fn": "headlights",
+   "pre": 12,
+   "post": 14,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "available"
+  },
+  "heat_haze": {
+   "fn": "heat_haze",
+   "pre": 10,
+   "post": 12,
+   "doc": "HEAT HAZE: the fire's heat rises up the frame: the picture shimmers and refracts, and the next shot is carried in behind a rising wall of heat with a glowing edge.",
+   "status": "available"
+  },
+  "ignite": {
+   "fn": "ignite",
+   "pre": 8,
+   "post": 10,
+   "doc": "the room goes dark; then his eyes ignite and the lightning flares up around him, brightest first.",
+   "status": "available"
+  },
+  "impact": {
+   "fn": "impact",
+   "pre": 3,
+   "post": 7,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "jolt": {
+   "fn": "jolt",
+   "pre": 2,
+   "post": 6,
+   "doc": "a jolt in time: a 2-frame prismatic tear and a punch-in.",
+   "status": "available"
+  },
+  "knife_pass": {
+   "fn": "knife_pass",
+   "pre": 28,
+   "post": 14,
+   "doc": "per-letter masks on a shared baseline: (pen origins, masks, mask x-offsets of the origin, total advance).",
+   "status": "execution_rejected_in_context",
+   "note": "the idea isn't banned; v103's unmotivated knife pass across the lens was rejected"
+  },
+  "lamp_on": {
+   "fn": "lamp_on",
+   "pre": 6,
+   "post": 16,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "lens": {
+   "fn": "lens_through",
+   "pre": 12,
+   "post": 9,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "available"
+  },
+  "lens_open": {
+   "fn": "lens_open",
+   "pre": 0,
+   "post": 16,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "lens_shatter": {
+   "fn": "lens_shatter",
+   "pre": 8,
+   "post": 18,
+   "doc": "LENS SHATTER: the lightning he throws comes at the camera, hits the lens; the glass cracks with electricity running through the cracks, then bursts toward us in shards and the next shot is behind it.",
+   "status": "available"
+  },
+  "lichtenberg": {
+   "fn": "lichtenberg",
+   "pre": 10,
+   "post": 14,
+   "doc": "LICHTENBERG: a branching lightning figure grows out of his chest across the whole frame (stopping short of his face); the next shot opens inside the branches, the newest tips white-hot.",
+   "status": "available"
+  },
+  "light_leak": {
+   "fn": "light_leak",
+   "pre": 8,
+   "post": 10,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "available"
+  },
+  "light_sweep": {
+   "fn": "light_sweep",
+   "pre": 7,
+   "post": 7,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "lightstreak": {
+   "fn": "lightstreak",
+   "pre": 6,
+   "post": 8,
+   "doc": "forensic viewfinder: corner brackets + a measuring ruler (act 1).",
+   "status": "available"
+  },
+  "logo_orig": {
+   "fn": "logo_orig",
+   "pre": 12,
+   "post": 11,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  },
+  "logo_uv": {
+   "fn": "logo_uv",
+   "pre": 12,
+   "post": 10,
+   "doc": "forensic viewfinder: corner brackets + a measuring ruler (act 1).",
+   "status": "rejected",
+   "note": "the owner rejected the recoloured logo; use logo_orig only"
+  },
+  "m99": {
+   "fn": "m99",
+   "pre": 15,
+   "post": 12,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  },
+  "mag_sweep": {
+   "fn": "mag_sweep",
+   "pre": 11,
+   "post": 12,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  },
+  "microscope": {
+   "fn": "microscope",
+   "pre": 12,
+   "post": 12,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "peel": {
+   "fn": "peel",
+   "pre": 8,
+   "post": 8,
+   "doc": "pastel bokeh light specks drifting up through the sunny shots.",
+   "status": "available"
+  },
+  "perimeter": {
+   "fn": "perimeter",
+   "pre": 8,
+   "post": 14,
+   "doc": "PERIMETER: he runs laps round the edge of the frame as a streak of lightning; the new picture fills in behind him as a spiral wake that closes on the centre (his own face arrives last, softly).",
+   "status": "available"
+  },
+  "petals": {
+   "fn": "petal_gust",
+   "pre": 12,
+   "post": 14,
+   "doc": "a gust of jasmine petals blows across the lens, densest on the cut.",
+   "status": "available"
+  },
+  "phase": {
+   "fn": "phase_through",
+   "pre": 10,
+   "post": 12,
+   "doc": "PHASE: he vibrates his molecules and passes through the frame: the picture shakes apart into chromatic copies, every edge lights up, the next shot shows through it for a few frames, then settles out of the vibration.",
+   "status": "available"
+  },
+  "plastic_rip": {
+   "fn": "plastic_rip",
+   "pre": 5,
+   "post": 16,
+   "doc": "forensic viewfinder: corner brackets + a measuring ruler (act 1).",
+   "status": "available"
+  },
+  "polaroid": {
+   "fn": "polaroid",
+   "pre": 6,
+   "post": 16,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "approved"
+  },
+  "prism_cut": {
+   "fn": "prism_cut",
+   "pre": 4,
+   "post": 8,
+   "doc": "a prismatic cut: red switches to the next shot first, then green, then blue, each sliding (time-slice).",
+   "status": "available"
+  },
+  "rainfocus": {
+   "fn": "rainfocus",
+   "pre": 8,
+   "post": 16,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "ramp": {
+   "fn": "ramp",
+   "pre": 6,
+   "post": 7,
+   "doc": "the speed ramp, without the brightness lift (the fire shots are already hot).",
+   "status": "available"
+  },
+  "red_eye_dive": {
+   "fn": "red_eye_dive",
+   "pre": 14,
+   "post": 14,
+   "doc": "RED EYE DIVE: the camera dives into the rival's glowing red eye until the frame is red light, then pulls out of Barry's eye on the other side (the answer).",
+   "status": "available"
+  },
+  "red_link": {
+   "fn": "red_link",
+   "pre": 6,
+   "post": 10,
+   "doc": "a red lightning arc leaps out of the mask and the cut hides in its flash (kept off both faces).",
+   "status": "available"
+  },
+  "red_phase": {
+   "fn": "red_phase",
+   "pre": 10,
+   "post": 12,
+   "doc": "the beat: Wells' frame shudders in red (the Reverse-Flash vibration) and resolves into the red-eyed mask.",
+   "status": "available"
+  },
+  "red_slices": {
+   "fn": "red_slices",
+   "pre": 6,
+   "post": 9,
+   "doc": "speed slices with red leading edges (the rival's lightning).",
+   "status": "available"
+  },
+  "red_streak": {
+   "fn": "red_streak",
+   "pre": 8,
+   "post": 8,
+   "doc": "the rival runs: a red lightning streak tears across the frame at chest height and the hero is behind it.",
+   "status": "available"
+  },
+  "redact": {
+   "fn": "redact",
+   "pre": 5,
+   "post": 9,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "restart": {
+   "fn": "restart",
+   "pre": 3,
+   "post": 14,
+   "doc": "time restarts on the second impact: a ring of colour and speed rushes out from him; the world moves again.",
+   "status": "available"
+  },
+  "rift": {
+   "fn": "rift",
+   "pre": 18,
+   "post": 26,
+   "doc": "",
+   "status": "available"
+  },
+  "roll": {
+   "fn": "roll",
+   "pre": 8,
+   "post": 9,
+   "doc": "the world rolls over: the knife shot spins 90 deg with rotational blur and lands upside down on the floor.",
+   "status": "approved"
+  },
+  "scan": {
+   "fn": "scan",
+   "pre": 6,
+   "post": 9,
+   "doc": "forensic viewfinder: corner brackets + a measuring ruler (act 1).",
+   "status": "available"
+  },
+  "shadow": {
+   "fn": "shadow_pass",
+   "pre": 10,
+   "post": 12,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "available"
+  },
+  "shock": {
+   "fn": "shock",
+   "pre": 4,
+   "post": 12,
+   "doc": "an electric shockwave rings out of the scream and refracts the frame open onto it.",
+   "status": "available"
+  },
+  "shutter": {
+   "fn": "shutter",
+   "pre": 5,
+   "post": 10,
+   "doc": "the music stops dead: a camera shutter (six gunmetal blades) snaps shut over the outgoing shot and opens on the frozen one, like the photograph of a moment.",
+   "status": "approved"
+  },
+  "slam": {
+   "fn": "slam",
+   "pre": 0,
+   "post": 5,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "available"
+  },
+  "slash": {
+   "fn": "slash",
+   "pre": 5,
+   "post": 14,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "execution_rejected_in_context",
+   "note": "use only when motivated by the shot"
+  },
+  "slices": {
+   "fn": "slices",
+   "pre": 6,
+   "post": 9,
+   "doc": "speed slices: the frame breaks into horizontal bands that rip sideways at different speeds; the next shot arrives band by band from the other side (with streak blur and a gold glint on each band's leading edge).",
+   "status": "available"
+  },
+  "slidebox": {
+   "fn": "slidebox",
+   "pre": 10,
+   "post": 14,
+   "doc": "forensic viewfinder: corner brackets + a measuring ruler (act 1).",
+   "status": "approved"
+  },
+  "slidebox_close": {
+   "fn": "slidebox_close",
+   "pre": 50,
+   "post": 16,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  },
+  "smear": {
+   "fn": "smear",
+   "pre": 6,
+   "post": 12,
+   "doc": "step-printed smear (the song is \"smeared, strobing\"): the frame drags into long horizontal echoes, then settles.",
+   "status": "available"
+  },
+  "speedforce_in": {
+   "fn": "speedforce_in",
+   "pre": 10,
+   "post": 14,
+   "doc": "into the Speed Force: the frame is pulled into a radial tunnel of light and the next shot rushes out of it.",
+   "status": "available"
+  },
+  "strings": {
+   "fn": "strings",
+   "pre": 11,
+   "post": 10,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "strobe": {
+   "fn": "strobe",
+   "pre": 3,
+   "post": 5,
+   "doc": "deep-house strobe: two soft strobe hits across the cut (never full black / white).",
+   "status": "available"
+  },
+  "strobe_echo": {
+   "fn": "strobe_echo",
+   "pre": 8,
+   "post": 10,
+   "doc": "STROBE ECHO: he moves so fast the frame strobes: the picture snaps left leaving a trail of gold stroboscopic afterimages, and the next shot lands from the right with its own echoes collapsing into place.",
+   "status": "available"
+  },
+  "sun": {
+   "fn": "sun_through",
+   "pre": 10,
+   "post": 10,
+   "doc": "after the CRT drop, Dexter stands in the vapor world; reality tunes in behind him, scanline by scanline.",
+   "status": "approved",
+   "note": "v6 sun stripes (vaporwave sun): restyle per edit"
+  },
+  "tape_snap": {
+   "fn": "tape_snap",
+   "pre": 7,
+   "post": 10,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "execution_rejected_in_context"
+  },
+  "tilt": {
+   "fn": "tilt",
+   "pre": 12,
+   "post": 16,
+   "doc": "the camera tilts down from the moon to Dexter looking up at it: one vertical strip, eased, with motion blur.",
+   "status": "available"
+  },
+  "time_particles": {
+   "fn": "time_particles",
+   "pre": 12,
+   "post": 31,
+   "doc": "TIME PARTICLES: the frozen moment breaks into fragments of its own pixels that burst apart and hang in the stopped air, then swirl back together as the next frozen moment (from his hand outward), landing on the beat that restarts time.",
+   "status": "available"
+  },
+  "tv_off": {
+   "fn": "tv_off",
+   "pre": 14,
+   "post": 12,
+   "doc": "pastel bokeh light specks drifting up through the sunny shots.",
+   "status": "available"
+  },
+  "uv_sweep": {
+   "fn": "uv_sweep",
+   "pre": 8,
+   "post": 10,
+   "doc": "hanging kill-room plastic: a few soft vertical folds that sway, a couple of diagonal creases, faint sheen.",
+   "status": "available"
+  },
+  "whip": {
+   "fn": "whip",
+   "pre": 6,
+   "post": 8,
+   "doc": "a whip pan: the frame flies out left in a smear of motion blur with a gold streak, the next shot lands from the right.",
+   "status": "approved"
+  },
+  "whip_up": {
+   "fn": "whip_up",
+   "pre": 5,
+   "post": 7,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "whirlwind": {
+   "fn": "whirlwind",
+   "pre": 12,
+   "post": 14,
+   "doc": "WHIRLWIND (on \"...carry OFF\"): the whirlwind carries the frame off. The picture twists into a spiral round the eye of the storm (angular blur, wind and gold debris torn round it); the next shot unwinds out of the same spin.",
+   "status": "available"
+  },
+  "wiper": {
+   "fn": "wiper",
+   "pre": 8,
+   "post": 10,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "available"
+  },
+  "wrap": {
+   "fn": "wrap",
+   "pre": 6,
+   "post": 10,
+   "doc": "a warm lamp clicks on: the frame drops to black, then a pool of light (with a filament flicker) blooms around his face.",
+   "status": "approved"
+  },
+  "zipper": {
+   "fn": "zipper",
+   "pre": 10,
+   "post": 12,
+   "doc": "the voidfx logo exactly as supplied (its own colours), flown through the 'o' \u2014 never restyled.",
+   "status": "approved"
+  }
+ },
+ "how_it_works": "TR2[name] = (fn(A, B, j, f, sa, sb), pre, post). A = outgoing frame, B = incoming frame, j = frames relative to the cut (negative before it), f = timeline frame, sa/sb = shot dicts. The incoming shot sets tin='name' in the EDL; the renderer calls fn for j in [-pre, post).",
+ "status_legend": {
+  "approved": "the owner liked it, or it shipped in an approved standard",
+  "execution_rejected_in_context": "the idea is allowed; one specific execution was rejected (see notes)",
+  "rejected": "don't use",
+  "available": "in the engine, no specific owner verdict"
+ }
+}

@@ -1,0 +1,218 @@
+{
+ "note": "The owner's preferences as checkable rules. 'hard' = never ship if violated; 'target' = measurable goals; 'style' = taste guidance a planner should follow; 'banned' = rejected by the owner. Source references point into STUDIO_SPEC.md and the edits in edits.json.",
+ "output": {
+  "aspect": "9:16",
+  "width": 1080,
+  "height": 1920,
+  "fps": 60,
+  "duration_s": [
+   20,
+   26
+  ],
+  "delivery": "H.264 + AAC, fast-start (TikTok)",
+  "master": "CRF 11 + 24-bit PCM",
+  "loudness_lufs": -13.0,
+  "true_peak_dbtp_max": -2.5,
+  "true_peak_aim_dbtp": -3.0,
+  "loudness_measured": "after AAC encoding"
+ },
+ "hard": [
+  {
+   "id": "faces_centred",
+   "rule": "Faces centred (about 37% of frame height) and never cut off; >8% of a face outside the frame is a failure",
+   "check": "qc face-centering (YuNet)"
+  },
+  {
+   "id": "no_face_too_wide",
+   "rule": "Leave out shots whose face is wider than the 9:16 window",
+   "since": "v103"
+  },
+  {
+   "id": "loop_seamless",
+   "rule": "The edit loops seamlessly in picture and sound; audio built circularly; audio and video exactly the same length; no outro card",
+   "check": "qc loop seam + length"
+  },
+  {
+   "id": "loop_lands_on_frame0",
+   "rule": "The last frames are built from frame 0's own image; blurred seam diff <= 1 (v11 standard)",
+   "since": "v11"
+  },
+  {
+   "id": "logo_once_unchanged",
+   "rule": "The voidfx logo appears exactly once, as a transition (fly through the 'o'), never recoloured or restyled",
+   "since": "v3/v7"
+  },
+  {
+   "id": "no_watermark_no_outro",
+   "rule": "No constant watermark, no outro card, no title card"
+  },
+  {
+   "id": "no_labels",
+   "rule": "No name tags, speaker chips, who-is-who graphics, counters, timecodes, or stamps on top of captions"
+  },
+  {
+   "id": "text_eases_in",
+   "rule": "Every word eases in (fade + rise + blur-to-sharp); nothing pops on"
+  },
+  {
+   "id": "text_band",
+   "rule": "Text readable, inside the 1240-1640 px band, clear of faces and TikTok UI",
+   "check": "qc text vs faces"
+  },
+  {
+   "id": "text_only_sung",
+   "rule": "Captions only on clearly sung or spoken words, each on its time, verified on the isolated vocal",
+   "since": "v103"
+  },
+  {
+   "id": "lipsync_real",
+   "rule": "Show a line as spoken only when his lips match; otherwise voice-over",
+   "since": "v101"
+  },
+  {
+   "id": "transition_sound",
+   "rule": "Every transition has its own sound"
+  },
+  {
+   "id": "no_plain_cuts_quiet",
+   "rule": "No plain hard cuts in quiet or dialogue sections"
+  },
+  {
+   "id": "loudness",
+   "rule": "-13 LUFS, true peak <= -2.5 dBTP after AAC"
+  },
+  {
+   "id": "no_clicks",
+   "rule": "No audio clicks at any cut or the loop seam",
+   "check": "qc"
+  },
+  {
+   "id": "flash_rate",
+   "rule": "No more than 3 flashes in any second",
+   "check": "qc 7b"
+  },
+  {
+   "id": "visual_signoff",
+   "rule": "Visual sign-off on frames pulled from the encoded file before delivery"
+  },
+  {
+   "id": "honesty",
+   "rule": "Report what was verified by frames and measurement; ask the owner to watch with sound"
+  }
+ ],
+ "targets": [
+  {
+   "id": "transition_density",
+   "rule": ">= 24 designed transitions per ~24 s, none repeated except as a motif",
+   "since": "v103 note",
+   "best": "v105: 27 in 22.97 s"
+  },
+  {
+   "id": "no_headspace",
+   "rule": "No span longer than about 1 s without a cut, transition or designed beat",
+   "since": "v104 gripe"
+  },
+  {
+   "id": "set_pieces",
+   "rule": ">= 3 multi-stage character-themed set pieces (drop, hook, loop) plus one focal set piece with layered sound",
+   "since": "v9, v11"
+  },
+  {
+   "id": "beat_camera",
+   "rule": "Beat-synced camera animation through every section with drums; every 'just moving' shot gets its own beat animation and sound",
+   "since": "v103, v11"
+  },
+  {
+   "id": "motion_pass",
+   "rule": "Speed ramps with smooth slow motion (only where clean) on every hook shot, before adding effects",
+   "since": "v10"
+  },
+  {
+   "id": "lyric_recognition",
+   "rule": "Window with sung lyrics; every clearly sung line captioned word by word; >= 3 picture moments land on sung words; explicit lyrics -> only a couple of designed titles",
+   "since": "v103, v11"
+  },
+  {
+   "id": "graphics_everywhere",
+   "rule": "Graphics in every section, depth layers reacting to the person matte, physically lit",
+   "since": "v6, v9"
+  },
+  {
+   "id": "clip_quality",
+   "rule": "Restore 720p sources (sr_prep), check sharpness before and after, zoom <= ~1.1 on 720p, hero shots on high-bitrate packs",
+   "since": "v105 gripe"
+  },
+  {
+   "id": "flash_discipline",
+   "rule": "Measure every flash; a flare keeps the picture (avoid long white-outs; v11 rim flash 178 -> 104 mean luma)",
+   "since": "v11"
+  },
+  {
+   "id": "hero_on_drop",
+   "rule": "The biggest transition lands on the song's biggest moment (full mix/bass return)",
+   "since": "v6"
+  }
+ ],
+ "style": {
+  "concept": "One sentence from the character's world or the song's own words, chosen before shots; carried through picture, grade, sound and loop",
+  "atmosphere_dexter": "dark, tense, stylish, intense; kill room, plastic, blood slides, tools, the Code, Harry, the Dark Passenger, victims, season villains",
+  "atmosphere_flash": "lightning, the Speed Force, the emblem, rivalries (Reverse-Flash)",
+  "transitions": "pronounced, designed, physical, going THROUGH something from the character's world; motivated by something in the shot or lyric; pre-roll 6-15 frames, post-roll 8-18 frames",
+  "text": "v9 standard: Inter Display Black caps, two-line keyline captions with red emphasis words, per-letter hero title with the edit's own exit particles",
+  "opening": "compelling first 1-2 s; dialogue-led openings play as one continuous take",
+  "ending": "deliberate; loops into the opening (same motif both ends)",
+  "dialogue": "less is more: one or two short lines that set up the song",
+  "graphics": "depth layers, themed overlays, halation, grain, anamorphic streaks; light sources behind the subject with a light wrap",
+  "props": "blood, slides, knives, glass, tape allowed only when motivated, brief, physically lit or real footage, in the edit's look, off the face",
+  "own_look": "each edit gets its own grade, type colour and transition mix; never reuse a benchmark's look (see style_bank)",
+  "sound": "drone/room tone across the loop; layered transition sounds (whoosh + impact + material); riser and sub drop into the drop; tonal sounds in the song's key"
+ },
+ "banned": [
+  "outro cards, title cards, constant watermarks",
+  "recoloured/restyled logo (UV/neon)",
+  "name labels, counters, timecodes, CJK subtitle lines",
+  "gimmick overlays on the face (target rings, converging strings)",
+  "text that pops on; v8-style thin wide-tracked sans / serif-italic / letter-by-letter fades",
+  "rapid single-word dialogue runs; exposition endings",
+  "generic explosion/starburst transitions",
+  "slow-motion run-at-camera / floating shots that look odd",
+  "captions on words the song isn't singing",
+  "narration shown as spoken without matching lips",
+  "lingering or random props (parked blood slides, random drips, unmotivated knife pass); drawn-looking graphics next to footage",
+  "the v101 16 mm psychedelic look"
+ ],
+ "style_bank_used": {
+  "v1": "warm cinematic, blood red",
+  "v2": "comic-ink / halftone",
+  "v3/v4": "night thriller, scope/barrel, chrome-red type",
+  "v5": "amber/gold lightning over deep teal",
+  "v6": "pastel vapor + VHS",
+  "v7": "forensic noir",
+  "v8": "sodium nocturne",
+  "v9": "moonbloom",
+  "v10": "(Studio 1) see studio1/v10/README.md",
+  "v11": "(Studio 1) red vs gold rivalry grades ('voltage', 'rival')",
+  "v101": "16 mm psychedelic (rejected)",
+  "v102": "storm",
+  "v103": "undertow",
+  "v104": "SUMI ink wash",
+  "v105": "SUNDOWN day/night split"
+ },
+ "fresh_looks": [
+  "16 mm home movie (Harry flashbacks)",
+  "red-and-black ink wash with Japanese-print restraint (no CJK)",
+  "surveillance/CCTV night vision",
+  "chalk outline / crime-scene diagram",
+  "blueprint / technical drawing",
+  "cold winter teal (Trinity)",
+  "full Sunshine State postcard",
+  "black-and-white newspaper 'BAY HARBOR BUTCHER' press",
+  "X-ray / MRI medical"
+ ],
+ "process": {
+  "one_brief": "song, packs, theme ideas and must-haves in one message (repo/studio/START_PROMPT.md)",
+  "one_revision_per_feedback": "apply every note in one pass, one full render + checkpoint",
+  "built_in_review": "the studio catches problems itself and judges ship-readiness before sending",
+  "efficiency": "quality and efficiency both matter"
+ }
+}
