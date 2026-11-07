@@ -1,81 +1,92 @@
-# Edit report: v11 BOP (The Flash × DaBaby "BOP")
+# HANDOFF: v11 BOP (The Flash × DaBaby "BOP"): STANDARD
 
-> From the **Flash studio** for the other voidfx studio. Apply sections 7 and 8 to your `CLAUDE.md`, handbook and toolkit, then confirm what changed.
+**From:** the Flash studio (Studio 1) · **Date:** 2026-11-07 (verdict given 2026-11-05) · **Revisions:** 4 · **Folder / branch:** `v11/` on `claude/gallant-planck-pqpczp`
 
-## 1. Verdict
-**Approved as a standard** after 4 rounds. The owner: *"I like this edit and would like for you to make it a standard."* It's the standard for **concept, focal set pieces and the loop**, and its engine is now the base new edits are scaffolded from (Studio 1).
+## 1. Verdict, in the owner's words
+> "I like this edit and would like for you to make it a standard."
 
-## 2. The edit
-- **Show × song:** The Flash × DaBaby "BOP" (127 BPM).
-- **Section used:** 7.75 → 28.54 s (11 bars, 20.79 s). The intro talk includes *"they're like, **Harrison**…"*; the beat drops in at 9.64; "Let's go!" at 14.34 in the dip; the drop at 15.31 is the start of the verse. It ends between two lines, then tape-stops.
-- **Concept: THE RIVAL.** The spoken "Harrison" (Harrison Wells *is* the Reverse-Flash) became the whole edit. The cold open is the rival in red; Barry answers on "Let's go"; on the drop the frame splits red against gold and gold wins; the verse is Barry in gold; at the end the red takes his symbol and the edit loops back to Harrison.
-- **Look: VOLTAGE / RIVAL.** For Barry: deep clean blacks, crimson suit, warm gold lightning bloom, teal shadows. For the rival: a second grade with red-shifted highlights, dark red shadows and red halation.
-- **Length / format:** 20.79 s, 1080×1920, 60 fps, loops.
-- **Sources:** a Flash S4 pack and a Reverse-Flash pack (both labelled 4K, both really 720p; the Reverse-Flash clips are a 600×600 inset with a watermark below, framed inside the inset).
-- **Text:** the verse is explicit, and the owner asked for few or no subtitles, so there are two designed titles: LET'S GO and BOP (the O is the Flash emblem).
+- **Status:** standard. The Flash scaffold (`tools/new_edit.py`) starts from v11. The reference for **concept, focal set pieces and the loop**.
+- **Gripes:** none at the verdict. Afterwards, the sharpness check (from DRACULA's gripe) flagged the punch and the grin as soft.
+
+## 2. The edit at a glance
+| | |
+|---|---|
+| Song / window | DaBaby "BOP", 0:07.75–0:28.54 (h32–h120, 11 bars), 127 BPM. The intro talk ("…they're like, **Harrison**…" at 9.60), the beat dropping in at 9.64 (+24.8 dB), the dip with "Let's go!" at 14.34, the drop into the verse at 15.31, a clean end between two lines. |
+| Length / format | 20.79 s, 1080×1920, 60 fps |
+| Concept | **THE RIVAL.** Harrison Wells *is* the Reverse-Flash, so the cold open belongs to the rival in red; Barry answers on "Let's go"; the drop splits the frame red against gold and gold wins; the verse is Barry in gold; at the end the red takes his symbol and the edit loops back to Harrison. Found in **the song's own words** (one spoken name in the intro). |
+| Look | Two grades. **VOLTAGE** (Barry): deep clean blacks, crimson suit, warm gold lightning bloom, teal shadows. **RIVAL**: red-shifted highlights, dark red shadows, red halation. |
+| Structure | 0–5.7 s rival cold open (Wells → mask on the beat → Thawne → Eobard) → 5.7 the answer (the red eye dive) → 6.6 "Let's go!" → 7.56 BOLT SPLIT drop → verse in gold, speed-ramped → 11.8 time freeze → 13.2 smirk → 14.2 charge-up → 15.1 THE RIFT into the flight through fire → 17.5 CLASH into the punch → 18.4 the final stare → 19.4 REVERSE → loop. |
+| Set pieces | **BOLT SPLIT** (a bolt-shaped seam cracks down beside his face, red vs gold halves, the seam sweeps across on the drop tearing LET'S GO apart; shockwave). **THE RIFT** (focal: a tear opens across the frame below his face with electric edges and light spill, the Speed Force churns inside, the camera flies through, the next shot rushes out of the vanishing point). **REVERSE** (loop: a red bolt strikes his chest emblem; the real emblem coin-flips into a detailed Reverse-Flash emblem; red radiates over him; an anticipation pull-back and a dive through the black disc onto frame 0). |
+| Transitions | 16 cuts, each a designed transition with its own sound: red phase, red link, red streak, red eye dive, dolly focus pull, bolt split, strobe echo, whip, bolt trace, freeze-in, restart, ignite, rift, heat haze, clash, emblem reveal; plus the REVERSE loop. All new in v11 except freeze-in, restart and ignite. |
+| Text | Two designed titles only (the verse is explicit and the owner asked for few or no subtitles): **LET'S GO** (GO lands white-hot, struck by a bolt; torn by the drop's seam) and **BOP** (letters punch in on the word; the O is the Flash emblem). |
+| Sound | The song window, tape-stopping into the loop; a red crackle bed under the cold open; a sound per transition (the drop: crackle build, whine, impact, thunder, sub drop; the rift: crack, panned rip, reversed swell, sub drop, roar; the flip: spin whir, sizzle, metal ring); a quiet swish on camera punches; a power-down whine under the tape stop. −13.2 LUFS / −3.4 dBTP after AAC. |
 
 ## 3. Creative process
-- **The concept came from the material:** a word in the song's own intro. It drove the grade (two colours), the drop (red vs gold), a late punch (gold beats red) and the loop (red takes the symbol).
-- **Structure:**
-  1. rival cold open (Wells → mask on the beat → Thawne → Eobard);
-  2. the answer (a dive from Eobard's red eye out of Barry's eye);
-  3. "Let's go!";
-  4. the bolt-split drop;
-  5. the gold verse with speed ramps on every shot;
-  6. a time freeze;
-  7. the charge-up into **THE RIFT** (the focal piece) and the flight through fire;
-  8. the clash and the punch;
-  9. the final stare;
-  10. the REVERSE loop.
-- **Sound:** the song window plus a red crackle bed under the cold open, a sound for every transition, a quiet swish on each camera punch, and a tape-stop with a power-down whine into the loop. Built circularly.
+1. Two new packs arrived labelled "4K 60fps"; both were really 720p (the S4 pack 24p content; the Reverse-Flash pack true 60 fps, every clip a 600×600 inset with a watermark, framed inside the inset). The S4 pack's first 13 shots (a CGI fan render) were left out.
+2. `song_map` found the beat-in and the drop; the vocal stem showed the intro talk. The word "Harrison" gave the concept, so the structure follows the rivalry, not just the energy.
+3. Alternatives rejected: a montage-only edit (no story); an emblem-dive copy of v10 (repeats a standard's look).
+4. Each "Barry moving to the beat" shot was given its own beat animation instead of more overlays (rev 3).
+5. Hero graphics were built as detailed procedural objects and revealed on the real object in the footage (rev 4).
 
 ## 4. Revision history
-| Rev | Owner's note | What changed | Why |
-|---|---|---|---|
-| 1 | (first delivery) | — | — |
-| 2 | *"a lot more animations, graphics, transitions… more sound effects… absolutely amazing"* | 5 new transitions (red eye dive, strobe echo, bolt trace, heat haze, clash) and a new punch shot; embers, gold dust, speed particles, edge lightning, light sweeps; a full sound pass | The owner always wants more designed moments and sounds |
-| 3 | *"improve the loop… more creative… a cool graphic or animation… replace the parts where Barry's just moving to the beat"* | The REVERSE loop (red strikes his emblem, it inverts, red radiates, a dive through it lands on frame 0); three beat animations: AURA (silhouette rings), REMNANTS (time copies splitting off), CHARGE (lightning gathering into his chest) | Shots that only "move to the beat" read as filler |
-| 4 | *"polish the symbol more and make it more detailed… the transition smoother and flashier… a new creative graphic… one of the focal points"* | A detailed procedural Reverse-Flash emblem revealed by a **coin flip** of the real emblem; a smoother, flashier dive (anticipation, speed-matched blur, rays, fringes, a red flare); **THE RIFT** focal piece | Hero graphics have to look like real objects, and the edit needed one centrepiece |
+- **Rev 2, the owner's note:** *"I would like for you to add a lot more animations, graphics, transitions etc. I also want more sound effects, i want this edit to be absolutely amazing with wonderful animations transitions etc."*
+  - **Change:** five new transitions (red eye dive, strobe echo, bolt trace, heat haze, clash) and a new punch shot (gold beats red); embers, gold dust, speed particles in depth (masked off faces), edge lightning on bar lines, light sweeps; a full sound pass.
+  - **Tried and failed:** the punch first framed on an empty wall; speed particles first crossed faces.
+- **Rev 3, the owner's note:** *"I would like for you to improve the loop, just make it overall better, make a more creative loop at the end… a cool graphic or a really cool animation paired with it. I would also like for you to take some of the parts where Barry's just moving to the beat and replace it or implement a new animation or graphic."*
+  - **Change:** the REVERSE loop (seam from 3.49 to 0.10, because the dive lands on frame 0's own image); AURA on the grin (silhouette rings pulse out each beat), REMNANTS on the smirk (time copies split off and snap back), CHARGE on the bar shot (lightning gathers into his chest). Each has its own sound.
+  - **Tried and failed:** the emblem detector first missed (the bolt split the disc; bridged with a morphological close); the AURA ring needed the matte, so it only works on `seg=True` shots.
+- **Rev 4, the owner's note:** *"I like the transition/loop at the end now but I would like for you to polish the symbol more and make it more detailed. I would also like for you to make the transition smoother and flashier. I would also like for you to implement a new creative graphic, animations or transition somewhere throughout the edit. I would like this effect to be one of the focal points of the edit and be well thought and created."*
+  - **Change:** a procedural Reverse-Flash emblem (bevelled crimson rim with a groove and neon line, glossy black disc with a reflection, a bevelled glowing bolt with light spill, lit by the real emblem's brightness) revealed by a **coin flip** of the real emblem; a smoother, flashier dive (anticipation, speed-matched blur, radial fringes, rays, sparks, a red flare); **THE RIFT**.
+  - **Tried and failed:** the flip's reverse face sat off-centre (the emblem is now found by a circle fit to its visible edge in each source frame); the rim flash first went near-white (mean luma 178; toned to a red flare, 104).
 
-## 5. What made it good
-- **One concept from the material**, carried through grade, structure, sound and the loop.
-- **One focal set piece** the owner can point to (THE RIFT).
-- **Detailed hero assets revealed physically:** the real chest emblem flips like a coin to show a bevelled, lit Reverse-Flash emblem.
-- **Every "just moving" shot got its own beat animation**, each with a sound.
-- **The loop lands exactly:** the dive ends on frame 0's own image (seam diff 0.11).
-- Very few words, all designed.
+## 5. What made it good / what made it weak
+- **Good (the owner):** approved as a standard after the symbol and the focal piece; liked the loop from rev 3.
+- **Good (the studio's analysis):**
+  - one concept from the song's words, carried through grade, structure, sound and loop;
+  - one focal set piece;
+  - detailed hero assets revealed physically on the real object;
+  - every "just moving" shot animated on the beat;
+  - an exact loop;
+  - very few, designed words.
+- **Weak:**
+  - **sharpness:** the S4 pack is soft and compressed; the punch (source motion blur) and the grin (speed-ramp blur) measure soft on the render, and the stare is smoothed by restoration;
+  - three Reverse-Flash shots are zoomed 32–40 % to stay inside the inset (they still measure sharpest; that pack was pre-sharpened);
+  - light rays are drawn over him rather than only behind (Studio 2's rule 1).
 
-## 6. Caught by review
-- The bolt-split seam through his nose: moved beside the face.
-- Red streak, emblem reveal and loop streak over faces: moved off faces.
-- Particles in front of faces: masked off every face.
-- Exposure blow-outs (fire, white skies): exposure brought down per shot.
-- The drop's impact frame and the dive's rim flash were near-white (mean luma 178): toned to a coloured flare (104).
-- The coin-flip reverse face sat off-centre: the emblem is now found by a circle fit to its visible edge in every source frame.
-- A background guard's face cut at the frame edge (caught by QC): reframed.
-- LET'S GO touching his chin: moved down.
+## 6. Measured results
+| Check | Result |
+|---|---|
+| QC checkpoint | all PASS |
+| Loudness after AAC | −13.2 LUFS / −3.4 dBTP |
+| Loop seam (blurred diff; target ≤ 1) | 0.11 |
+| Flashes | rim flare peak mean luma 104 (was 178); no white-out runs |
+| Softest shots (render) | punch 0.65×, stare 0.71×, grin 0.73× the edit median (this studio's tool; relative scale) |
+| Transitions / longest span without a beat | 16 + the loop / about 1 s (every beat punches or animates) |
 
-## 7. Rules to adopt
-1. *(new)* **Find the concept in the material:** a word in the song, a line, the character's history. Carry it through picture, grade, sound and the loop.
-2. *(new)* **One focal set piece** per edit: multi-stage, with its own layered sound, on a structural moment (a bar line after a build).
-3. *(new)* **Detailed physical hero assets:** build them lit and bevelled to match the shot, reveal them on the real tracked object, and check them at full resolution.
-4. *(new)* **No "just moving to the beat" shots:** give each its own beat animation and sound.
-5. *(new)* **Flash discipline:** measure every flash in the encode; a flare must keep the picture (peak mean luma about 110 or less).
-6. *(new)* **Explicit lyrics → two designed titles, not captions.**
-7. *(confirmed)* The loop lands exactly on frame 0 (seam ≤ 1), built from frame 0's own image.
-8. *(confirmed)* Nothing on faces: lightning, seams, particles and streaks are routed around a face/head box.
-9. *(new)* **Packs labelled 4K are usually 720p:** check specs, frame inside insets, avoid watermarks.
+## 7. New rules (adopt in both studios)
+1. **Find the concept in the material:** a word in the song (even spoken), a line, the character's history; carry it through picture, grade, structure, sound and the loop. Evidence: the "Harrison" concept, then "make it a standard" (v11). Applies to: all edits.
+2. **Give every edit one focal set piece** the owner can point to: multi-stage, its own layered sound, on a structural moment (a bar line after a build). Evidence: "I would like this effect to be one of the focal points of the edit" (v11 rev 4). Applies to: all edits.
+3. **Build hero graphics as detailed, lit objects and reveal them physically on the real tracked object;** check them at full resolution. Evidence: "polish the symbol more and make it more detailed" (v11 rev 4). Applies to: all edits.
+4. **No "just moving to the beat" shots:** give each its own beat animation with its own sound. Evidence: "take some of the parts where Barry's just moving to the beat and replace it or implement a new animation or graphic" (v11 rev 3). Applies to: all edits.
+5. **Flash discipline:** measure every flash in the encode; a flare keeps the picture (peak mean luma about 110 or less, no white-out runs). Evidence: v11 rev 4 review (178 → 104). Applies to: all edits.
+6. **Explicit lyrics → two designed titles, not captions.** Evidence: "I would like for this edit to not have subtitles or only as few" (v11 brief). Applies to: all edits.
+7. **Treat packs labelled 4K as unknown until probed;** frame inside insets and keep watermarks out. Evidence: both v11 packs. Applies to: all edits.
 
-## 8. Techniques to reuse
-- **Rival grade** (`look="rival"` vs `"voltage"`): a second grade for the antagonist; the finish blooms red for the rival's shots.
-- **Red phase** (`red_phase`): the Reverse-Flash face-vibration, i.e. jittered red ghost copies resolving into the next shot.
-- **Red eye dive** (`red_eye_dive`): find the brightest red point (his eye), dive in until the frame is red light, pull out of the next character's eye (face-track landmarks).
-- **BOLT SPLIT drop** (`bolt_split`): a lightning-bolt-shaped seam cracks down beside the face; the left half graded red, the right gold; on the drop the seam sweeps across and tears the title apart; shockwave. Sound: crackle build, impact, thunder, sub drop.
-- **THE RIFT** (`rift`): a tear grows along a jagged diagonal below the face, opens with white-gold electric edges and light spill, the Speed Force churns inside, the camera flies through, and the next shot rushes out of the vanishing point. Sound: crack, a rip panned across, reversed swell into a sub drop, roar and whine, arrival impact.
-- **Coin-flip emblem** (`rf_emblem`, `coin_flip`): a procedural emblem (bevelled rim, groove, glossy disc with a reflection, an emissive bolt with light spill), lit by the real emblem's brightness; the real emblem flips on its axis with its edge visible and the suit filled in behind; a flare at edge-on, a shockwave and sparks on landing. Sound: spin whir, sizzle, metal ring.
-- **REVERSE loop** (`reverse_loop`): strike → flip → red radiates → an anticipation pull-back and accelerating dive into the black disc (speed-matched blur, radial colour fringes, rays, sparks, a red flare as the rim passes) → lands on frame 0.
-- **Beat moments** (`aura`, `remnants`, `charge`): silhouette rings pulsing out on each beat; time-remnant copies splitting sideways and snapping back; lightning and dust gathering into the chest.
-- **Clash, strobe echo, bolt trace, heat haze, whip, dolly focus pull, emblem draw-on reveal:** in the toolkit catalogue.
+## 8. Reusable assets
+| Technique / transition | Where the code is | How to restyle it for another show |
+|---|---|---|
+| Second grade for an antagonist (`look="rival"` vs `"voltage"`, `finish11`) | `v11/work/render11.py` | Dexter vs Trinity / Doakes: a cold grade for the rival. |
+| Red phase (`red_phase`, `red_vibe`) | `render11.py` | Any "shudder" motif (the Dark Passenger surfacing). |
+| Red eye dive (`red_eye_dive`) | `render11.py` (rev 2) | Into any glowing point (a lamp, a blood drop) and out of the next subject's eye. |
+| BOLT SPLIT (`bolt_split`) | `render11.py` | Any two-sided concept split along a themed seam (a knife edge, a crack). |
+| THE RIFT (`rift`, `rift_geom`, `sf_interior`) | `render11.py` (rev 4) | A tear into any world: a wound into a kill room, plastic tearing open. |
+| Procedural emblem + coin flip (`rf_emblem`, `coin_flip`, `emblem_src`) | `render11.py` (rev 4) | Any badge or prop flipped to its "other side" (a Miami Metro badge flipping to a blood slide). |
+| REVERSE loop (`reverse_loop`) | `render11.py` (rev 3/4) | Strike → transform → radiate → dive into a disc onto frame 0; any round object. |
+| Beat moments (`aura_pulse`, `time_remnants`, `charge_up`) | `render11.py` (rev 3) | Recolour: red aura, ghost remnants, blood gathering. |
+| Clash, strobe echo, bolt trace, heat haze, whip, dolly focus pull | `render11.py` (rev 1/2) | Swap lightning for blood or light. |
+| Depth particles masked off faces (`motes11`) | `render11.py` (rev 2) | Ash, dust, embers for any show. |
 
-## 9. Measured (final)
-−13.2 LUFS, −3.4 dBTP after AAC; loop seam blurred diff 0.11; 16 cuts, 0 clicks; faces centred; sharpness check afterwards: the punch (source motion blur) and the grin (speed-ramp blur) measure soft, the stare low because restoration smooths skin.
+## 9. For the other studio
+- DRACULA's ASHES TO SUN would reach the ≤ 1 seam if the last frame is frame 0's image exactly (the REVERSE dive does this: the inside of the disc *is* frame 0, scaled to 1.0 on the last frame).
+- The coin flip is a ready way to "reveal the other side" of a real prop in the footage.
+- Engine base: agreed with your proposal: **Dexter edits from v105, Flash edits from v11**, shared effects ported through handoffs.

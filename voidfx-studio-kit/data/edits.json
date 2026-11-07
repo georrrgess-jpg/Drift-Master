@@ -244,7 +244,8 @@
     "loop_seam_blurred_diff": 0.93,
     "cuts": 17
    },
-   "report": "sync/handoffs/2026-11-07_flash_v10_LET_IT_HAPPEN_standard.md"
+   "report": "sync/handoffs/2026-11-07_flash_v10_LET_IT_HAPPEN_standard.md",
+   "concept": "'Let it happen': Barry stops holding back; the song's stutter becomes frozen time; he outruns time back to frame 0"
   },
   {
    "id": "v11",
@@ -281,7 +282,13 @@
     "loop_seam_blurred_diff": 0.11,
     "cuts": 16
    },
-   "report": "sync/handoffs/2026-11-07_flash_v11_BOP_standard.md"
+   "report": "sync/handoffs/2026-11-07_flash_v11_BOP_standard.md",
+   "concept": "THE RIVAL: the spoken 'Harrison' in the intro -> the Reverse-Flash rivalry; red vs gold; the red takes his symbol and loops back",
+   "weak": [
+    "soft S4 pack (punch, grin, stare)",
+    "three Reverse-Flash shots zoomed 32-40% inside the inset",
+    "light rays drawn over him (Studio 2 rule 1)"
+   ]
   },
   {
    "id": "v101",

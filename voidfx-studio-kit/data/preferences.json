@@ -149,7 +149,7 @@
   },
   {
    "id": "flash_discipline",
-   "rule": "Measure every flash in the encode; a flare keeps the picture: peak mean luma about 110 or less (qcN.py 7b lists any above)",
+   "rule": "Measure every flash in the encode; a flare keeps the picture: peak mean luma about 110 or less (qcN.py 7b lists any above); and no white-out runs",
    "since": "v11"
   },
   {
@@ -221,7 +221,8 @@
   "lingering or random props (parked blood slides, random drips, unmotivated knife pass); drawn-looking graphics next to footage",
   "the v101 16 mm psychedelic look",
   "glowing-eyes gimmick shots (v10 rev 2: 'remove the scene with Barry's eyes being lit up')",
-  "glass webs over the frame or face (v10 rev 4, v103)"
+  "glass webs over the frame or face (v10 rev 4, v103)",
+  "solving a moment with an overlay that sits on the frame (glass web, hanging shards); transform the picture itself (v10 rev 4)"
  ],
  "style_bank_used": {
   "v1": "warm cinematic, blood red",
@@ -256,6 +257,7 @@
   "one_revision_per_feedback": "apply every note in one pass, one full render + checkpoint",
   "built_in_review": "the studio catches problems itself and judges ship-readiness before sending",
   "efficiency": "quality and efficiency both matter",
-  "coalition": "Two voidfx chats; this one is the Dexter studio (v106+). On every verdict write a handoff (sync/HANDOFF_TEMPLATE.md), update edits.json, preferences.json and sync/LEDGER.md, push, and send the file; adopt handoffs from the other chat the same way (sync/README.md)."
+  "coalition": "Two voidfx chats; this one is the Dexter studio (v106+). On every verdict write a handoff (sync/HANDOFF_TEMPLATE.md), update edits.json, preferences.json and sync/LEDGER.md, push, and send the file; adopt handoffs from the other chat the same way (sync/README.md).",
+  "engine_bases": "Agreed 2026-11-07: Dexter edits from v105, Flash edits from v11; shared effects ported through edit reports"
  }
 }
