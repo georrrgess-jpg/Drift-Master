@@ -17,6 +17,7 @@ Everything needed to develop a fully autonomous and manual editing studio for vo
 | `data/transitions.json` | Every transition in Studio 2's v105 engine (80) and Studio 1's v11 engine (91): timing, description, owner status. |
 | `data/sources.json` | All 35 source files the studios used, with measured resolution, fps and bitrate (the media itself isn't included). |
 | `data/owner_messages_studio2.md` | Every message the owner sent Studio 2, verbatim and in order: briefs, notes, approvals. |
+| `sync/` | **The two-chat workflow:** the procedure (`README.md`), the handoff template, the message to paste into the other chat (`RECEIVE_PROMPT.md`), the ledger, and the handoffs themselves (`handoffs/`). |
 | `repo/` | Studio 2's complete voidfx tree at `c512052`: every edit's engine, EDL, effects, sound design, QC, face tracks, transcripts and README; `tools/`; `studio/` (handbook, scene packs, start prompt, setup); `docs/TOOLKIT.md`; `CLAUDE.md`. |
 | `studio1/` | Studio 1's files changed since the shared base `daff0de`, at `122013b`: the v10 and v11 edits (engine, EDL, QC, README), `tools/sr_prep.py` + `srnet.py` (source restoration), its scaffold and template, and its versions of the shared docs. |
 

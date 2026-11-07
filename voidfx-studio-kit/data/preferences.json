@@ -151,6 +151,26 @@
    "id": "hero_on_drop",
    "rule": "The biggest transition lands on the song's biggest moment (full mix/bass return)",
    "since": "v6"
+  },
+  {
+   "id": "creative_loop",
+   "rule": "The loop is the most creative transition in the edit: a set piece that pays off the concept and lands in frame 0's own image, not a fade or white-out",
+   "since": "v105 rev 3"
+  },
+  {
+   "id": "restyle_library",
+   "rule": "Restyle library transitions before reuse; they carry their original edit's look (v6 cube grid, v9 jasmine)",
+   "since": "v105 rev 3"
+  },
+  {
+   "id": "remove_before_light",
+   "rule": "When a burn/dissolve removes the subject, remove him before drawing scene light; fill with a plausible background, not a flat colour",
+   "since": "v105 rev 3"
+  },
+  {
+   "id": "add_means_new_cuts",
+   "rule": "'Add transitions, graphics and animations' = replace generic connectors with themed ones and add new cuts with new transitions, not stacked effects",
+   "since": "v105 rev 2-3"
   }
  ],
  "style": {
@@ -213,6 +233,7 @@
   "one_brief": "song, packs, theme ideas and must-haves in one message (repo/studio/START_PROMPT.md)",
   "one_revision_per_feedback": "apply every note in one pass, one full render + checkpoint",
   "built_in_review": "the studio catches problems itself and judges ship-readiness before sending",
-  "efficiency": "quality and efficiency both matter"
+  "efficiency": "quality and efficiency both matter",
+  "coalition": "Two voidfx chats; this one is the Dexter studio (v106+). On every verdict write a handoff (sync/HANDOFF_TEMPLATE.md), update edits.json, preferences.json and sync/LEDGER.md, push, and send the file; adopt handoffs from the other chat the same way (sync/README.md)."
  }
 }
