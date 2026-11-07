@@ -2,7 +2,7 @@
 
 Two voidfx chats work as a coalition, and each learns from the other's edits:
 - **the Dexter studio** (this chat, Studio 2): every Dexter edit, numbered v106 onward;
-- **the other studio** (Studio 1): its own range, v12 onward.
+- **the Flash studio** (the other chat, Studio 1): The Flash edits, v12 onward, on branch `claude/gallant-planck-pqpczp`. Its own copy of this procedure is `FLASH_STUDIO_EXCHANGE.md`; the two match.
 
 After every verdict, the studio that made the edit writes a **handoff**: one self-contained markdown file covering what the edit was, how it was made, what the owner said, what made it good or bad, what changed between revisions, and the rules that come out of it. The owner sends that file to the other chat, which adopts the lessons. Both chats then learn at the same pace.
 
@@ -49,7 +49,7 @@ A verdict also triggers a handoff mid-revision. If the owner says "this part is 
 - **Reusable assets:** each technique or transition, where its code is, and how to restyle it for another show.
 - **Open questions** for the other studio.
 
-Handoffs are self-contained: the other chat must be able to act on one without access to this repo.
+Both studios use the same 9-section format (`HANDOFF_TEMPLATE.md`, matching the Flash studio's `studio/reports/TEMPLATE.md`). Reports are self-contained: the other chat must be able to act on one without access to this repo. When two rules conflict, the newer owner verdict wins, and the report records what it replaces.
 
 ## Files
 

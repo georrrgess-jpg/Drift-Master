@@ -1,56 +1,43 @@
-# HANDOFF: vNNN TITLE (Show × Artist "Song"): STANDARD | REJECTED
+# Edit report: vNNN TITLE (Show × Artist "Song")
 
-**From:** the Dexter studio | the other studio · **Date:** YYYY-MM-DD · **Revisions:** N · **Folder / branch:** `vNNN/` on `branch`
+> From the **Dexter studio** (or the **Flash studio**) for the other voidfx studio. Apply sections 7 and 8 to your `CLAUDE.md`, handbook and toolkit, then confirm what changed.
 
-## 1. Verdict, in the owner's words
-> The final verdict, verbatim.
+This is the shared format, the same in both studios (it matches the Flash studio's `studio/reports/TEMPLATE.md`). A report must stand alone: the other chat may not have this branch.
 
-- **Status:** standard (the scaffold now starts from it) | approved | rejected.
-- **The owner's gripe(s) or reasons:** verbatim.
+## 1. Verdict
+**Approved as a standard | Approved | Rejected** after N rounds. The owner: *"verbatim verdict"*. What it is now the standard for, or why it was rejected.
 
-## 2. The edit at a glance
-| | |
-|---|---|
-| Song / window | Artist "Song", mm:ss–mm:ss (half-beats h…–h…), BPM; why this section |
-| Length / format | s, 1080×1920, 60 fps |
-| Concept | one sentence, and how it was found (song words? the character's world?) |
-| Look | the grade(s) and finish; how it differs from every earlier look |
-| Structure | the timeline against the song: cold open, drop, hook, loop |
-| Set pieces | name: stages (anticipation → action → payoff), sound |
-| Transitions | count, list, which are new |
-| Text | which words, why they were captioned, the style |
-| Sound | design and mix: levels against the music |
+## 2. The edit
+- **Show × song:** … (BPM).
+- **Section used:** start → end (bars, length); what happens in the song where (drop, drop-out, hook, lyric lines).
+- **Concept:** NAME. One sentence, and how it runs through the edit.
+- **Look:** NAME. The grade(s) and finish.
+- **Length / format:** s, 1080×1920, 60 fps, loops.
+- **Sources:** packs used, with their real specs (resolution, cadence, bitrate, watermarks, insets).
+- **Text:** what is captioned or titled, and why.
 
 ## 3. Creative process
-How the concept was chosen; what the review of footage and earlier edits found; key decisions and the alternatives rejected.
+- **How the concept was found.**
+- **Structure:** numbered sections in timeline order.
+- **Set pieces:** the stages of each.
+- **Type, sound, loop.**
 
 ## 4. Revision history
-For each round:
-- **Rev N, the owner's note (verbatim):** "…"
-- **Diagnosis:** what was actually wrong (technical cause).
-- **Change:** what was built instead.
-- **Tried and failed on the way:** what didn't work and why.
+| Rev | Owner's note | What changed | Why |
+|---|---|---|---|
+| 1 | (first delivery) | — | — |
 
-## 5. What made it good / what made it weak
-- **Good (the owner's view first, then the studio's analysis):** …
-- **Weak (gripes, measured gaps):** …
+## 5. What made it good (or bad)
+Specific, with evidence.
 
-## 6. Measured results
-| Check | Result |
-|---|---|
-| QC checkpoint | x/x |
-| Loudness after AAC | LUFS / dBTP |
-| Loop seam (blurred diff; target ≤ 1) | |
-| Flashes (white-out runs, max per second) | |
-| Softest shots (`tools/sharpness.py`) | |
-| Transitions / longest span without a beat | |
+## 6. Caught by review
+Defects found by the studio's own review and QC, and how each was fixed.
 
-## 7. New rules (adopt in both studios)
-1. **Rule, phrased as an instruction.** Evidence: "quote" (vNNN, rev N). Applies to: all edits | Dexter | Flash.
+## 7. Rules to adopt
+Numbered, written so the other studio can paste them into its `CLAUDE.md` and handbook as is. Mark each one *(new)*, *(changed)* or *(confirmed)*.
 
-## 8. Reusable assets
-| Technique / transition | Where the code is | How to restyle it for another show |
-|---|---|---|
+## 8. Techniques to reuse
+Each with enough detail to rebuild it without this branch's code (inputs, stages, timings, sound), plus the function name in case the code is merged.
 
-## 9. For the other studio
-Questions, things to try in their next edit, and anything that conflicts with their rules.
+## 9. Measured (final)
+Loudness and true peak after AAC; loop seam (blurred diff); cut count and clicks; faces; flashes (peak mean luma, white-outs); sharpness flags.

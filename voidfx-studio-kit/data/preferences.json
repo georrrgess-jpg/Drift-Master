@@ -98,6 +98,11 @@
   {
    "id": "honesty",
    "rule": "Report what was verified by frames and measurement; ask the owner to watch with sound"
+  },
+  {
+   "id": "nothing_on_faces",
+   "rule": "Lightning, seams, particles, streaks, suns and wipe edges are routed around a face/head box; particles in front of faces are masked",
+   "since": "v7, v10, v11, v105"
   }
  ],
  "targets": [
@@ -124,7 +129,7 @@
   },
   {
    "id": "motion_pass",
-   "rule": "Speed ramps with smooth slow motion (only where clean) on every hook shot, before adding effects",
+   "rule": "Speed ramps on every hook/montage shot (a burst on each beat, ~0.3-0.6x flow slow motion between, only where clean); beat camera with a ~5-6% zoom punch and ±1° rotation kick per beat, zoom blur and colour split on the hit frames, type clean on top; light that reacts to the footage",
    "since": "v10"
   },
   {
@@ -144,7 +149,7 @@
   },
   {
    "id": "flash_discipline",
-   "rule": "Measure every flash; a flare keeps the picture (avoid long white-outs; v11 rim flash 178 -> 104 mean luma)",
+   "rule": "Measure every flash in the encode; a flare keeps the picture: peak mean luma about 110 or less (qcN.py 7b lists any above)",
    "since": "v11"
   },
   {
@@ -171,6 +176,21 @@
    "id": "add_means_new_cuts",
    "rule": "'Add transitions, graphics and animations' = replace generic connectors with themed ones and add new cuts with new transitions, not stacked effects",
    "since": "v105 rev 2-3"
+  },
+  {
+   "id": "lyric_onsets",
+   "rule": "Every lyric word on its sung onset, checked on the isolated vocal (pitch + onsets), not just Whisper (up to 1 s off)",
+   "since": "v10"
+  },
+  {
+   "id": "no_plain_rewind_loop",
+   "rule": "A plain motion-blurred rewind loop reads as low quality; the loop is a set piece",
+   "since": "v10"
+  },
+  {
+   "id": "fx_level_vs_master",
+   "rule": "Measure effect levels against the music at every set piece; on a loud master push effects about +9 dB and duck the music about 3 dB under the biggest hits",
+   "since": "v105"
   }
  ],
  "style": {
@@ -199,7 +219,9 @@
   "captions on words the song isn't singing",
   "narration shown as spoken without matching lips",
   "lingering or random props (parked blood slides, random drips, unmotivated knife pass); drawn-looking graphics next to footage",
-  "the v101 16 mm psychedelic look"
+  "the v101 16 mm psychedelic look",
+  "glowing-eyes gimmick shots (v10 rev 2: 'remove the scene with Barry's eyes being lit up')",
+  "glass webs over the frame or face (v10 rev 4, v103)"
  ],
  "style_bank_used": {
   "v1": "warm cinematic, blood red",

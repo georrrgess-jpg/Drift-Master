@@ -1,144 +1,214 @@
-# HANDOFF: v105 DRACULA (Dexter × Tame Impala "Dracula"): STANDARD
+# Edit report: v105 DRACULA (Dexter × Tame Impala "Dracula")
 
-**From:** the Dexter studio (Studio 2) · **Date:** 2026-11-07 (verdict given 2026-11-05) · **Revisions:** 3 · **Folder / branch:** `v105/` on `claude/beautiful-volta-wjki7k` (voidfx; the transfer bundle is in Drift-Master `voidfx-v101/`)
+> From the **Dexter studio** for the other voidfx studio. Apply sections 7 and 8 to your `CLAUDE.md`, handbook and toolkit, then confirm what changed.
 
-## 1. Verdict, in the owner's words
-> "I like this edit and would like for you to make it a standard. The only gripe I have is the quality of some of the clips. You do not have to edit this further."
+## 1. Verdict
+**Approved as a standard** after 3 rounds. The owner: *"I like this edit and would like for you to make it a standard. The only gripe I have is the quality of some of the clips. You do not have to edit this further."*
 
-- **Status:** standard. It's the Dexter studio's newest standard, and its scaffold (`tools/new_edit.py`) starts from v105.
-- **Gripe:** *"the quality of some of the clips"*, i.e. soft source footage. Now a rule (§7).
+It is the Dexter studio's newest standard and the base its new edits are scaffolded from: the concept-driven day/night split, light physically behind the subject, five set pieces, and a loop that is the edit's most creative transition. The gripe, clip quality, is now a rule (§7.2).
 
-## 2. The edit at a glance
-| | |
-|---|---|
-| Song / window | Tame Impala "Dracula", 2:34.6–2:57.5 (half-beats h592–h680, 11 bars), 114.99 BPM. The final chorus run: "Saw this moment coming from afar", then the song's one-bar drop-out at 2:40.8, then the drop at 2:42.9 (+29.8 dB, the biggest change in the song). One pass, no splice; the pre-roll is the song's own lead-in, so the loop plays straight through. |
-| Length / format | 22.97 s, 1080×1920, 60 fps (every source plays at its own 24p/30p cadence; no interpolation) |
-| Concept | **SUNDOWN.** By day he wears the mask (sunny Miami, the boat, the smile, the ice cream). The lyric is "run from the sun like Dracula", so the sun sets across the drop-out bar and night slams in on the drop. Night is the hunt. At the end the sun takes him, and his ashes become the sun the loop opens in. Found in the **song's own words**, mapped onto **Dexter's double life** (the day mask against the night hunter). |
-| Look | Two grades split on the drop. **Day:** a bleached warm "Sunshine State postcard" with teal shadows; the sun (rays and lens ghosts) sits *behind* him via his matte, with a light wrap and sunlit dust. **Night:** cold moonlit silver and deep blacks, with only crimson kept and pushed, plus a crimson bloom. A dusk blend runs through the drop-out bar. |
-| Structure | k0–24 the day montage (a cut every 3 half-beats, sun in every shot, the first lyric captioned) → k24–32 SUNDOWN (the sun sets down the frame edge, an eclipse, bats gather behind him) → k32 THE BAT BURST on the drop + "DRACULA" → k48 THE BLOOD MOON (the 2nd "Dracula") → k64 THE COFFIN (the 3rd) → k66–83 the night montage → k83–88 ASHES TO SUN (the loop). |
-| Set pieces | **SUNDOWN** (the sun sets → eclipse with corona and diamond ring → gathering bats). **THE BAT BURST** (a 3D bat cloud from the sky, a crimson flash, bats flying past the lens with depth blur; the per-letter DRACULA title breaks into crimson bats). **THE BLOOD MOON** (a moon iris opens; a procedural blood moon rises behind his MODNet cut-out with clouds and bats; a red rim on him; a church-bell toll on B-flat). **THE COFFIN** (a height-map-lit mahogany lid with a brass cross falls and slams; the frame jolts; dust). **ASHES TO SUN** (see §3). |
-| Transitions | **27 in 22.97 s**, each with its own sound: sun flare, whip, film burn, slam, **card flip**, quarter-turn, **palm sweep**, light sweep, **eclipse**, **bat burst**, strobe, impact, torch blind-out, **cape**, **moon iris**, lamp on, logo, roll into the upside-down shot, **coffin**, **mist**, **bat swarm**, eye dive, face-match, shutter, zipper, **great bat**, sun flare. Bold = new in v105. |
-| Text | Only the words verified on the Demucs vocal stem (Whisper in tight windows, no prompt, so it couldn't echo the expected lyric): SAW THIS MOMENT / COMING FROM **AFAR**; RUN FROM THE **SUN** / LIKE; the per-letter hero **DRACULA**; **DRACULA** twice more. Not captioned (unclear on the vocal): "Now here we are", "this love is spectacular". |
-| Sound | Every transition has a layered sound. Tonal sounds are in the song's key (B-flat minor: a bell toll, a dawn chord). The bed is sea air by day and wind plus a sub drone by night. The song is mastered loud (−9 to −11 dBFS RMS), so the effects were pushed +9 dB and the music ducks −3 dB under the three big hits. −13.1 LUFS / −4.1 dBTP after AAC. |
+## 2. The edit
+- **Show × song:** Dexter × Tame Impala "Dracula" (114.99 BPM).
+- **Section used:** 2:34.55 → 2:57.51 (half-beats 592–680, 11 bars, 22.97 s), the final chorus run, in one pass with no splice:
+  - it opens on the lyric "Saw this moment coming from afar" (2:35.2);
+  - the song drops out for one bar at 2:40.8;
+  - "(So) run from the sun like Dracula" runs 2:41.0–2:43.6;
+  - **the drop at 2:42.9** (+29.8 dB, the biggest change in the song);
+  - "Dracula" returns at 2:47.2 and 2:51.4.
+  The pre-roll is the song's own lead-in, so the audio loops straight through.
+- **Concept: SUNDOWN.** By day he wears the mask (sunny Miami, the boat, the smile, the ice cream). The lyric "run from the sun like Dracula" makes the sun set across the drop-out bar, and night slams in on the drop. Night is the hunt. At the end the sun takes him, and his ashes become the sun the loop opens in.
+- **Look: SUNDOWN, two grades split on the drop:**
+  - **Day:** a bleached warm "Sunshine State postcard" with teal shadows and a sun with rays and lens ghosts *behind* him;
+  - **Dusk:** an orange-magenta blend through the drop-out;
+  - **Night:** cold moonlit silver, deep blacks, only crimson kept and pushed, with a crimson bloom.
+- **Length / format:** 22.97 s, 1080×1920, 60 fps, loops. Every source plays at its own 24p/30p cadence; no interpolation.
+- **Sources:** ten Dexter packs, all really 720p (two labelled 4K), compressed from 0.43 to 2.2 Mb/s. The softest were p8 (S1, 0.43 Mb/s) and p9, p10 and p6 (about 0.7 Mb/s).
+- **Text:** only words verified on the isolated vocal, in the approved keyline style:
+  - SAW THIS MOMENT / COMING FROM **AFAR**;
+  - RUN FROM THE **SUN** / LIKE;
+  - the per-letter hero **DRACULA**, whose letters break into crimson bats;
+  - **DRACULA** twice more.
+  "Now here we are" and "this love is spectacular" weren't clear on the vocal, so they aren't captioned.
 
 ## 3. Creative process
-1. **The window.** `song_map` showed the drop at 162.90 s as the biggest change in the song, preceded by a one-bar drop-out. That made the drop-out the natural "sundown" beat and the drop the hero moment. The window was set to start on "Saw this moment" so the lead-in is a lyric.
-2. **The lyrics** were verified on the isolated vocal before writing any text. Only clearly sung words were captioned, and the published lyrics (Songfacts, Wikipedia) confirmed the chorus line.
-3. **The concept** came from the lyric, but its imagery came from Dexter's world (day mask against night hunter), not from vampire clichés alone.
-4. **The footage review** found day shots (S1–S5 sunny Miami) and night shots (S4 pack p9). No new Dexter packs came with the brief; the two Flash packs attached were catalogued for the other studio.
-5. **The engine:** built on the v104 standard, restyled entirely in `fx105.py`. Every set piece is procedural:
-   - bat sprites with flapping wings;
-   - a lunar surface with craters, maria and limb darkening;
-   - a coffin lid from a height map with normals, diffuse and specular;
-   - a particle system for the embers;
-   - noise fields for the mist.
-6. **ASHES TO SUN (the loop, rev 3)**, built in this order:
-   1. The sun rises beside him, and his edge catches fire (a flickering rim, embers off his hair and shoulders).
-   2. He burns like paper from the side facing the sun inward: a burn order map combining distance from his silhouette edge, direction to the sun and two octaves of noise. Ahead of the front he chars, at the front a thin line glows, and behind it the street shows through (each row continues the background on either side of him).
-   3. 3,000 embers (one per burnt piece, keeping his colour, then turning orange and white-gold) drift up and spiral into the sun's exact position in frame 0.
-   4. The sun flares (radial rays and a shock ring), and under the flash the picture becomes frame 0 (the boat shot).
-   5. The light collapses back into the sun like an iris, so frame 0 opens on the blazing sun, which calms over a quarter second.
-   His ashes become the sun he ran from, and the day and the mask begin again.
+- **The concept came from the song's own words**, mapped onto the character's double life (the day mask against the night hunter): the hook line "run from the sun like Dracula". It drove:
+  - the grade (day against night);
+  - the structure (the sun sets in the drop-out, night on the drop);
+  - every set piece (bats, moon, coffin, burning in the sun);
+  - the sound (bright sea air by day, wind and a B-flat drone by night);
+  - the loop.
+- **Structure:**
+  1. the day montage, k0–24: a cut every 3 half-beats, a sun in every shot, the first lyric captioned word by word;
+  2. **SUNDOWN**, k24–32: the sun sets down the frame edge, an eclipse takes the light, and bats gather in the sky behind him;
+  3. **THE BAT BURST** on the drop, k32, with the hero title DRACULA;
+  4. the night run (red-lit drive, blinds, light table, gloves);
+  5. **THE BLOOD MOON** on the second "Dracula", k48;
+  6. the logo, then the roll into the upside-down shot (a motif from the v104 standard);
+  7. **THE COFFIN** on the third "Dracula", k64, then he turns to mist;
+  8. the night montage (bat swarm, eye dive, face-match, shutter, zipper, the great bat);
+  9. **ASHES TO SUN**, k83–88, the loop.
+- **Set pieces (stages, sound):**
+  - **SUNDOWN:**
+    - the sun sinks down the right edge of two shots, behind him;
+    - the grade slides day → dusk → night;
+    - the eclipse transition (the moon's disc slides across with a streaming corona; the night shot is inside it; a diamond-ring flash on its rim; the disc swells to fill the frame);
+    - bats gather behind his matte.
+    - Sound: a descending sun glide (F5 → F2), a heartbeat, an eclipse impact with a shimmer and a low bell.
+  - **THE BAT BURST:**
+    - a 3D cloud of about 460 bats pours out of the sky above him toward the lens (a vanishing point that moves from the sky to the frame centre as they near);
+    - it blacks out the frame against a crimson flash;
+    - the bats fly past the camera (near ones soft, far ones sharp);
+    - then the title builds letter by letter, floods red and breaks into crimson bats that scatter *sideways, away from his face*.
+    - Sound: a reverse swell, a sub impact, a burst of wingbeats panned wide, bat chirps.
+  - **THE BLOOD MOON:**
+    - a moon iris opens on him;
+    - a procedural blood moon (maria, craters with lit and shadowed rims, limb darkening, the Earth's-shadow edge) rises behind his cut-out, with drifting cloud and bats crossing it;
+    - it pulses on the word and puts a red rim on his edge.
+    - Sound: a church-bell toll on B-flat (the song's key).
+  - **THE COFFIN:**
+    - a mahogany lid lit from a height map (bevel, raised panel, groove, a brass cross, specular, a clear-coat sheen) falls toward the lens;
+    - it slams over him (the frame jolts, dust kicks up), then lifts away on the next shot;
+    - he turns to mist into the knife shot.
+    - Sound: a hinge creak, a wood thud with its own resonances, dust, then an airy breath.
+  - **ASHES TO SUN (the loop):**
+    1. the sun rises beside him and his edge catches fire (a flickering hot rim, embers off his hair and shoulders);
+    2. he burns like paper from the side facing the sun inward: char ahead of the front, a thin glowing line at it, and the street behind him showing through it;
+    3. 3,000 embers (one per burnt piece, carrying his colour, then turning orange and white-gold) drift up and spiral into the sun at frame 0's sun position;
+    4. the sun flares (radial rays and a shock ring), and under the flash the picture becomes frame 0;
+    5. the light collapses back into the sun like an iris, and frame 0 opens on the blazing sun, calming over a quarter second.
+    - Sound: crackle and a paper-burn hiss, a riser, a bright impact and shimmer on the flare, a reverse swell, and a warm bloom on the loop point.
+- **Type:** the approved two-line keyline captions with red emphasis words, and a per-letter hero title whose exit particles are the edit's own motif (bats).
+- **Sound:**
+  - the song plus a bed (sea air by day; wind and a B-flat sub drone by night);
+  - a layered sound for every transition;
+  - tonal sounds in B-flat minor (a bell, a dawn chord);
+  - the song is mastered loud (−9 to −11 dBFS RMS), so the effects are pushed +9 dB and the music ducks 3 dB under the three big hits;
+  - built circularly, with tails wrapped into frame 0.
 
 ## 4. Revision history
-- **Rev 1 (first delivery).** The internal review before delivery caught and fixed these:
-  - the bat burst first came out of his mouth (rebuilt as a 3D flight from the sky);
-  - the swarm read as wallpaper (rebuilt in depth with a moonlight band behind it);
-  - the coffin looked like a flat brown shape with dots (rebuilt with height-map lighting);
-  - the moon was a flat red disc (now a procedural surface);
-  - the sun streaks and dawn sun sat on his face (moved);
-  - red title on red footage (re-timed);
-  - a missing logo (added once, unrestyled);
-  - text on his chin (moved);
-  - effects 20–25 dB under the song (raised).
-  On the encoded file, QC failed face centring on an over-tight sunset close-up (re-timed to a centred moment), and two night shots were nearly black (per-shot exposure).
-- **Rev 2. The owner's note:** *"I like the edit but what happened with the sun and the top right part of dexters head? Additionally, I would like for you to add a couple more transitions, graphics, and unique creative animations."*
-  - **Diagnosis:** the sun (disc, glow and rays) was laid over the whole frame, so where his hair met the sky it burned his head away. The sun was in front of him.
-  - **Change:** every sun shot now uses his MODNet matte. The disc and rays come only from the sky behind him, 22% of the light scatters over him, there's a light wrap on his near edge, and the lens ghosts dim by how much of the sun he covers.
-  - **Added:**
-    - cape sweep (replacing a repeated whip);
-    - mist ("he turns to mist", into a new knife shot);
-    - the great bat through the lens (into a new flashlight shot);
-    - sunlit dust;
-    - the first dawn burn.
-  - **Tried and failed:**
-    - the mist read first as blotchy holes, then as vertical drips (the owner dislikes drips); it became a soft blur-and-rise smoke dissolve;
-    - the great bat started on his face with a cartoon outline; it now starts in the top corner with a fine edge;
-    - the dawn burn was invisible on a frame-filling close-up (no edge for the matte), so the final shot was swapped for a full silhouette;
-    - after the light wrap, the face detector read the tight sunset close-up as cut off, so it's framed off-centre (`face_x`).
-- **Rev 3. The owner's note:** *"I would like for you to improve the transition/loop at the end and make it a more creative and unique transition. Try to do something creative and different. Please add transitions, graphics and animations wherever possible."*
-  - **Change:**
-    - the ASHES TO SUN loop (§3);
-    - frame 0 became the clean boat shot (it had been hazed white);
-    - new transitions: eclipse, card flip, palm sweep;
-    - gathering bats before the drop;
-    - a crimson backlight and night fog.
-  - **Tried and failed:**
-    - the burnt area first showed flat cream; then the sun's rays still "saw" his burnt body and cast straight wedge shadows (fixed by burning him *before* drawing the sun);
-    - inpainting the street smeared into diagonal wedges (replaced with a row-by-row continuation);
-    - a faint ghost outline remained (fixed with a hardened matte);
-    - the library's cube and foliage transitions brought v6's synthwave grid and v9's jasmine (replaced with new ones);
-    - the palm fronds lingered over his face (sped up).
+| Rev | Owner's note | What changed | Why |
+|---|---|---|---|
+| 1 | (first delivery) | — (the review fixes are in §6) | — |
+| 2 | *"I like the edit but what happened with the sun and the top right part of dexters head? Additionally, I would like for you to add a couple more transitions, graphics, and unique creative animations."* | **The sun now sits behind him.** Every sun shot has his MODNet matte; the disc and rays come only from the sky behind him; 22% of the light scatters over him; a light wrap on his near edge; lens ghosts dim by how much of the sun he covers. **New transitions:** cape sweep (replacing a repeated whip), mist ("he turns to mist", into a new knife shot), and a great bat through the lens (into a new flashlight shot). **New graphics:** sunlit dust in the day shots; the first daybreak burn (embers, hot rim) on a new full-silhouette final shot. | The sun was laid over the whole frame, so where his hair met the sky it burned his head away. "Add" means new themed cuts and transitions, not effects stacked on existing shots. |
+| 3 | *"I would like for you to improve the transition/loop at the end and make it a more creative and unique transition. Try to do something creative and different. Please add transitions, graphics and animations wherever possible."* | **The ASHES TO SUN loop** (§3), replacing a burn-to-white and cross-fade. Frame 0 became the clean boat shot (it had been hazed white). **New transitions:** eclipse (replacing a whip up), a sunny 3D card flip (replacing a tilt) and palm fronds sweeping the lens (replacing a smear). **New graphics:** bats gathering before the drop, a pulsing crimson backlight on the late night shots, night fog. | A white-out and fade isn't a loop worth watching twice. The loop should pay off the concept and be the most creative transition in the edit. |
+| Verdict | *"I like this edit and would like for you to make it a standard. The only gripe I have is the quality of some of the clips."* | No edits (as asked). Clip quality became a rule, and `tools/sharpness.py` was added. | Every pack is 720p and several are heavily compressed. |
 
-## 5. What made it good / what made it weak
-- **Good, per the owner:** approved as a standard after the loop rebuild.
-- **Good, the studio's analysis:**
-  - a concept from the song's words carried through grade, set pieces, sound and loop;
-  - the day/night split lands on the song's biggest change;
-  - five set pieces, each multi-stage with layered sound;
-  - 27 designed transitions, with almost no generic move unthemed;
-  - a loop that is itself a set piece and lands in frame 0's own sun;
-  - light physically behind him;
-  - every procedural asset lit (height maps, specular, rims) and checked at full size;
-  - text only on verified sung words.
-- **Weak:**
-  - **Clip quality (the owner's gripe).** Every library pack is 720p; several are heavily compressed (p8 S1 at 0.43 Mb/s, p9/p6/p10 at about 0.7 Mb/s); a 9:16 crop is enlarged about 2.8×. The softest shots were:
-    - the daybreak walk (zoomed to 3.5×);
-    - the palms (p10);
-    - the lollipop (p8);
-    - then the ice cream, hood and pink-wall shots.
-  - **Measured against the newer v11 rules:**
-    - the loop seam is 8.4, against a target of ≤ 1 (the light is still collapsing on the last frame);
-    - there are two white-outs: the torch blind-out (frames 687–692, mean luma 236) and the loop flare (1360–1372, mean luma 223).
+## 5. What made it good
+- **One concept from the song's own words**, mapped onto the character, carried through grade, structure, set pieces, sound and the loop.
+- **The biggest visual change on the song's biggest change:** the day/night split on the drop.
+- **Five multi-stage set pieces with layered sound,** and a loop that is the most creative of them. The loop lands in frame 0's own sun, so the end pays off the concept.
+- **27 designed transitions in 22.97 s,** almost none generic, each with its own sound.
+- **Light physically behind the subject** (matte, light wrap), and every procedural asset lit (height maps, specular, rims) and checked at full size.
+- **Text only on verified sung words.**
+- **What was weak:**
+  - clip quality (the owner's gripe);
+  - against the newer Flash rules, the loop seam (8.4 against ≤ 1) and the flare brightness (§9).
 
-## 6. Measured results
-| Check | Result |
-|---|---|
-| QC checkpoint | 11/11 PASS (incl. the flash-rate check added later) |
-| Loudness after AAC | −13.1 LUFS / −4.1 dBTP |
-| Loop seam (blurred diff; target ≤ 1) | 8.4 |
-| Flashes | two white-out runs (peaks 236 and 223); at most 2 flashes a second |
-| Softest shots | daybreak walk 0.147, palms 0.154, lollipop 0.200 (detail score on the MP4; 0.30+ is sharp) |
-| Transitions / longest span without a beat | 27 / 1.57 s (the drop and moon shots, each full of internal beats: burst, title, iris, moon rise) |
+## 6. Caught by review
+- The bat burst first came out of his mouth as a clump: rebuilt as a 3D flight from the sky with depth blur.
+- The swarm read as wallpaper, and the bats vanished on dark footage: rebuilt in depth (parallax, size and blur by distance) with a band of moonlight behind the column.
+- The coffin lid looked like a flat brown shape with yellow dots: rebuilt from a height map. The first wood grain read as zebra stripes and was toned down.
+- The moon was a flat red disc: now a procedural lunar surface.
+- Overlays on faces: sun-flare streaks across his eyes, the setting sun crossing his face, the dawn sun on his chin, title bats flying up across his face. All moved or re-routed off the face.
+- The red title spilled onto a red-lit shot: re-timed.
+- The logo was missing from the first cut: added once, unrestyled, with no halo on logo frames.
+- A caption on his chin: moved below.
+- The effects sat 20–25 dB under a loudly mastered song: raised 9 dB, and the music ducks under the big hits.
+- QC: an over-tight sunset close-up failed face centring. Re-timed to a centred moment; later framed off-centre (`face_x`) when the light wrap enlarged the detected face.
+- Two night shots were nearly black: per-shot exposure. A hazy opening shot: per-shot contrast.
+- The mist read first as blotchy holes, then as vertical drips (the owner dislikes drips): rebuilt as a soft blur-and-rise smoke dissolve.
+- The great bat started on his face with a thick cartoon outline: it now enters from the top corner with a fine edge, and dives out under the camera within 4 frames.
+- The burn was invisible on a frame-filling close-up (the matte had no edge): the final shot became a full silhouette.
+- In the loop:
+  - the burnt area first showed flat cream;
+  - the sun's rays still saw his burnt body and cast straight wedges (fixed by burning him *before* drawing the sun);
+  - inpainting the street smeared into diagonal wedges (replaced with a row-by-row continuation);
+  - a faint outline of him lingered (fixed with a hardened matte).
+- Library transitions brought old looks (the cube's synthwave grid, the foliage's jasmine): replaced with new ones.
 
-## 7. New rules (adopt in both studios)
-1. **Light sources go behind the subject, not over him.** Give sun, glow and ray shots the person matte, draw the light only from the background, and add a light wrap on the near edge. Evidence: "what happened with the sun and the top right part of dexters head?" (v105, rev 1). Applies to: all edits.
-2. **Clip quality.**
-   - Restore 720p sources (Studio 1's `tools/sr_prep.py`).
-   - Rank shots by sharpness before choosing them (`tools/sharpness.py N --src`) and on the render, and swap SOFT ones.
-   - Keep zoom at or under about 1.1 on 720p.
-   - Put hero shots and close-ups on the high-bitrate packs.
-   - Ask for 1080p or 4K packs when a hero moment needs one.
-   Evidence: "The only gripe I have is the quality of some of the clips" (v105 verdict). Applies to: all edits.
-3. **The loop should be the most creative transition in the edit**, a set piece that pays off the concept and lands in frame 0's own image, not a fade or white-out. Evidence: "make it a more creative and unique transition" (v105, rev 2→3), then approval. Applies to: all edits.
-4. **Restyle library transitions before reusing them;** they carry their original edit's look (v6's cube brings a synthwave grid, v9's foliage brings jasmine). Evidence: v105 rev 3 review. Applies to: all edits.
-5. **When a burn, dissolve or disintegration removes the subject, remove him before drawing scene light**, so nothing (rays, shadows, wraps) still reacts to him. Fill the hole with a plausible background, not a flat colour. Evidence: v105 rev 3 review. Applies to: all edits.
-6. **When the owner asks to "add transitions, graphics and animations wherever possible", replace the generic connectors with themed ones and add new cuts with new transitions**, rather than stacking effects on existing shots. Evidence: rev 2 and rev 3, then approval. Applies to: all edits.
+## 7. Rules to adopt
+1. *(new)* **Light sources go behind the subject, not over him.** Give every sun, glow or ray shot the person matte; draw the light only from the background; add a light wrap on the near edge; dim the lens ghosts by how much of the source he covers. (*"What happened with the sun and the top right part of Dexter's head?"*)
+2. *(new)* **Clip quality:**
+   - restore 720p sources (the Flash studio's `sr_prep.py`);
+   - rank shots by sharpness before choosing them and again on the render, and swap the soft ones;
+   - keep zoom at or under about 1.1 on 720p;
+   - put close-ups and hero shots on the highest-bitrate packs;
+   - ask the owner for 1080p or 4K packs when a hero moment needs one.
+   (*"The only gripe I have is the quality of some of the clips."*)
+3. *(changed, extends "the loop is a set piece")* **The loop should be the most creative transition in the edit:** it pays off the concept (here, his ashes become the sun he ran from) and lands in frame 0's own image, not a white-out or a fade.
+4. *(new)* **Restyle library transitions before reusing them.** They carry their original edit's look (a synthwave grid, jasmine flowers).
+5. *(new)* **When a burn, dissolve or disintegration removes the subject, remove him before drawing scene light,** so no rays, shadows or wraps still react to him. Fill the hole with a plausible background (continue the rows on either side), never a flat colour.
+6. *(new)* **"Add transitions, graphics and animations wherever possible" means:** replace generic connectors with themed transitions, and add new cuts with new transitions and new shots. Don't stack effects on existing shots.
+7. *(new)* **Mix effects against how loudly the song is mastered.** Measure them against the music at every set piece; on a loud master, push them about +9 dB and duck the music about 3 dB under the biggest hits.
+8. *(confirmed)* Nothing on faces: streaks, suns, particles and title bats are routed off the face. A concept from the song's words, carried everywhere. Text only on clearly sung words, each on its onset. Packs labelled 4K are 720p.
 
-## 8. Reusable assets
-| Technique / transition | Where the code is | How to restyle it for another show |
-|---|---|---|
-| Sun behind the subject: `sun_fx(..., m)` with light wrap, rays from the sky only, ghosts scaled by visibility | `v105/work/fx105.py` | Any light source (lightning, a streetlight, the Speed Force glow): swap the colour and position. |
-| ASHES TO SUN: `ash_setup`, `ash_body`, `ashes_fx`, `clean_plate`, `seam_out` | `fx105.py` | Any disintegration into a target: Flash → lightning sparks into the emblem; any subject → particles into frame 0's focal point. |
-| Eclipse transition `eclipse_tr` | `fx105.py` | A disc wipe with corona; recolour the corona, or use a lens or an emblem. |
-| 3D flock: `bat_burst`, `bat_swarm`, `bat_pass_tr`, `bat_sprite` | `fx105.py` | Any swarm sprite (debris, birds, shards); the depth projection and blur stay. |
-| Height-map-lit object: `coffin_lid` | `fx105.py` | Any hero prop (an emblem, a badge, a door): draw a height map and light it. |
-| Procedural moon: `moon_tex`, `bloodmoon_fx` | `fx105.py` | A planet or the sun behind a matte. |
-| Mist dissolve `mist_tr`; cape sweep `cape_tr`; card flip `card_flip`; palm sweep `palm_sweep` | `fx105.py` | Recolour or swap the sprite (the cape becomes a coat or flag; the palms become foliage, cables or banners). |
-| Flash measurement in QC (section 7b) | `v105/work/qc105.py` | Drop-in for any `qcN.py`. |
-| Clip quality ranking | `tools/sharpness.py` | Works on any edit (`--src` before rendering). |
+## 8. Techniques to reuse
+- **Sun behind the subject** (`sun_fx(..., m)`):
+  - inputs: the frame, the sun position and radius, and the person matte;
+  - build an emission map from the bright *background* plus a sun disc, both multiplied by (1 − matte), at quarter resolution;
+  - streak it radially away from the sun (10 scaled copies) into rays;
+  - add a glow of the visible disc;
+  - over the subject, add only 22% of the light; a light wrap is a blurred background halo near the sun, multiplied by the matte;
+  - lens ghosts along the axis through the centre are scaled by the disc's visible fraction.
+- **ASHES TO SUN** (`ash_setup`, `ash_body`, `ashes_fx`, `clean_plate`, `seam_out`):
+  1. once, from the matte at the start of the burn, make a burn-order map: 0.46 × distance from the silhouette edge + 0.30 × direction away from the sun + 0.12 × height + 0.20 × two octaves of noise, normalised, giving a release time per pixel over about 0.6 s;
+  2. per frame, within the hardened matte: char (×0.3) ahead of the front, a thin line glowing orange-white at the front with a halo, and behind it a clean plate made by averaging each row's background on either side of him;
+  3. 3,000 particles sampled from his silhouette, each carrying its pixel colour and its release time; after release they drift up with turbulence, then follow a shrinking spiral into the target (frame 0's sun), turning orange, then white-gold;
+  4. the flash: a light disc expands from the sun over about 8 frames with radial rays and a shock ring, the picture switches to frame 0 at its peak, and the disc collapses back to the sun's radius over about 11 frames (screen-blend sunlight, soft fall-off);
+  5. frame 0's sun starts 1.9× bright and calms over about 16 frames.
+  - Sound: crackle, a paper-burn hiss, a riser, a flare impact with a shimmer, a reverse swell, and a bloom on the loop point.
+- **Eclipse** (`eclipse_tr`, about 10 frames before the cut and 14 after):
+  - a black disc of 0.62 × the frame width slides in from the left, eased out, to centre;
+  - its inside shows the next shot;
+  - the corona outside is an exponential fall-off modulated by angular streamers;
+  - the outgoing shot dims up to 67%;
+  - at about 47% of the transition, a diamond-ring flash (a point glow plus a cross streak) fires on the rim at the upper right;
+  - then the disc radius grows to cover the frame.
+  - Sound: reverse swell, deep impact, shimmer, low bell.
+- **3D bat burst** (`bat_burst`):
+  - each bat has (X, Y) and a pass time; depth z = 0.16 + 14 × (pass time − now);
+  - projected as vanishing point + X × 700 / z, with size 62 / z and depth blur 2 / z − 0.9;
+  - the vanishing point moves from the sky (far bats) to the frame centre (near ones);
+  - painted far to near, as procedural flapping sprites (wings from a few polygons; the phase cycles at 6–10 Hz) with a backlit rim;
+  - the background flashes crimson as they pass.
+- **Height-map-lit prop** (`coffin_lid`):
+  - draw the height map (bevel from the distance transform, a raised inner panel, a groove, a raised cross);
+  - take normals from its Sobel gradient, light from the top left, add diffuse and specular (power 40), a wood grain albedo with streaks, and a clear-coat sheen band;
+  - the slam: scale 1.35 → 1 with an ease-in, then a jolt, dust, and a lift-away.
+- **Procedural blood moon** (`moon_tex`):
+  - three octaves of noise for the maria;
+  - 70 craters (a dark floor, a lit upper-right rim, a shadowed lower-left rim);
+  - limb darkening and a brighter Earth's-shadow edge;
+  - mapped through a dark → crimson → orange ramp;
+  - composited behind the person matte, with a red rim on him.
+- **Mist** (`mist_tr`, 10 frames before the cut and 14 after):
+  - the outgoing shot softens (blur up to σ 28 px) and rises (up to 110 px) as it thins through a rising billow mask;
+  - fog fills the frame;
+  - the incoming shot condenses from soft to sharp through a second mask.
+- **Cape sweep** (`cape_tr`): a billowing leading edge sweeps across with ripples. Behind it is black satin with broad sheen folds and a 190 px crimson lining band, with motion blur, casting a soft shadow ahead of it.
+- **Card flip** (`card_flip`): a perspective flip around the vertical axis over a blurred warm sky made from both shots, pulling back as it turns, with a glint edge-on.
+- **Palm sweep** (`palm_sweep`): procedural fronds (a curved spine with drooping leaflets) at three depths sweep across against the sun, with dappled light, and the next shot comes in their shadow.
+- **The great bat** (`bat_pass_tr`):
+  - one bat grows exponentially (×1.55 a frame) from a top corner to frame-filling;
+  - it's drawn at quarter resolution with depth blur and wing bones in the membrane;
+  - the cut happens in its shadow, and it dives out under the camera.
+- **Flash measurement in QC:**
+  - mean luma per frame;
+  - white-out runs at 200 or more;
+  - flash events (rise and fall of 25.5 or more within 0.2 s);
+  - flashes per second (fail above 3);
+  - every flash over a peak mean luma of 110.
+- **Clip quality ranking** (`tools/sharpness.py`):
+  - detail = mean |L − blur 1.2| / mean |L − blur 8| over the middle of each shot (independent of brightness);
+  - plus the upscale factor and the pack bitrate;
+  - flags SOFT, ZOOM (over 3.1×) and LOWBIT (under 800 kb/s).
 
-## 9. For the other studio
-- Your `tools/sr_prep.py` is the direct fix for this edit's gripe. The Dexter studio will use it from v106 on, once the branches merge.
-- The ASHES TO SUN technique pairs well with your "loop lands exactly on frame 0" rule. Building the end from frame 0's image is how v105's frame 0 and last frame match visually, but v105's measured seam (8.4) misses your ≤ 1. Making the last frame equal frame 0's image exactly (the iris fully closed on frame 0's sun) would close it.
-- **The question to settle:** which engine new edits start from. The Dexter studio uses v105; you use v11. The proposal: Dexter edits from v105, Flash edits from v11, with shared effects ported both ways through handoffs.
+## 9. Measured (final)
+- **Loudness:** −13.1 LUFS, −4.1 dBTP after AAC.
+- **Loop seam:** blurred diff 8.4. This misses the ≤ 1 rule: the light is still collapsing on the last frame. The next edit will end on frame 0's exact image.
+- **Cuts:** 27 designed cuts, 0 clicks.
+- **Faces:** centred in every shot, 0 text over faces.
+- **Flashes:** at most 2 per second.
+  - Two white-outs: the torch blind-out (frames 687–692, peak mean luma 236) and the loop flare (1360–1372, peak 223).
+  - 9 of 14 flashes exceed the ~110 flare limit, partly because the day half is bright overall.
+- **Softest shots** (detail score on the MP4; about 0.30 or more is sharp): the daybreak walk 0.147 (zoomed to 3.5×), the palms 0.154 (p10), the lollipop 0.200 (p8).
