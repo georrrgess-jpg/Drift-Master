@@ -1,5 +1,5 @@
 {
- "note": "Every voidfx edit with its owner verdict, quotes, strengths and lessons. Studio 1 = v1-v11 (its own branch), Studio 2 = v101-v106 (v106 is a one-off Flash edit made in the Dexter chat on the v11 engine). Verbatim Studio 2 messages: owner_messages_studio2.md.",
+ "note": "Every voidfx edit with its owner verdict, quotes, strengths and lessons. Studio 1 = v1-v12 (its own branch), Studio 2 = v101-v106 (v106 is a one-off Flash edit made in the Dexter chat on the v11 engine). Verbatim Studio 2 messages: owner_messages_studio2.md.",
  "edits": [
   {
    "id": "v1",
@@ -289,6 +289,48 @@
     "three Reverse-Flash shots zoomed 32-40% inside the inset",
     "light rays drawn over him (Studio 2 rule 1)"
    ]
+  },
+  {
+   "id": "v12",
+   "studio": 1,
+   "title": "BLOOM",
+   "show": "The Flash",
+   "song": "fakemink \"Night Blooming Jasmine\"",
+   "tempo": "102.79 BPM",
+   "window": "18.71-42.05 s (bars 8-18, h64-h144); the vocal stem fades on a half-beat echo so the instrumental wraps into bar 8",
+   "hero_moment": "bar 12 (28.05 s) the vocal enters -> the drop out of his pupil; 18.68 s FULL BLOOM",
+   "concept": "LIGHTNING BLOOM: 'night blooming' = the night Barry was struck; a procedural lightning jasmine with Lichtenberg veins",
+   "look": "NOCTURNE: indigo nights, crimson suit, orange light turned cream, jasmine-white lightning, deep vignette",
+   "verdict": "approved standard after rev 3 (the Flash scaffold moved to v12)",
+   "owner_quotes": [
+    "can you remove the night text at the beginning and get rid of like half the sound effects. Do this efficiently.",
+    "get rid of the bloom text, remove the bell sound on the flower and the whoosh on one of the first transitions. I would also like for you to implement one more really cool transition and try to do an emblem transition aswell.",
+    "I like this edit make it a standard"
+   ],
+   "set_pieces": [
+    "THE BLOOM (bud in the pupil)",
+    "FULL BLOOM behind him (focal)",
+    "EMBLEM BLOOM",
+    "FRACTAL BURN",
+    "the closing-bud dive onto frame 0"
+   ],
+   "transitions": 16,
+   "duration_s": 23.35,
+   "lessons": [
+    "Text is optional; titles must earn their place",
+    "Fewer, bigger sounds (37 effects, none on beat moments, no chimes)",
+    "An emblem transition on the real tracked emblem",
+    "A transition built on a real physical phenomenon",
+    "One hero asset carries the edit"
+   ],
+   "measured": {
+    "loudness_lufs": -13.0,
+    "true_peak_dbtp": -3.5,
+    "loop_seam_blurred_diff": 0.19,
+    "flashes_over_110": "none"
+   },
+   "folder": "voidfx dev/pipeline-v2: v12/ (from claude/gallant-planck-pqpczp)",
+   "report": "sync/handoffs/2026-11-08_flash_v12_BLOOM_standard.md"
   },
   {
    "id": "v101",

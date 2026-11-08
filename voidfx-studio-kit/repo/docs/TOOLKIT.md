@@ -219,6 +219,21 @@ Port by copying the functions into the edit's own section (`tools/splice_section
 | Smooth shiver | `shiver(shape, f, seed)` | Per-element sines at 9–15 Hz for tremble (no per-frame random). |
 | WONDER grade + finish | `look="wonder"`, `grade`, `finish106` | Amber highs, cobalt shadows, milky blacks by `tone_lut`; halation kept off the face box (its weight can be faded, for the loop). |
 
+### The v12 BLOOM toolkit (Studio 1's newest standard; `v12/work/render12.py` on `dev/pipeline-v2`, above the speed section)
+Full table in `sync/handoffs/2026-11-08_flash_v12_BLOOM_standard.md` §8. Dexter restyles are the Flash studio's suggestions.
+
+| Piece | Functions | Restyle for Dexter |
+|---|---|---|
+| Lightning jasmine (procedural five-petal flower, 2.5D opening, Lichtenberg veins, lightning edges) | `jas_geom`, `jas_draw`, `jas_light`, `jas_veins` | a blood-drop splash, a plastic sheet opening |
+| Light behind the subject with a light wrap | `behind` | a blood moon or sun behind him (v105 rule 1) |
+| THE BLOOM: a bud in the pupil bursts into a frame-filling bloom with the next shot inside the petals | `bloom`, `eye_pos` | a drop of blood blooming out of an eye or a slide |
+| FULL BLOOM: a flower unfolds behind him, petals as glowing surfaces breathing on the claps | `full_bloom_fx` | a blood moon / sun corona |
+| EMBLEM BLOOM: the tracked emblem cracks into five petals that peel open | `emblem_bloom`, `emblem_at`, `crack_canvas` | the Miami Metro badge, a blood slide, a kill-room lamp |
+| FRACTAL BURN: a Lichtenberg burn with embers and char burning through to the next shot | `fractal_burn` (uses v10 `lich_tree`) | a burn through plastic, a scorch across a photo |
+| Strike link, ECG bolt, bud iris, petal pass, pollen burst | `render12.py` | ECG: a crime-scene monitor; pollen: ash or blood mist |
+| Closing-bud dive onto frame 0 | `loop_dive`, `frame0_prefinish` | any closing aperture whose inside is frame 0 |
+| Guards | `face_guard`, `flash_governor`, per-shot `tame` | generic |
+
 ## 3. Graphics and text
 
 - **v9 graphics and type** (`render9.py`, end of file):
