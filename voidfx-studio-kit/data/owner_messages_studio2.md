@@ -644,3 +644,16 @@ Every message the owner sent in the Studio 2 session, in order, with uploaded fi
 ## 2026-11-05 15:27
 
 > Im currently working towards the development of a fully autonomous and manual editing studio. I would like for you to provide all the preference information, the notes about the edits and any and all files needed for the development of this studio.
+
+
+## 2026-11-08 (v106 WONDERWALL, The Flash × Oasis "Wonderwall")
+
+> I would like for you to create a marvelous flash edit using the attached audio and your best highest quality scene packs. I would like for you to try to utilize the audio attached. I want this to be the highest quality edit you have produced and to include many custom elements such as custom animations, creative custom graphics etc. Please ensure this edit is made with quality and efficiency. Please ensure this edit include cool creative and unique transitions.
+
+> Creating a flash edit in here was an error on my part and this will not regularly occur. Just complete it to the best of your ability and if it comes out bad then it's no big deal.
+
+> I would like for you to remove like half of the sound effects mostly the tedious annoying ones like the emblem shine and the few near the end . I would also like for you to do one more polish smooth over the animations make sure the loop is seemless and I would like for you to identify one space where these isn't anything happening and add a custom unique graphic into a cool transition.
+
+> can you slow down the tear drop transition so it's more visible?
+
+> I like this edit make it a standard

@@ -1,5 +1,5 @@
 {
- "note": "Every voidfx edit with its owner verdict, quotes, strengths and lessons. Studio 1 = v1-v11 (its own branch), Studio 2 = v101-v105. Verbatim Studio 2 messages: owner_messages_studio2.md.",
+ "note": "Every voidfx edit with its owner verdict, quotes, strengths and lessons. Studio 1 = v1-v11 (its own branch), Studio 2 = v101-v106 (v106 is a one-off Flash edit made in the Dexter chat on the v11 engine). Verbatim Studio 2 messages: owner_messages_studio2.md.",
  "edits": [
   {
    "id": "v1",
@@ -432,6 +432,65 @@
    },
    "folder": "repo/v105",
    "report": "sync/handoffs/2026-11-07_dexter_v105_DRACULA_standard.md"
+  },
+  {
+   "id": "v106",
+   "studio": 2,
+   "title": "WONDERWALL",
+   "show": "The Flash",
+   "song": "Oasis \"Wonderwall\"",
+   "tempo": "87.02 BPM (drum-stem fit; the auto map locked to 4/3 = 116)",
+   "window": "h456-h520, bars 57-65 (2:37.5-2:59.6, 22.06 s): chorus 2; bar 65 starts chorus 3 the same way, so the loop is musically exact",
+   "hero_moment": "16.55 s, the sung 'WONDERWALL' -> THE WONDERWALL burst (the frame becomes the wall and bursts toward the camera)",
+   "concept": "'Maybe you're gonna be the one that saves me': S3 finale Barry walks into the Speed Force, S4 premiere Iris brings him back",
+   "look": "WONDER: golden-hour amber against Speed Force cobalt, milky lifted blacks, red-orange halation kept off faces",
+   "engine": "v11 (Flash base) on dev/pipeline-v2; one-off Flash edit in the Dexter chat",
+   "verdict": "approved standard after rev 3 (a Flash standard next to v11 and v10)",
+   "owner_quotes": [
+    "I would like for you to create a marvelous flash edit using the attached audio and your best highest quality scene packs. ... I want this to be the highest quality edit you have produced and to include many custom elements such as custom animations, creative custom graphics etc. Please ensure this edit is made with quality and efficiency. Please ensure this edit include cool creative and unique transitions.",
+    "Creating a flash edit in here was an error on my part and this will not regularly occur. Just complete it to the best of your ability and if it comes out bad then it's no big deal.",
+    "I would like for you to remove like half of the sound effects mostly the tedious annoying ones like the emblem shine and the few near the end . I would also like for you to do one more polish smooth over the animations make sure the loop is seemless and I would like for you to identify one space where these isn't anything happening and add a custom unique graphic into a cool transition.",
+    "can you slow down the tear drop transition so it's more visible?",
+    "I like this edit make it a standard"
+   ],
+   "set_pieces": [
+    "the lightning rod onto Iris",
+    "TEAR LENS (her tear holds Barry's goodbye; we fall through it)",
+    "THE WONDERWALL rises, breathes, cracks",
+    "THE WONDERWALL burst (focal) + the title forged from light",
+    "the loop mist into frame 0"
+   ],
+   "transitions": 19,
+   "duration_s": 22.06,
+   "lessons": [
+    "Sound restraint: sound the set pieces and structural hits only; no shimmer/chime 'shine'; a transition may be silent",
+    "Find dead spans and pops by measuring frame-to-frame activity on the encode",
+    "A signature custom transition needs ~1 s on screen; move the cut to the next sung word to make room",
+    "Smoothness: flow on 24p holds, sub-pixel procedural motion, smooth tremble, no texture wrap",
+    "The loop dissolves into frame 0 under the cover and keeps its background moving across the wrap (virtual frames)"
+   ],
+   "measured": {
+    "loudness_lufs": -13.0,
+    "true_peak_dbtp": -2.9,
+    "loop_seam_blurred_diff": 0.14,
+    "whiteouts": [],
+    "max_flashes_per_s": 3,
+    "flashes_over_110": "3 single frames inside designed flashes (558: 155.6, 929: 117.4, 931: 139.2)",
+    "text_over_faces": 0,
+    "sharpness_soft": [
+     "run1",
+     "saves",
+     "pov",
+     "runred",
+     "lookup",
+     "arms",
+     "charge",
+     "through",
+     "smile"
+    ]
+   },
+   "folder": "voidfx dev/pipeline-v2: v106/",
+   "report": "sync/handoffs/2026-11-08_dexter_v106_WONDERWALL_standard.md"
   }
  ]
 }

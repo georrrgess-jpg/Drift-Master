@@ -115,6 +115,7 @@ The owner, after rev 5: *"I like this edit. I would like for you to make it a st
 | Edit | Folder | Why it is a benchmark |
 |---|---|---|
 | **BOP** (The Flash × DaBaby "BOP", rev 4, Studio 1) | `v11/` (Studio 1's branch) | **Studio 1's newest benchmark and base engine.** *"I like this edit and would like for you to make it a standard."* The reference for a concept found in the song itself ("Harrison" → the Reverse-Flash rivalry), a single focal set piece (THE RIFT), detailed graphics revealed on real objects (the emblem coin flip), a beat animation for every shot that only moved to the beat, and a loop that lands exactly on frame 0 (seam 0.11). Its rules are in CLAUDE.md. |
+| **WONDERWALL** (The Flash × Oasis "Wonderwall", rev 3; made in the Dexter chat on the v11 engine) | `v106/` (voidfx `dev/pipeline-v2`) | Approved as a standard: *"I like this edit make it a standard."* The reference for **a story concept from a lyric line and the show's history** ("you're gonna be the one that saves me": into the Speed Force, Iris brings him back), **a focal set piece built from the edit's own frames** (THE WONDERWALL rises tile by tile behind him, cracks, and the frame bursts into its tiles on the word), **a custom graphic transition carrying the reverse shot** (TEAR LENS: Iris's tear holds Barry's goodbye, falls toward the lens, we fall through), **sound restraint** (half the effects cut, then approved), **dead-span and pop audits by measurement**, and **a loop that lands exactly and keeps moving** (seam 0.14). Handoff: `sync/handoffs/2026-11-08_dexter_v106_WONDERWALL_standard.md`. |
 | **LET IT HAPPEN** (The Flash × Tame Impala "Let It Happen", rev 5, Studio 1) | `v10/` (Studio 1's branch) | **Studio 1's standard for motion and finish** (the Flash edit approved in chat 1): speed ramps with smooth slow motion on restored source, the beat camera, light rays, multi-stage set pieces, the AROUND ring loop. Two rounds of "lacklustre" were fixed by **the motion pass, not by more effects**. |
 | **DRACULA** (Dexter × Tame Impala "Dracula", rev 3, Studio 2) | `v105/` | **The newest standard (§0); the scaffold starts from it.** *"I like this edit and would like for you to make it a standard."* The day/night split on the drop, the sun behind him, the bat burst, the blood moon, the eclipse and the ASHES TO SUN loop. The gripe: clip quality (§0, §2 item 11). |
 | **THE PASSENGER** (Dexter × GLM-RST "still love you (super slowed + reverb)", rev 3, Studio 2) | `v104/` | **A standard (§0).** *"I really like this edit and would like for it to be a standard."* The ink-wash look, the self-drawing opening, the lit dark-side set piece, the rotation motif. |
@@ -424,6 +425,7 @@ Only then deliver.
 | v103 FOREVER | undertow (deep teal-black water, bone highlights, blood the only warm colour, caustics, marine snow, cyan halation) |
 | v104 THE PASSENGER | SUMI ink wash (ivory paper highlights with fibres, ink-blue lifted blacks, only strong reds kept as red ink; ink drop, ink blooms, brush strokes, ink-bled vignette) |
 | v105 DRACULA | SUNDOWN: two looks split on the drop. Day: a bleached warm "Sunshine State postcard" (teal shadows, a sun with rays and lens ghosts). Night: cold moonlit silver, deep blacks, only crimson kept and pushed (a blood moon, bats, a crimson bloom). |
+| v106 WONDERWALL (The Flash) | WONDER (golden-hour amber light against Speed Force cobalt, milky lifted blacks, red-orange halation kept off faces; cobalt mist, gold mortar light) |
 
 Fresh directions for future edits:
 - 16 mm film burn / home movie (Harry flashbacks);
@@ -453,6 +455,7 @@ Fresh directions for future edits:
 | v103 | Foo Fighters "Everlong" | 158 BPM | h1000–h1080 + h1096–h1152 (3:09.9–3:38.7; two riff bars spliced out) | 3:20.51, the full band returns → THE RIP (rev 4; was THE SAMPLE) |
 | v104 | GLM-RST "still love you (super slowed + reverb)" (TikTok sound, screen-recorded) | 112.19 BPM (fitted to the sub-bass hits; k = sixteenth 0.13370 s, k0 = 0.042 s) | the whole 23 s clip: synth pickup + five two-bar phrases, ends on a loop boundary | 1.65 s, the sub-bass enters → THE INK DROP lands |
 | v105 | Tame Impala "Dracula" | 114.99 BPM | half-beats 592–680 (2:34.6–2:57.5, 11 bars, one pass); the pre-roll is the song's own lead-in, so the loop plays through | 2:40.8 one-bar drop-out → SUNDOWN; 2:42.9 drop (+29.8 dB) → THE BAT BURST |
+| v106 | Oasis "Wonderwall" | 87.02 BPM (drum-stem fit; the auto map locked to 4/3 = 116) | half-beats 456–520 (bars 57–65, 2:37.5–2:59.6, chorus 2); bar 65 starts chorus 3 the same way, so the loop wraps on the music | 16.55 s, the sung "WONDERWALL" → THE WONDERWALL burst |
 
 ## 11. Communication
 

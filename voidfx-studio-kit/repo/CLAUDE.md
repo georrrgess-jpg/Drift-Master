@@ -53,6 +53,15 @@
   - the song window chosen so its lyrics are on screen;
   - every clearly sung line captioned on its words (`tools/lyrics.py`), with key moments landing on sung words.
 
+**`v106/`, *WONDERWALL*** (The Flash × Oasis "Wonderwall", rev 3): a one-off Flash edit the owner asked for in this chat, built on the v11 engine (code in `v106/` on the voidfx `dev/pipeline-v2` branch). The owner: *"I like this edit make it a standard."* Its rules apply to Dexter edits too:
+  - **Sound restraint** (rev 2: *"remove like half of the sound effects mostly the tedious annoying ones like the emblem shine and the few near the end"*): sound the set pieces and structural hits only. No sound on every camera punch, letter, small transition or beat animation; no shimmer, chime or "shine" sounds; let the song carry the ending and the loop. A transition may be silent, and mixcheck's "buried" list is a review list, not a target. Rule 7 (+9–10 dB against a loud master, a 3 dB duck) still applies to the sounds you keep. **This changes "every transition gets its own sound".**
+  - **Find dead spans by measurement** (rev 2: *"identify one space where these isn't anything happening"*): the mean frame-to-frame difference of the encode per half-beat. Any span of about 1 s or more near the static floor (about 1–1.5 grey levels, against 5–18 when active) gets a new cut and a designed transition.
+  - **A pop audit on every encode:** every frame whose difference exceeds 3× the local median plus 2 is a cut, a designed flash or a beat hit; anything else is a defect (rev 1 shipped six that no still showed).
+  - **A signature transition needs about 1 s on screen** (rev 3: *"slow down the tear drop transition so it's more visible"*, 0.6 → 1.0 s). Move the cut to the next sung word to make room rather than squeezing it.
+  - **Smooth motion** (rev 2: *"one more polish smooth over the animations"*): flow on 24p held shots where it stays clean; procedural motion sub-pixel, never in integer steps; tremble as smooth per-element sines, not per-frame random; no noise texture wraps inside the edit's time range. Cover transitions are exactly 0 at their ends, and plates dissolve under the cover instead of switching.
+  - **The loop keeps moving** (rev 2: *"make sure the loop is seemless"*): dissolve into frame 0's picture under the cover, fade frame 0's finish in, render frame 0's background animation at the wrap's virtual negative frames, keep periodic events off frame 0. Seam ≤ 1 (v106: 0.14) and no frame-difference spike across the wrap.
+  - **Probe the source range for VFX colour flashes** (the S3 Speed Force shot flashes pink at 134.37–134.47 s); they become pops under flow and transitions.
+
 **Workflow from 2026-11-07: two voidfx chats as a coalition.**
 - **Roles:**
   - the Flash studio is Studio 1 (the other chat; v12 onward; branch `claude/gallant-planck-pqpczp`);
@@ -150,7 +159,7 @@
 - **Branding:** no constant watermark and no outro card. The voidfx logo (`src/voidfx_logo.webp`) appears **once, as a transition** (e.g. flying through the "o"). **Never recolour, retheme or restyle the logo** (no neon/UV/tint versions). Use the supplied image as-is (`logo_through` / `tin="logo_orig"`) unless the user explicitly asks for a change.
 - **Transitions:** pronounced and designed, the kind where the viewer wonders "how did they do that". They should feel like **going through something**: barrel, scope, shattering glass, an eye or pupil, a shadow, the logo's "o", a photo on the wall, a knife slash.
   - Avoid plain hard cuts in quiet or dialogue sections.
-  - Every transition gets its own sound.
+  - Every transition gets its own sound. *(Changed by v106: sound the set pieces and structural hits only; a transition may be silent. See the v106 standard below.)*
 - **Loop:** the edit must loop seamlessly for TikTok, in picture (e.g. into the pupil to black → iris open from black) and in sound. For sound: room tone and drone continue across the wrap, the timeline is built circularly, mastering runs on a wrapped copy, and audio and video are exactly the same length. An outro card breaks the loop, so don't use one.
 - **Sound:** smooth and clean.
   - Dialogue is cleaned and levelled, with equal-power fades at every join.

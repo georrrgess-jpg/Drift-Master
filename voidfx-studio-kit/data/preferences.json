@@ -191,6 +191,49 @@
    "id": "fx_level_vs_master",
    "rule": "Measure effect levels against the music at every set piece; on a loud master push effects about +9 dB and duck the music about 3 dB under the biggest hits",
    "since": "v105"
+  },
+  {
+   "id": "sound_restraint",
+   "rule": "Sound the set pieces and structural hits only; no sound on every camera punch, letter, small transition or beat animation; no shimmer/chime 'shine' sounds; let the song carry the ending and the loop. A transition may be silent; mixcheck's buried list is a review list, not a target",
+   "since": "v106 rev 2",
+   "changes": "'every transition gets its own sound' (v6-v11) and v11 rule 8's 'each with its own sound'"
+  },
+  {
+   "id": "dead_span_audit",
+   "rule": "Measure frame-to-frame activity of the encode per half-beat; any ~1 s+ span near the static floor (~1-1.5 grey levels vs 5-18 when active) gets a new cut and a designed transition",
+   "since": "v106 rev 2",
+   "check": "activity table"
+  },
+  {
+   "id": "pop_audit",
+   "rule": "Every frame whose difference exceeds 3x the local median (+-6 frames) + 2 is a cut, a designed flash or a beat hit; anything else is a defect to fix",
+   "since": "v106 rev 2"
+  },
+  {
+   "id": "signature_transition_time",
+   "rule": "A custom graphic transition needs ~1 s on screen and a graphic >= ~8% of the frame width while it is read; move cuts to the next sung word to make room rather than squeezing",
+   "since": "v106 rev 3"
+  },
+  {
+   "id": "smooth_motion",
+   "rule": "Flow on 24p held shots where it stays clean; procedural motion sub-pixel (no integer-step drift); tremble as smooth per-element sines, not per-frame random; no noise texture wraps inside the edit's time range (virtual frames included)",
+   "since": "v106 rev 2"
+  },
+  {
+   "id": "cover_ends_at_zero",
+   "rule": "Cover transitions are exactly 0 at their ends and continuous across the cut; dissolve plates under the cover instead of switching",
+   "since": "v106 rev 2"
+  },
+  {
+   "id": "loop_keeps_moving",
+   "rule": "The loop dissolves into frame 0's picture under the cover, fades frame 0's finish in, renders frame 0's background animation at the wrap's virtual negative frames, and keeps periodic events off frame 0; seam <= 1 and no frame-diff spike across the wrap",
+   "since": "v106 rev 2",
+   "extends": "loop_lands_exactly (v10, v11)"
+  },
+  {
+   "id": "probe_vfx_flicker",
+   "rule": "Check the chosen source range for VFX colour flashes; they become pops under flow and transitions",
+   "since": "v106 rev 2"
   }
  ],
  "style": {
@@ -239,7 +282,8 @@
   "v102": "storm",
   "v103": "undertow",
   "v104": "SUMI ink wash",
-  "v105": "SUNDOWN day/night split"
+  "v105": "SUNDOWN day/night split",
+  "v106": "WONDER: golden-hour amber against Speed Force cobalt, milky lifted blacks, red-orange halation (The Flash)"
  },
  "fresh_looks": [
   "16 mm home movie (Harry flashbacks)",
