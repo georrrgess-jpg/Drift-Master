@@ -427,6 +427,7 @@ Only then deliver.
 | v104 THE PASSENGER | SUMI ink wash (ivory paper highlights with fibres, ink-blue lifted blacks, only strong reds kept as red ink; ink drop, ink blooms, brush strokes, ink-bled vignette) |
 | v105 DRACULA | SUNDOWN: two looks split on the drop. Day: a bleached warm "Sunshine State postcard" (teal shadows, a sun with rays and lens ghosts). Night: cold moonlit silver, deep blacks, only crimson kept and pushed (a blood moon, bats, a crimson bloom). |
 | v106 WONDERWALL (The Flash) | WONDER (golden-hour amber light against Speed Force cobalt, milky lifted blacks, red-orange halation kept off faces; cobalt mist, gold mortar light) |
+| v12 BLOOM (The Flash, Studio 1) | NOCTURNE (indigo nights with daylight pushed to night, the suit crimson, orange light turned cream, lightning in jasmine white over a cream glow, deep vignette, fine grain) |
 
 Fresh directions for future edits:
 - 16 mm film burn / home movie (Harry flashbacks);
@@ -457,6 +458,7 @@ Fresh directions for future edits:
 | v104 | GLM-RST "still love you (super slowed + reverb)" (TikTok sound, screen-recorded) | 112.19 BPM (fitted to the sub-bass hits; k = sixteenth 0.13370 s, k0 = 0.042 s) | the whole 23 s clip: synth pickup + five two-bar phrases, ends on a loop boundary | 1.65 s, the sub-bass enters → THE INK DROP lands |
 | v105 | Tame Impala "Dracula" | 114.99 BPM | half-beats 592–680 (2:34.6–2:57.5, 11 bars, one pass); the pre-roll is the song's own lead-in, so the loop plays through | 2:40.8 one-bar drop-out → SUNDOWN; 2:42.9 drop (+29.8 dB) → THE BAT BURST |
 | v106 | Oasis "Wonderwall" | 87.02 BPM (drum-stem fit; the auto map locked to 4/3 = 116) | half-beats 456–520 (bars 57–65, 2:37.5–2:59.6, chorus 2); bar 65 starts chorus 3 the same way, so the loop wraps on the music | 16.55 s, the sung "WONDERWALL" → THE WONDERWALL burst |
+| v12 | fakemink "Night Blooming Jasmine" (again; v9 used 2:19–3:09) | 102.8 BPM | 18.71–42.05 s (bars 8–18); the vocal fades on a half-beat echo so the instrumental wraps into bar 8 | bar 12 (28.05 s) the vocal enters, the hats fall away; bar 16 the claps |
 
 ## 11. Communication
 
