@@ -533,6 +533,74 @@
    },
    "folder": "voidfx dev/pipeline-v2: v106/",
    "report": "sync/handoffs/2026-11-08_dexter_v106_WONDERWALL_standard.md"
+  },
+  {
+   "id": "v107",
+   "studio": 2,
+   "title": "ALL CAPS",
+   "show": "Dexter",
+   "song": "Madvillain \"All Caps\"",
+   "tempo": "87.50 BPM (drum-stem fit over 8 bars; the auto map read 175.6, the autocorrelation 117.4 = the dotted pattern)",
+   "window": "h176-h240 (8 bars, 60.92-82.86 s, 21.94 s): the end of verse 1 and the beat break; the bass drops out in the last bar and returns on bar 1",
+   "hero_moment": "14.76-16.45 s: 'ALL CAPS' -> the newsprint strip slaps on, D-E-X-T-E-R stamped on the 16th grid, the strip flies into the sky onto the real WE <3 DEXTER banner",
+   "concept": "ALL CAPS: 'just remember ALL CAPS when you spell the man name'. The press knows him as the BAY HARBOR BUTCHER; the song spells his name (front page, letterpress, the S1 finale banner, the crowd's confetti for the loop)",
+   "look": "TABLOID: newsprint cream highlights, ink blacks, slate blues, one spot red, a misregistered red plate, paper grain, a fine screen",
+   "engine": "v12 (v11 BOP + v12) on dev/pipeline-v2, with the restored-source sampler; the new Dexter scaffold base (--base v107)",
+   "verdict": "approved standard after rev 4 (the newest Dexter standard)",
+   "owner_quotes": [
+    "I would like for you to create a marvelous dexter edit using the attached audio and your best highest quality scene packs. I would like for you to try to utilize the audio attached. I want this to be the highest quality edit you have produced and to include many custom elements such as custom animations, creative custom graphics etc. Please ensure this edit is made with quality and efficiency. Please ensure this edit include cool creative and unique transitions.",
+    "All right, I really like the end, and I like most of the transitions, but the transition that occurs at 3 seconds in, I don't really like that. I like to replace it with a custom graphic into a really cool transition. And then the head spin transition, I don't really like it because the final shot doesn't have a centered shot of Dexter. I would like for you to replace it with that or change the transition to something else. I also don't like that you reuse the same clip around the 17-second mark. You reuse it at the 17-second mark and the 19-second mark. I'd like for you to use a different shot, and I'd like for you to smooth out the ending part. And I don't really like how low effort the loop is. The loop is pretty low effort. It kind of just does one shot and then does the shot from the beginning of the next shot. So try to make the loop more creative with a unique graphic/animation and then do the transition.",
+    "I don't like the transition at 3 seconds with the black bars. I also don't like how slow it writes dexters name in black near the end of the edit. Can you make it line up so it's not too fast and not too slow. Additionally, I want you to implement one new really unique graphic/animation that you have not tried to create before to give this edit it's own custom flare. Please complete this improvement with quality and efficiency.",
+    "Can you get rid of the point of origin graphic/transition the remove and replace the black box transition from the 3 and a half second mark.",
+    "I like this edit make it a standard"
+   ],
+   "set_pieces": [
+    "HOT MOLASSES (a viscous blood pour down the lens)",
+    "HEADSPIN onto a centred overhead face",
+    "THE FRONT PAGE (MIAMI GAZETTE spins in; dive into his halftone photo)",
+    "ALL CAPS (focal): letterpress D-E-X-T-E-R on a newsprint strip -> the strip becomes the real banner",
+    "the parade confetti behind his matte",
+    "THE MASSES SPELL HIS NAME (loop): the crowd's confetti forms DEXTER and bursts into frame 0"
+   ],
+   "transitions": 17,
+   "duration_s": 21.94,
+   "rejected_in_revisions": [
+    "press flash (rev 1)",
+    "SPECIAL REPORT TV in a dark room: read as black bars (rev 2)",
+    "SPATTER ANALYSIS -> RORSCHACH: converging strings on a target ring where his face appears (rev 3; a banned gimmick)",
+    "redaction boxes: 'black box transition' (rev 1-3)"
+   ],
+   "lessons": [
+    "No black occluders as transitions (bars, boxes, a screen in a dark room)",
+    "Never design graphics that converge on a face, even one about to appear; read the banned list first",
+    "A slot that failed twice: a kinetic transition or a clean downbeat cut, not another graphic concept",
+    "Spell-outs on an even rhythm grid, each letter landing on its hit",
+    "A spin lands on a centred face and decelerates about it",
+    "Never reuse a clip; smooth endings (beat camera rests, fewer longer cuts)",
+    "The beat-hit colour split must clamp at the frame edge (np.roll wraps)"
+   ],
+   "measured": {
+    "loudness_lufs": -13.0,
+    "true_peak_dbtp": -3.5,
+    "loop_seam_blurred_diff": 0.1,
+    "audio_seam_step": 0.0005,
+    "whiteouts": [],
+    "flashes_over_110": [],
+    "text_over_faces": "2 single frames inside transitions (422 headspin, 620 whip)",
+    "faces_vs_effects": "13 flags in 3 runs (Doakes ECU <=4.4 %, a cage beat, the loop burst)",
+    "dead_spans": "none >= 0.5 s",
+    "sharpness_soft": [
+     "hazmat",
+     "robot",
+     "cage",
+     "crowd"
+    ],
+    "full_renders": 9,
+    "rounds": 4,
+    "effects_placed": 28
+   },
+   "folder": "voidfx dev/pipeline-v2: v107/",
+   "report": "sync/handoffs/2026-11-08_dexter_v107_ALL_CAPS_standard.md"
   }
  ]
 }

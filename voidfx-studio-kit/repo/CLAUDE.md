@@ -1,6 +1,6 @@
 # voidfx edit standard
 
-**THE STANDARDS: `v105/` *DRACULA* (the newest), `v104/` *THE PASSENGER* and `v103/` *FOREVER* (Studio 2).** Every new edit starts from DRACULA: `tools/new_edit.py` copies its engine, its toolkit (which also carries all of THE PASSENGER's and FOREVER's) and its EDL. Every new edit must **exceed all three**. See the handbook §0.
+**THE STANDARDS: `v107/` *ALL CAPS* (the newest; on the v12 engine, see below), `v105/` *DRACULA*, `v104/` *THE PASSENGER* and `v103/` *FOREVER* (Studio 2).** Since 2026-11-08 every new Dexter edit starts from ALL CAPS (`tools/new_edit.py --base v107` on `dev/pipeline-v2`). The v105 base still works and carries DRACULA's, THE PASSENGER's and FOREVER's toolkits. Every new edit must **exceed all four**. See the handbook §0.
 
 **`v105/`, *DRACULA*** (Dexter × Tame Impala "Dracula", rev 3). The owner: *"I like this edit and would like for you to make it a standard."*
 - **The concept, SUNDOWN:** by day he wears the mask (sunny Miami, the boat, the smile). The last chorus is "run from the sun like Dracula", so the sun sets across the song's one-bar drop-out and night slams in on the drop. At the end the sun takes him.
@@ -53,6 +53,15 @@
   - the song window chosen so its lyrics are on screen;
   - every clearly sung line captioned on its words (`tools/lyrics.py`), with key moments landing on sung words.
 
+**`v107/`, *ALL CAPS*** (Dexter × Madvillain "All Caps", rev 4; the newest Dexter standard, on the v12 engine, code in `v107/` on the voidfx `dev/pipeline-v2` branch). The owner: *"I like this edit make it a standard."* Handoff: `sync/handoffs/2026-11-08_dexter_v107_ALL_CAPS_standard.md`. **New Dexter edits scaffold from it:** `tools/new_edit.py N SLUG "TITLE" --base v107` (the default for Dexter titles; on `dev/pipeline-v2`) copies the v12 engine with the restored-source sampler, the v107 toolkit as `fxN.py` and v107's EDL as the worked template; re-splice with `tools/splice_section.py N vN/work/fxN.py --replace`. Concept ALL CAPS: the name printed under the BUTCHER headline, stamped in letterpress, flown into the sky as the real WE ♥ DEXTER banner, spelled by the crowd's confetti for the loop (seam 0.10). Do this on every edit:
+  - **No black occluders as transitions:** letterbox bars, redaction boxes, a screen floating in a dark room read as "black bars / a black box". A cover must be content (paper, liquid, light, the picture itself). Evidence: *"I don't like the transition at 3 seconds with the black bars"*; *"remove and replace the black box transition"*.
+  - **No gimmick on the face, including graphics that point at where a face will appear** (converging strings, crosshairs, target rings; already in the banned list). **Read the banned list before designing any graphic.** Evidence: rev 3's POINT OF ORIGIN, *"get rid of the point of origin graphic/transition"*.
+  - **A slot that has failed twice gets no new graphic concept:** a kinetic, physical transition (rip, pour, spin, page, whip) or a clean cut on the downbeat with the beat camera's punch. Evidence: the 3 s slot (press flash, TV, POINT OF ORIGIN rejected; the clean downbeat cut approved).
+  - **Spell-outs and per-letter titles run on an even rhythm grid** (a 16th at ~90 BPM ≈ 10 frames a letter), each letter landing on its hit with its sound on the same frame. Evidence: *"how slow it writes dexters name … not too fast and not too slow"*.
+  - **A spin lands on a centred face and decelerates about it.** Evidence: *"the final shot doesn't have a centered shot of Dexter"*.
+  - **Never reuse a clip; smooth endings** (the beat camera rests through the break, fewer and longer cuts); **the loop is a set piece** (*"the loop is pretty low effort"*).
+  - **QC:** the beat-hit colour split clamps at the frame edge (`np.roll` wrapped it into a cyan/magenta edge line); face-centring flags inside designed transition windows are listed, not counted.
+
 **`v106/`, *WONDERWALL*** (The Flash × Oasis "Wonderwall", rev 3): a one-off Flash edit the owner asked for in this chat, built on the v11 engine (code in `v106/` on the voidfx `dev/pipeline-v2` branch). The owner: *"I like this edit make it a standard."* Its rules apply to Dexter edits too:
   - **Sound restraint** (rev 2: *"remove like half of the sound effects mostly the tedious annoying ones like the emblem shine and the few near the end"*): sound the set pieces and structural hits only. No sound on every camera punch, letter, small transition or beat animation; no shimmer, chime or "shine" sounds; let the song carry the ending and the loop. A transition may be silent, and mixcheck's "buried" list is a review list, not a target. Rule 7 (+9–10 dB against a loud master, a 3 dB duck) still applies to the sounds you keep. **This changes "every transition gets its own sound".**
   - **Find dead spans by measurement** (rev 2: *"identify one space where these isn't anything happening"*): the mean frame-to-frame difference of the encode per half-beat. Any span of about 1 s or more near the static floor (about 1–1.5 grey levels, against 5–18 when active) gets a new cut and a designed transition.
@@ -65,7 +74,7 @@
 **Workflow from 2026-11-07: two voidfx chats as a coalition.**
 - **Roles:**
   - the Flash studio is Studio 1 (the other chat; v12 onward; branch `claude/gallant-planck-pqpczp`);
-  - the Dexter studio is Studio 2 (this chat; v106 onward).
+  - the Dexter studio is Studio 2 (this chat; v106 onward; v107 ALL CAPS is its newest standard).
 - **Report format:** both studios write the same 9-section report: verdict, the edit, creative process, revision history, what made it good or bad, caught by review, rules (marked *new*, *changed* or *confirmed*), techniques described well enough to rebuild without the code, and measured numbers. The Flash studio's version of the procedure is in Drift-Master `voidfx-studio-kit/sync/FLASH_STUDIO_EXCHANGE.md`.
 - **Conflicts:** when two rules conflict, the newer owner verdict wins; record what it replaces. Shared decisions (the scaffold base, tools with the same name) are the owner's, and are recorded in both chats.
 - **This chat is the Dexter studio.** Every Dexter edit is made here, numbered v106 onward; the other chat has its own range.
@@ -144,7 +153,7 @@
 **Engines after the merge:** the two studios' scaffolds start from different engines.
 - **Studio 1:** `tools/new_edit.py` copies the v11 engine (v4–v11, 91 transitions plus the audio builder). Its EDL template adds v11's three timing settings: `E_BEAT` (where the beat drops in), `E_DIP` (the dip before the drop) and `E_LOOP` (where the loop set piece starts). Its setup check confirms v11 loads.
 - **Studio 2:** starts from v105 (the v4–v9 engine plus the v103, v104 and v105 toolkits).
-- **Agreed by both studios (2026-11-07):** Dexter edits start from v105, Flash edits from v11, and shared effects are ported between them through the edit reports. At the merge, `tools/new_edit.py` needs to support both bases. *(Updated 2026-11-08: Flash edits now start from v12; `tools/new_edit.py` on `dev/pipeline-v2` supports `--base v12|v11|v105`.)*
+- **Agreed by both studios (2026-11-07):** Dexter edits start from v105, Flash edits from v11, and shared effects are ported between them through the edit reports. At the merge, `tools/new_edit.py` needs to support both bases. *(Updated 2026-11-08: Flash edits now start from v12, Dexter edits from v107; `tools/new_edit.py` on `dev/pipeline-v2` supports `--base v12|v11|v107|v105`.)*
 
 - **Smooth slow motion vs. interpolation artefacts:** the owner also asked (v104 brief) to *"avoid introducing visible interpolation artifacts."* Use flow-interpolated slow motion only where it stays clean, and check those frames one by one. On fast motion or occlusions, prefer a held 24p cadence, a speed ramp that stays at 1x or faster, or a cut.
 
@@ -237,7 +246,7 @@
 
 - Sources go in `src/` (read-only copies). Each edit gets its own folder (`vN/work`, `vN/out`, ...).
 - One EDL file per edit holds every decision, and the renderer reads only that file. The EDL also sets `VER`, `SLUG` and `SONG`, plus the engine knobs (`DROP_TITLE`, `MONTAGE`, `VANISH_T0`, `VO_STEM`, `CAPS`, `END_CAP`); the template is `tools/edl_template.py`.
-- Tools: `tools/new_edit.py` (scaffold from the v105 standard), `tools/sharpness.py` (clip quality: soft, over-zoomed and low-bitrate shots, before and after the render), `tools/song_map.py` (beat grid, drops, candidate windows), `tools/lyrics.py` (lyric recognition: Demucs vocals + Whisper word times aligned to the published lyrics, with a ready caption block), `tools/transcribe.py` (dialogue word times), `tools/check_sources.py` (source-range audit), `tools/build.sh` (prep / auto / audio / clip / preview / video / qc), `tools/setup_studio.sh` (deps, models, source-library check).
+- Tools: `tools/new_edit.py` (scaffold; `--base v107` for Dexter since 2026-11-08, `--base v105` the previous Dexter standard, `--base v12` for Flash; the `dev/pipeline-v2` version), `tools/sharpness.py` (clip quality: soft, over-zoomed and low-bitrate shots, before and after the render), `tools/song_map.py` (beat grid, drops, candidate windows), `tools/lyrics.py` (lyric recognition: Demucs vocals + Whisper word times aligned to the published lyrics, with a ready caption block), `tools/transcribe.py` (dialogue word times), `tools/check_sources.py` (source-range audit), `tools/build.sh` (prep / auto / audio / clip / preview / video / qc), `tools/setup_studio.sh` (deps, models, source-library check).
 - Two studios: each works on its own branch with its own version range (Studio 1 `v8+`, Studio 2 `v101+`); see `studio/NEW_STUDIO_SETUP.md`.
 - Media (`src/`, audio, frames, outputs, models) stays out of git. Commit the code, EDL, transcripts, tracks and README, then push to the session's branch.
 - Models are downloaded at runtime: YuNet (`v3/models/face_detection_yunet_2023mar.onnx`), MODNet (`Xenova/modnet`), and faster-whisper large-v3 for dialogue and lyric timing.

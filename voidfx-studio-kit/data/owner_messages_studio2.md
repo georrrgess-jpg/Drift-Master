@@ -657,3 +657,16 @@ Every message the owner sent in the Studio 2 session, in order, with uploaded fi
 > can you slow down the tear drop transition so it's more visible?
 
 > I like this edit make it a standard
+
+
+## 2026-11-08 (v107 ALL CAPS, Dexter × Madvillain "All Caps")
+
+> I would like for you to create a marvelous dexter edit using the attached audio and your best highest quality scene packs. I would like for you to try to utilize the audio attached. I want this to be the highest quality edit you have produced and to include many custom elements such as custom animations, creative custom graphics etc. Please ensure this edit is made with quality and efficiency. Please ensure this edit include cool creative and unique transitions.
+
+> All right, I really like the end, and I like most of the transitions, but the transition that occurs at 3 seconds in, I don't really like that. I like to replace it with a custom graphic into a really cool transition. And then the head spin transition, I don't really like it because the final shot doesn't have a centered shot of Dexter. I would like for you to replace it with that or change the transition to something else. I also don't like that you reuse the same clip around the 17-second mark. You reuse it at the 17-second mark and the 19-second mark. I'd like for you to use a different shot, and I'd like for you to smooth out the ending part. And I don't really like how low effort the loop is. The loop is pretty low effort. It kind of just does one shot and then does the shot from the beginning of the next shot. So try to make the loop more creative with a unique graphic/animation and then do the transition.
+
+> I don't like the transition at 3 seconds with the black bars. I also don't like how slow it writes dexters name in black near the end of the edit. Can you make it line up so it's not too fast and not too slow. Additionally, I want you to implement one new really unique graphic/animation that you have not tried to create before to give this edit it's own custom flare. Please complete this improvement with quality and efficiency.
+
+> Can you get rid of the point of origin graphic/transition the remove and replace the black box transition from the 3 and a half second mark.
+
+> I like this edit make it a standard

@@ -259,6 +259,46 @@
    "id": "guards",
    "rule": "Face guard on beat moments, flash governor (flares under mean luma 110), per-shot tame for coloured light that isn't the subject",
    "since": "v12"
+  },
+  {
+   "id": "no_black_occluders",
+   "rule": "A transition's cover must be content (paper, liquid, light, the picture itself), never black bars, boxes or a dark room around a screen",
+   "since": "v107 rev 3-4"
+  },
+  {
+   "id": "check_banned_first",
+   "rule": "Read the banned list before designing any graphic; graphics pointing at a face (converging lines, crosshairs, rings) are banned even if the face arrives later",
+   "since": "v107 rev 4"
+  },
+  {
+   "id": "failed_slot",
+   "rule": "A slot that has failed twice gets a kinetic physical transition (rip, pour, spin, page, whip) or a clean downbeat cut with the beat camera's punch, not another graphic concept",
+   "since": "v107 rev 4"
+  },
+  {
+   "id": "spell_on_grid",
+   "rule": "Spell-outs and per-letter titles run on an even rhythm grid (16ths at ~90 BPM = ~10 frames a letter), each letter landing on its hit with its sound on the same frame",
+   "since": "v107 rev 3"
+  },
+  {
+   "id": "spin_lands_centred",
+   "rule": "A spin transition lands on a centred face and its second half rotates about the incoming face's centre",
+   "since": "v107 rev 2"
+  },
+  {
+   "id": "no_clip_reuse",
+   "rule": "Never use the same clip twice in one edit",
+   "since": "v107 rev 2"
+  },
+  {
+   "id": "smooth_ending",
+   "rule": "Through a beat break and the ending, the beat camera rests and cuts get fewer and longer (dolly, soft smear)",
+   "since": "v107 rev 2"
+  },
+  {
+   "id": "edge_clamped_split",
+   "rule": "Colour splits and channel shifts clamp at the frame edge (np.roll wraps into a cyan/magenta edge line)",
+   "since": "v107 rev 4 review"
   }
  ],
  "style": {
@@ -290,7 +330,9 @@
   "the v101 16 mm psychedelic look",
   "glowing-eyes gimmick shots (v10 rev 2: 'remove the scene with Barry's eyes being lit up')",
   "glass webs over the frame or face (v10 rev 4, v103)",
-  "solving a moment with an overlay that sits on the frame (glass web, hanging shards); transform the picture itself (v10 rev 4)"
+  "solving a moment with an overlay that sits on the frame (glass web, hanging shards); transform the picture itself (v10 rev 4)",
+  "black occluders as transitions: letterbox bars, redaction boxes, a screen floating in a dark room (v107 rev 2-4: 'the black bars', 'the black box transition')",
+  "graphics that converge on where a face is about to appear (v107 rev 3 POINT OF ORIGIN: strings + target ring)"
  ],
  "style_bank_used": {
   "v1": "warm cinematic, blood red",
@@ -309,7 +351,8 @@
   "v104": "SUMI ink wash",
   "v105": "SUNDOWN day/night split",
   "v106": "WONDER: golden-hour amber against Speed Force cobalt, milky lifted blacks, red-orange halation (The Flash)",
-  "v12": "NOCTURNE (Studio 1): indigo nights, the suit crimson, orange light turned cream, lightning in jasmine white over a cream glow, deep vignette"
+  "v12": "NOCTURNE (Studio 1): indigo nights, the suit crimson, orange light turned cream, lightning in jasmine white over a cream glow, deep vignette",
+  "v107": "TABLOID: newsprint cream highlights, ink blacks, slate blues, one spot red, misregistered red plate, paper grain, fine screen (Dexter)"
  },
  "fresh_looks": [
   "16 mm home movie (Harry flashbacks)",
@@ -319,7 +362,6 @@
   "blueprint / technical drawing",
   "cold winter teal (Trinity)",
   "full Sunshine State postcard",
-  "black-and-white newspaper 'BAY HARBOR BUTCHER' press",
   "X-ray / MRI medical"
  ],
  "process": {
@@ -328,6 +370,6 @@
   "built_in_review": "the studio catches problems itself and judges ship-readiness before sending",
   "efficiency": "quality and efficiency both matter",
   "coalition": "Two voidfx chats; this one is the Dexter studio (v106+). On every verdict write a handoff (sync/HANDOFF_TEMPLATE.md), update edits.json, preferences.json and sync/LEDGER.md, push, and send the file; adopt handoffs from the other chat the same way (sync/README.md).",
-  "engine_bases": "Dexter edits from v105; Flash edits from v12 since 2026-11-08 (was v11); tools/new_edit.py --base v12|v11|v105 on dev/pipeline-v2"
+  "engine_bases": "Dexter edits from v107 since 2026-11-08 (was v105); Flash edits from v12 since 2026-11-08 (was v11); tools/new_edit.py --base v12|v11|v107|v105 on dev/pipeline-v2"
  }
 }
