@@ -251,6 +251,18 @@ Full table in `sync/handoffs/2026-11-08_flash_v12_BLOOM_standard.md` §8. Dexter
 | Closing-bud dive onto frame 0 | `loop_dive`, `frame0_prefinish` | any closing aperture whose inside is frame 0 |
 | Guards | `face_guard`, `flash_governor`, per-shot `tame` | generic |
 
+### The v13 EVENT HORIZON pieces (Studio 1; approved, not a standard; `v13/work/sec13.py` on `dev/pipeline-v2`)
+Full recipes in `sync/handoffs/2026-11-08_flash_v13_EVENT_HORIZON_approved.md` §8.
+
+| Piece | Code | Restyle for Dexter |
+|---|---|---|
+| LIGHT RIBBON (graphic → transition → loop) | `ribbon_pts`, `ribbon_canvas`, `ribbon_light`, `ribbon_draw`, `ribbon_orbit`, `ribbon_spiral`, `ribbon_loop` | A blood ribbon, a smoke trail; keep the orbit at shoulder or chest height |
+| EMBLEM SPLIT | `emblem_split`, `zig_pts`, `ZIG` | A symbol's dominant stroke becomes the split line (a knife edge) |
+| EDGE CURRENT | `edge_map`, `current_mask`, `edge_current` | Outlines in UV luminol light |
+| FOCUS RACK, EYE IRIS, TIME SLICE, PANEL RUN, AFTERIMAGE, LIGHT LEAK, SPEED WHIP, WHIP UP | `focus_rack`, `eye_iris`, `time_slice`, `panel_run`, `afterimage`, `light_leak13`, `speed_whip`, `whip_up13` | Universal; recolour the seams and streaks |
+| Black hole kit, EVENT HORIZON, GRAV WAVE | `bh_warp`, `bh_disk`, `bh_draw`, `clean_plate`, `clock13`, `horizon_fx`, `event_horizon_tr`, `grav_wave`, the EDL's `dilate()` | A portal or eclipse behind a subject, once; time stopping on a lyric's silence |
+| Smoothness + QC | `src_weights` (`flowmax`, `flowfall`), `qc13.py`, `tools/motionqc.py` | Engine and QC (container durations; dead spans, pops, judder, the wrap step) |
+
 ## 3. Graphics and text
 
 - **v9 graphics and type** (`render9.py`, end of file):

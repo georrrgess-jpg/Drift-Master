@@ -601,6 +601,53 @@
    },
    "folder": "voidfx dev/pipeline-v2: v107/",
    "report": "sync/handoffs/2026-11-08_dexter_v107_ALL_CAPS_standard.md"
+  },
+  {
+   "id": "v13",
+   "studio": 1,
+   "title": "EVENT HORIZON",
+   "show": "The Flash",
+   "song": "Brent Faiyaz \"Wish You Well\" (full version)",
+   "tempo": "138 BPM half-beats, 69 BPM feel (drum-stem fit)",
+   "window": "h92-h188 (0:20.05-0:40.92, 20.87 s): six 16-half-beat phrases with no drums (an 808 hit at e8 mod 16, a rest at e12-14); bar 23 mirrors bar 11, so the window wraps exactly",
+   "hero_moment": "10.4-13.9 s 'Darling,' -> THE EVENT HORIZON (time dilates to a stop, a black hole eclipses behind him) -> the GRAV WAVE breakout",
+   "concept": "SINGULARITY: the S1 finale's singularity is the song's voice, a love that pulls everything in",
+   "look": "REDSHIFT: desaturated silver-steel; only the suit's crimson, skin, lightning and the light keep colour; redshifts as time slows",
+   "verdict": "approved, NOT a standard (rev 2); the Flash scaffold stays on v12",
+   "owner_quotes": [
+    "To be honest with you, I really don't like this edit. I don't like that the singularity is the primary object in every transition and animation. I would like for you to make a emblem transition. I want you to do some more transitions that replace the previous singularity transitions. And I want you to remove some of the tedious sound effects. And I would like for you to just create a really cool graphic that you use to turn into a transition, and just try to smooth out the rest of the edit and polish it.",
+    "I like this edit but I do not want you to make it a standard. It does somethings good and somethings bad."
+   ],
+   "set_pieces": [
+    "EVENT HORIZON + GRAV WAVE",
+    "LIGHT RIBBON (hero graphic -> transition -> loop)",
+    "EMBLEM SPLIT",
+    "the loop: the ribbon spirals out with frame 0 inside"
+   ],
+   "transitions": 15,
+   "duration_s": 20.87,
+   "lessons": [
+    "The hero asset is a motif (2-4 appearances), not the transition kit",
+    "An emblem/symbol transition comes from the symbol itself",
+    "A hero graphic lives ~1 s on screen before it becomes the transition",
+    "Start sound lean (~10-12 events)",
+    "Pull frames of library transitions (source leaks)"
+   ],
+   "weak": [
+    "abstract concept that took over rev 1",
+    "soft S1 pack under a desaturated grade; the emblem shot SOFT",
+    "a drumless section: few beat moments, no big moment in the first 10 s",
+    "the ribbon and the loop wipe touch his face for a few frames"
+   ],
+   "measured": {
+    "loudness_lufs": -13.5,
+    "true_peak_dbtp": -3.3,
+    "loop_seam_blurred_diff": 0.12,
+    "sound_events": 11,
+    "flashes": "no white-outs, at most 1 a second"
+   },
+   "folder": "voidfx dev/pipeline-v2: v13/ (merged from claude/gallant-planck-pqpczp)",
+   "report": "sync/handoffs/2026-11-08_flash_v13_EVENT_HORIZON_approved.md"
   }
  ]
 }
