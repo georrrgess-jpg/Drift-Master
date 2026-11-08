@@ -71,7 +71,7 @@
   },
   {
    "id": "transition_sound",
-   "rule": "Every transition has its own sound"
+   "rule": "At most one sound per ordinary transition; small transitions may be silent; layered sound only at the set pieces (changed by v12, v106, v13: was 'every transition has its own sound')"
   },
   {
    "id": "no_plain_cuts_quiet",
@@ -108,8 +108,8 @@
  "targets": [
   {
    "id": "transition_density",
-   "rule": ">= 24 designed transitions per ~24 s, none repeated except as a motif",
-   "since": "v103 note",
+   "rule": "16-20 designed transitions in ~22 s (the approved v107, v12, v13, v106: 0.73-0.91 a second), each a different idea; none repeated except a motif (changed: was >= 24 per 24 s, from v103)",
+   "since": "v103; recalibrated on v12, v13, v106, v107",
    "best": "v105: 27 in 22.97 s"
   },
   {
@@ -390,6 +390,7 @@
   "built_in_review": "the studio catches problems itself and judges ship-readiness before sending",
   "efficiency": "quality and efficiency both matter",
   "coalition": "Two voidfx chats; this one is the Dexter studio (v106+). On every verdict write a handoff (sync/HANDOFF_TEMPLATE.md), update edits.json, preferences.json and sync/LEDGER.md, push, and send the file; adopt handoffs from the other chat the same way (sync/README.md).",
-  "engine_bases": "Dexter edits from v107 since 2026-11-08 (was v105); Flash edits from v12 since 2026-11-08 (was v11); tools/new_edit.py --base v12|v11|v107|v105 on dev/pipeline-v2"
+  "engine_bases": "Dexter edits from v107 since 2026-11-08 (was v105); Flash edits from v12 since 2026-11-08 (was v11); tools/new_edit.py --base v12|v11|v107|v105 on dev/pipeline-v2",
+  "efficiency_2026_11_08": "Read studio/OWNER_RULES.md (one page) before designing and before delivering; plan_check before any render (build.sh video stops on a FAIL); stills only through the render server; one command per revision: build.sh N ship (audio, plan, video, parallel QC, signoff pages, report, deliver); the fresh-eyes critique (studio/CRITIQUE_PROMPT.md) before each delivery; log every owner rejection in studio/transitions.json the same turn. Targets: <= 2 owner rounds, <= 2 renders before the first delivery, 1 render per revision. Plan: sync/EFFICIENCY_PLAN.md"
  }
 }

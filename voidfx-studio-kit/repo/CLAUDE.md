@@ -1,5 +1,7 @@
 # voidfx edit standard
 
+**Read first (since 2026-11-08, the efficiency update): `studio/OWNER_RULES.md`** (every owner rule still in force, on one page) **and `studio/WORKFLOW.md`** (the fast loop). On `dev/pipeline-v2`: `bash tools/build.sh N plan` checks the EDL against the owner's recurring notes and `studio/transitions.json` before any render (a FAIL stops `video`); `bash tools/build.sh N ship` runs audio → plan → video → parallel QC → sign-off pages → report → deliver; the fresh-eyes critique (`studio/CRITIQUE_PROMPT.md`) runs before each delivery. The live tools are on `dev/pipeline-v2`; this kit's `repo/tools/` holds copies of the new ones (`plan_check.py`, `signoff.py`, `report.py`). Plan: `sync/EFFICIENCY_PLAN.md`.
+
 **THE STANDARDS: `v107/` *ALL CAPS* (the newest; on the v12 engine, see below), `v105/` *DRACULA*, `v104/` *THE PASSENGER* and `v103/` *FOREVER* (Studio 2).** Since 2026-11-08 every new Dexter edit starts from ALL CAPS (`tools/new_edit.py --base v107` on `dev/pipeline-v2`). The v105 base still works and carries DRACULA's, THE PASSENGER's and FOREVER's toolkits. Every new edit must **exceed all four**. See the handbook §0.
 
 **`v105/`, *DRACULA*** (Dexter × Tame Impala "Dracula", rev 3). The owner: *"I like this edit and would like for you to make it a standard."*
