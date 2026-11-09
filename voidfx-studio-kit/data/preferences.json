@@ -319,6 +319,21 @@
    "id": "qc_container_duration",
    "rule": "QC measures length and the audio seam on the container duration (the decoded AAC carries padding); fade the mix ends a few samples so a loud frame-0 hit doesn't click",
    "since": "v13 QC, v107 rev 1"
+  },
+  {
+   "id": "transition_density_v108",
+   "rule": "about 24-26 designed transitions in a 22 s edit (>= 1.1/s), nearly all custom and motivated; generic connectors to a handful",
+   "since": "v108 verdict ('could have contained slightly more transitions/animations' at 0.97/s)"
+  },
+  {
+   "id": "concept_boards_real_props",
+   "rule": "build the owner's concept boards from the shot's own props (lift / tilt / move the real object; fill where it was), not a CG copy beside them; board choices (text, timing) are per edit",
+   "since": "v108 rev 1"
+  },
+  {
+   "id": "built_drop",
+   "rule": "when a loop-based song has no drop, build one from the stems (mute drums + bass under the pre-drop half bar) and put the signature transition on it",
+   "since": "v108"
   }
  ],
  "style": {
@@ -352,7 +367,8 @@
   "glass webs over the frame or face (v10 rev 4, v103)",
   "solving a moment with an overlay that sits on the frame (glass web, hanging shards); transform the picture itself (v10 rev 4)",
   "black occluders as transitions: letterbox bars, redaction boxes, a screen floating in a dark room (v107 rev 2-4: 'the black bars', 'the black box transition')",
-  "graphics that converge on where a face is about to appear (v107 rev 3 POINT OF ORIGIN: strings + target ring)"
+  "graphics that converge on where a face is about to appear (v107 rev 3 POINT OF ORIGIN: strings + target ring)",
+  "droplets on the lens (rainfocus) and wavy heat-haze warps (haze108) as transitions (v108 rev 2: 'remove the water droplet filter', 'the squiggle, swirl, weird animation')"
  ],
  "style_bank_used": {
   "v1": "warm cinematic, blood red",
@@ -372,7 +388,8 @@
   "v105": "SUNDOWN day/night split",
   "v106": "WONDER: golden-hour amber against Speed Force cobalt, milky lifted blacks, red-orange halation (The Flash)",
   "v12": "NOCTURNE (Studio 1): indigo nights, the suit crimson, orange light turned cream, lightning in jasmine white over a cream glow, deep vignette",
-  "v107": "TABLOID: newsprint cream highlights, ink blacks, slate blues, one spot red, misregistered red plate, paper grain, fine screen (Dexter)"
+  "v107": "TABLOID: newsprint cream highlights, ink blacks, slate blues, one spot red, misregistered red plate, paper grain, fine screen (Dexter)",
+  "v108": "SURFACE / UNDER: warm bleached pastel Miami split by a plastic peel into cold steel and teal where only blood red survives (Dexter)"
  },
  "fresh_looks": [
   "16 mm home movie (Harry flashbacks)",

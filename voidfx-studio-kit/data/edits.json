@@ -648,6 +648,39 @@
    },
    "folder": "voidfx dev/pipeline-v2: v13/ (merged from claude/gallant-planck-pqpczp)",
    "report": "sync/handoffs/2026-11-08_flash_v13_EVENT_HORIZON_approved.md"
+  },
+  {
+   "id": "v108",
+   "studio": 2,
+   "title": "DOOMSDAY",
+   "show": "Dexter",
+   "song": "MF DOOM \"Doomsday\" (feat. Pebbles the Invisible Girl)",
+   "tempo": "95.39 BPM (drum-stem fit agrees with the map)",
+   "window": "h208-h280 (9 bars, 65.64-88.29 s, 22.64 s): 'watch your own back' -> the hook -> 'go get bagged and checked in'; drums and bass muted e18-e22 to build a drop on 'DOOMSDAY'",
+   "hero_moment": "6.92 s, 'DOOMSDAY': SPECIMEN, the real blood slide pivots up in his fingers, magnifies his eye, the next shot inside the glass, fills the lens as the beat slams back",
+   "concept": "UNDER THE SURFACE / BORN IN BLOOD: the hook ('ever since the womb, till I'm back where my brother went') taken literally from Dexter's history (the shipping container, Brian's table); built around the owner's two concept boards (SURFACE, SPECIMEN); no text",
+   "look": "two grades split by the SURFACE peel: surface108 (warm bleached pastel Miami) / under108 (cold steel and teal, only blood red survives, skin kept out of it)",
+   "engine": "v107 base (v12 engine + v107 toolkit) + the v108 toolkit; the new Dexter scaffold base (--base v108)",
+   "transitions": "21 + the loop in 22.6 s: surface, specimen, frost108, molasses108, fronds108, diffusion108, double108, luminol108, facematch108, developer108, sink108, light_sweep108, wiper108, last_drop + dolly x2, roll, polaroid, whip x2, slam, smear",
+   "verdict": "approved standard after rev 2 (the newest Dexter standard)",
+   "owner_quotes": [
+    "I would like for you to create a edit using the doomsday song and the attached concept transitions/ideas. I do not want you to use any text for either of the concepts I have attached (this is not a new preference or something I want you to institute often, this is just what I want for this edit) I would like for you to also use any other creative and custom graphics, animations and transitions you see fit. Try to make this the best dexter edit you have created .",
+    "I generally like the edit. ... merge that slide graphic slash animation and merge it with one of the actual slides from that scene ... remove that just for this edit ... add a lot more transition and unique graphics with custom animated transitions as well. I want there to be a lot of smooth transitions and creative ones so the edit flows all together.",
+    "I'd like for you to remove the water droplet filter at 14 seconds ... I also do not like the first transition that's kind of like the squiggle, swirl, weird animation. I like to replace it with a creative, unique transition",
+    "I like this edit make it a standard. Just note in there that the edit could have contained slightly more transitions/animations."
+   ],
+   "gripe": "the edit could have contained slightly more transitions/animations (21 + the loop, 0.97/s)",
+   "measured": {
+    "qc": "11/11",
+    "loudness": "-13.2 LUFS / -3.4 dBTP after AAC",
+    "loop_seam": 0.13,
+    "pops": "10, all cuts",
+    "dead_spans": 0,
+    "judder": 0,
+    "effects": 15
+   },
+   "folder": "repo/v108 (voidfx dev/pipeline-v2)",
+   "handoff": "sync/handoffs/2026-11-09_dexter_v108_DOOMSDAY_standard.md"
   }
  ]
 }
