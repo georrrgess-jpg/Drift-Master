@@ -662,7 +662,7 @@
    "look": "two grades split by the SURFACE peel: surface108 (warm bleached pastel Miami) / under108 (cold steel and teal, only blood red survives, skin kept out of it)",
    "engine": "v107 base (v12 engine + v107 toolkit) + the v108 toolkit; the new Dexter scaffold base (--base v108)",
    "transitions": "21 + the loop in 22.6 s: surface, specimen, frost108, molasses108, fronds108, diffusion108, double108, luminol108, facematch108, developer108, sink108, light_sweep108, wiper108, last_drop + dolly x2, roll, polaroid, whip x2, slam, smear",
-   "verdict": "approved standard after rev 2 (the newest Dexter standard)",
+   "verdict": "approved standard after rev 2 (the previous Dexter standard; v109 PHANTOM is newer)",
    "owner_quotes": [
     "I would like for you to create a edit using the doomsday song and the attached concept transitions/ideas. I do not want you to use any text for either of the concepts I have attached (this is not a new preference or something I want you to institute often, this is just what I want for this edit) I would like for you to also use any other creative and custom graphics, animations and transitions you see fit. Try to make this the best dexter edit you have created .",
     "I generally like the edit. ... merge that slide graphic slash animation and merge it with one of the actual slides from that scene ... remove that just for this edit ... add a lot more transition and unique graphics with custom animated transitions as well. I want there to be a lot of smooth transitions and creative ones so the edit flows all together.",
@@ -681,6 +681,40 @@
    },
    "folder": "repo/v108 (voidfx dev/pipeline-v2)",
    "handoff": "sync/handoffs/2026-11-09_dexter_v108_DOOMSDAY_standard.md"
+  },
+  {
+   "id": "v109",
+   "studio": 2,
+   "title": "PHANTOM",
+   "show": "Dexter",
+   "song": "EsDeeKid & Rico Ace \"Phantom\"",
+   "tempo": "70.0 BPM on the drum stem (the auto map read 93.3, 4/3 of it)",
+   "window": "h24-h80 (10.48-34.48 s, 24.0 s): one bar before the beat drops (2.57 s in the edit) through 'you've never got no motion, as you've never got no action'",
+   "hero_moment": "14.6-15.4 s: THE PHANTOM'S TRAIL, a red silk ribbon of light circles him (behind him through his matte, in front of his waist) and dives into the next shot; 2.57 s: MATERIALISE on the drop",
+   "concept": "PHANTOM: 'rocked out like a phantom', the Bay Harbor Butcher as a ghost the city hunts and never sees; mist (materialise, vanish, pass), graphics that become the cut (fingerprint, the fire from the real photo), the gust loop",
+   "look": "SPECTRAL: silver-blue night, inky blacks, cold cyan highlights with a ghost bloom, only blood red survives (per-shot redthr keeps sunburnt skin out)",
+   "engine": "v108 base + the v109 toolkit; the new Dexter scaffold base (--base v109)",
+   "transitions": "22 designed + 1 clean downbeat cut + the loop in 24 s: flashlight109, materialize109, afterimage109, mirror109, time_particles, tantrum109, flicker109, phantom_pass109, slices, surface, polaroid, cctv109, vanish109, page_turn107, whip, trail109, print109, smear, burn109, whip, redwash109, streetlight109, (cut), dust_loop109",
+   "verdict": "approved standard after rev 3 (the newest Dexter standard)",
+   "owner_quotes": [
+    "I want you to make a dexter edit using the attached song. I want this edit to include many cool custom and unique transitions and animations. I want this to be the best dexter edit you've created.",
+    "I relatively like this edit ... the head spin transition. I don't really like how that flows with this edit ... remove the clips with dokes and replace them with other high-quality texture clips ... make a cool flow where there's unique graphics appearing and then transitions from those graphics ... the end flow of the edit and into the loop. I don't really like that part ... more unique and creative with better animations.",
+    "I like this edit a lot ... change the heart monitor on the 21-second mark. You don't have to replace this with anything ... make the fire transition graphic ... stem from the actual picture that's burning and try to make it tied into that transition.",
+    "I really like this edit still, but I think it's just missing one more focal point. I would like for you to add one more really, really cool, custom, unique graphic into a transition ... the finishing touch.",
+    "I like this edit, make it a standard."
+   ],
+   "gripe": "none at the verdict; three rounds asked for: no headspin, no Doakes, graphics that become transitions, a better end and loop, no heart monitor, the fire from the real photo, one more focal point",
+   "measured": {
+    "qc": "11/11",
+    "loudness": "-13.1 LUFS / -3.1 dBTP after AAC",
+    "loop_seam": 0.12,
+    "pops": "12 (9 cuts, 1 beat, 2 source)",
+    "dead_spans": 0,
+    "judder": 0,
+    "effects": 11
+   },
+   "folder": "repo/v109 (voidfx dev/pipeline-v2)",
+   "handoff": "sync/handoffs/2026-11-09_dexter_v109_PHANTOM_standard.md"
   }
  ]
 }

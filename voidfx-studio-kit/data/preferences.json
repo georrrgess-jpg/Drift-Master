@@ -334,6 +334,31 @@
    "id": "built_drop",
    "rule": "when a loop-based song has no drop, build one from the stems (mute drums + bass under the pre-drop half bar) and put the signature transition on it",
    "since": "v108"
+  },
+  {
+   "id": "focal_point_v109",
+   "rule": "one centrepiece graphic mid-edit besides the drop: ~1 s with its own motion and depth (behind him through the matte, in front, off the face), then it becomes the transition",
+   "since": "v109 rev 3 ('it's just missing one more focal point ... the finishing touch')"
+  },
+  {
+   "id": "graphic_flow_v109",
+   "rule": "chain 2-3 graphic -> transition moments in the back half, each graphic on its shot ~0.5-1 s first",
+   "since": "v109 rev 1 ('unique graphics appearing and then transitions from those graphics')"
+  },
+  {
+   "id": "prop_effect_tracked_v109",
+   "rule": "a prop's effect starts on the prop, tracked through the shot: the object first, then the frame",
+   "since": "v109 rev 2 ('stem from the actual picture that's burning')"
+  },
+  {
+   "id": "loop_physics_v109",
+   "rule": "the loop needs real animated physics building frame 0 from its own picture, no dark gap; a fade or fog is not enough",
+   "since": "v109 rev 1"
+  },
+  {
+   "id": "texture_clips_v109",
+   "rule": "stay on the main character; swap soft or busy shots for sharp texture clips (fire, foliage, rust; high-bitrate packs)",
+   "since": "v109 rev 1 ('remove the clips with dokes ... high-quality texture clips')"
   }
  ],
  "style": {
@@ -368,7 +393,9 @@
   "solving a moment with an overlay that sits on the frame (glass web, hanging shards); transform the picture itself (v10 rev 4)",
   "black occluders as transitions: letterbox bars, redaction boxes, a screen floating in a dark room (v107 rev 2-4: 'the black bars', 'the black box transition')",
   "graphics that converge on where a face is about to appear (v107 rev 3 POINT OF ORIGIN: strings + target ring)",
-  "droplets on the lens (rainfocus) and wavy heat-haze warps (haze108) as transitions (v108 rev 2: 'remove the water droplet filter', 'the squiggle, swirl, weird animation')"
+  "droplets on the lens (rainfocus) and wavy heat-haze warps (haze108) as transitions (v108 rev 2: 'remove the water droplet filter', 'the squiggle, swirl, weird animation')",
+  "HUD / interface overlays drawn over the footage: monitor traces, readouts, timers (v109 rev 2: 'change the heart monitor ... You don't have to replace this with anything'; v6's VHS counter)",
+  "spins (headspin, roll, flip) in a smooth, dark edit (v109 rev 1: 'I don't really like how that flows with this edit')"
  ],
  "style_bank_used": {
   "v1": "warm cinematic, blood red",
@@ -389,7 +416,8 @@
   "v106": "WONDER: golden-hour amber against Speed Force cobalt, milky lifted blacks, red-orange halation (The Flash)",
   "v12": "NOCTURNE (Studio 1): indigo nights, the suit crimson, orange light turned cream, lightning in jasmine white over a cream glow, deep vignette",
   "v107": "TABLOID: newsprint cream highlights, ink blacks, slate blues, one spot red, misregistered red plate, paper grain, fine screen (Dexter)",
-  "v108": "SURFACE / UNDER: warm bleached pastel Miami split by a plastic peel into cold steel and teal where only blood red survives (Dexter)"
+  "v108": "SURFACE / UNDER: warm bleached pastel Miami split by a plastic peel into cold steel and teal where only blood red survives (Dexter)",
+  "v109": "SPECTRAL: silver-blue night, inky blacks, cold cyan highlights with a ghost bloom, only blood red survives; a red ribbon of light as the one accent (Dexter)"
  },
  "fresh_looks": [
   "16 mm home movie (Harry flashbacks)",
