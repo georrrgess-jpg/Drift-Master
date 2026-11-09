@@ -695,7 +695,7 @@
    "look": "SPECTRAL: silver-blue night, inky blacks, cold cyan highlights with a ghost bloom, only blood red survives (per-shot redthr keeps sunburnt skin out)",
    "engine": "v108 base + the v109 toolkit; the new Dexter scaffold base (--base v109)",
    "transitions": "22 designed + 1 clean downbeat cut + the loop in 24 s: flashlight109, materialize109, afterimage109, mirror109, time_particles, tantrum109, flicker109, phantom_pass109, slices, surface, polaroid, cctv109, vanish109, page_turn107, whip, trail109, print109, smear, burn109, whip, redwash109, streetlight109, (cut), dust_loop109",
-   "verdict": "approved standard after rev 3 (the newest Dexter standard)",
+   "verdict": "approved standard after rev 3 (the previous Dexter standard; v110 SLEEPWALKER is newer)",
    "owner_quotes": [
     "I want you to make a dexter edit using the attached song. I want this edit to include many cool custom and unique transitions and animations. I want this to be the best dexter edit you've created.",
     "I relatively like this edit ... the head spin transition. I don't really like how that flows with this edit ... remove the clips with dokes and replace them with other high-quality texture clips ... make a cool flow where there's unique graphics appearing and then transitions from those graphics ... the end flow of the edit and into the loop. I don't really like that part ... more unique and creative with better animations.",
@@ -743,6 +743,37 @@
    },
    "folder": "v15 (voidfx claude/gallant-planck-pqpczp, merged into dev/pipeline-v2)",
    "handoff": "sync/handoffs/2026-11-09_flash_v15_OUT_OF_TIME_standard.md"
+  },
+  {
+   "id": "v110",
+   "studio": 2,
+   "title": "SLEEPWALKER",
+   "show": "Dexter",
+   "song": "\"Sleepwalker (Slowed)\"",
+   "tempo": "98.6 BPM (the drum stem agrees with the map)",
+   "window": "h162-h241 (49.39-73.43 s, 24.04 s), the owner's 'roughly the 49-second mark': 'I'm losing power', the bass out for a bar and a half, the drop at 9.1 s, 'Mommy?'",
+   "hero_moment": "9.1 s THE SURGE (the fan's light, a blade across the lens into the kill room); 14 s THE BARREL (a seamless push into the real muzzle); the SWINGING LIGHT into the blood wall; THE DRIP loop",
+   "concept": "SLEEPWALKER: his waking life a sleepwalk; the song loses power with its lyric and surges back on the drop; the nightmare loops (the blood room drops him back into bed)",
+   "look": "3 A.M.: sodium amber highlights, navy shadows, a dream bloom and soft frame edges; blood stays red",
+   "engine": "v109 base + the v110 toolkit; the new Dexter scaffold base (--base v110)",
+   "transitions": "25 + the loop in 24 s: dolly, whip, bokeh110, lightson110, brownout110, fogwipe110, nodoff110, fan110, facematch108, double108, light_sweep108, wiper108, tear110, fronds108, barrel110, flicker109, whip, curtain110, plasticroll110, brush110, streetlight109, dolly, swinglight110, tilt110, glide110, driploop110",
+   "verdict": "approved standard after rev 3 (the newest Dexter standard)",
+   "owner_quotes": [
+    "I'd like for you to make a text edit using the song attached above. I want this edit to be the best text edit you've ever created ... roughly the 49-second mark and onward ... any custom graphics, animations, and transitions.",
+    "I like the general style of this edit ... I don't like the splatter transition at the end ... the loop is really poor ... I'm losing power text ... more as a beat drop ... most of the transitions right now are kind of lackluster ... the doorway transition that appears at 16 seconds ... the lines transition at 17 seconds.",
+    "I do like the general theme of this edit ... the beginning window graphic ... isn't really necessary ... phase it in ... I'm losing, and then power would be when it drops ... the blood spatter scene ... smoother or more cinematic ... the gun transition ... more seamless and smoother ... the scenes shake a little bit too much ... reduce the shaking/beat jump.",
+    "I would like for you to remove the I'm losing power, and then upon completion, you can make the edit as standard."
+   ],
+   "gripe": "the title (removed at the verdict); four owner rounds",
+   "measured": {
+    "qc": "11/11",
+    "loudness": "-13.0 LUFS / -3.4 dBTP after AAC",
+    "loop_seam": 0.12,
+    "dead_spans": 0,
+    "effects": 8
+   },
+   "folder": "repo/v110 (voidfx dev/pipeline-v2)",
+   "handoff": "sync/handoffs/2026-11-09_dexter_v110_SLEEPWALKER_standard.md"
   }
  ]
 }
