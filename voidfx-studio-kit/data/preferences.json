@@ -359,6 +359,21 @@
    "id": "texture_clips_v109",
    "rule": "stay on the main character; swap soft or busy shots for sharp texture clips (fire, foliage, rust; high-bitrate packs)",
    "since": "v109 rev 1 ('remove the clips with dokes ... high-quality texture clips')"
+  },
+  {
+   "id": "freeze_on_hit_v15",
+   "rule": "freeze on the instant of most action, on a real source frame, the shot before running into the same framing; emphasize it in depth (bullet time), not overlays",
+   "since": "v15 round 2"
+  },
+  {
+   "id": "blank_space_v15",
+   "rule": "'blank space' = new cuts with motivated custom transitions plus a visible motivated in-shot animation in each plain hold",
+   "since": "v15 round 2"
+  },
+  {
+   "id": "loop_destination_v15",
+   "rule": "a seamless loop shows frame 0 early (at the end of the move the whole way) and lands smoothly; never a giant card fading in",
+   "since": "v15 round 2"
   }
  ],
  "style": {
@@ -395,7 +410,8 @@
   "graphics that converge on where a face is about to appear (v107 rev 3 POINT OF ORIGIN: strings + target ring)",
   "droplets on the lens (rainfocus) and wavy heat-haze warps (haze108) as transitions (v108 rev 2: 'remove the water droplet filter', 'the squiggle, swirl, weird animation')",
   "HUD / interface overlays drawn over the footage: monitor traces, readouts, timers (v109 rev 2: 'change the heart monitor ... You don't have to replace this with anything'; v6's VHS counter)",
-  "spins (headspin, roll, flip) in a smooth, dark edit (v109 rev 1: 'I don't really like how that flows with this edit')"
+  "spins (headspin, roll, flip) in a smooth, dark edit (v109 rev 1: 'I don't really like how that flows with this edit')",
+  "taking a face apart: a particle dissolve of a face, fire holes, a scorch line or particles across it (v15 round 3: 'where [Barry] kind of like breaks down into many pieces ... change that'); a cover passes a face as one soft edge. Exception kept: v109's loop dissolves his face last, as the concept's own set piece"
  ],
  "style_bank_used": {
   "v1": "warm cinematic, blood red",

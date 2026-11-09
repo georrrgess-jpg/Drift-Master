@@ -715,6 +715,34 @@
    },
    "folder": "repo/v109 (voidfx dev/pipeline-v2)",
    "handoff": "sync/handoffs/2026-11-09_dexter_v109_PHANTOM_standard.md"
+  },
+  {
+   "id": "v15",
+   "studio": 1,
+   "title": "OUT OF TIME",
+   "show": "The Flash",
+   "song": "Eyedress \"Jealous\"",
+   "tempo": "93.0 BPM (grid fitted on the Demucs drum stem)",
+   "window": "h176-h256 (56.84-82.64 s, 25.80 s), built around the drum-only break bar",
+   "hero_moment": "TIME STOPS on the break (bullet-time freeze on the strike, his palm against the bolt) and TIME RESTARTS on the return; EMBLEM CLOCK (the real S5 bolt wound like a clock hand)",
+   "concept": "OUT OF TIME: 'I don't got time'; the drum break freezes time at the S1 strike; the loop rewinds down a corridor of the edit's memories into frame 0",
+   "look": "VIOLET HOUR: lifted violet shadows, peach-gold highlights, the suit's red rich; the freeze in cold steel under molten-gold bolts",
+   "engine": "v12 base + sec15.py (the Flash scaffold stays v12)",
+   "transitions": "28 + the loop in 25.8 s (1.09/s), 14 new custom (vibrate, phone flare, streak pass, strike cut, time stops/restarts, turn away, dust cloud, emblem clock, pendulum, freefall, ignition, wind gust, rewind), 8 in-shot animations",
+   "verdict": "approved standard after round 3 (the newest energetic Flash standard)",
+   "owner_quotes": [
+    "make a flash edit using the song above. I want you to try to follow the beat in this and make a really amazing edit. Try to make this the best flash edit you've ever made. Use custom graphics, animations, transitions etc.",
+    "[the 23] Second mark, where [Barry] kind of like breaks down into many pieces. I'd like you to change that into another transition. Next, I would like for you to add a focal point graphic to the transition ... The really, really smooth animation.",
+    "I like this edit, make it a standard."
+   ],
+   "measured": {
+    "qc": "11/11",
+    "loudness": "-13.0 LUFS / -4.5 dBTP after AAC",
+    "loop_seam": 0.13,
+    "effects": 9
+   },
+   "folder": "v15 (voidfx claude/gallant-planck-pqpczp, merged into dev/pipeline-v2)",
+   "handoff": "sync/handoffs/2026-11-09_flash_v15_OUT_OF_TIME_standard.md"
   }
  ]
 }
