@@ -757,7 +757,7 @@
    "look": "3 A.M.: sodium amber highlights, navy shadows, a dream bloom and soft frame edges; blood stays red",
    "engine": "v109 base + the v110 toolkit; the new Dexter scaffold base (--base v110)",
    "transitions": "25 + the loop in 24 s: dolly, whip, bokeh110, lightson110, brownout110, fogwipe110, nodoff110, fan110, facematch108, double108, light_sweep108, wiper108, tear110, fronds108, barrel110, flicker109, whip, curtain110, plasticroll110, brush110, streetlight109, dolly, swinglight110, tilt110, glide110, driploop110",
-   "verdict": "approved standard after rev 3 (the newest Dexter standard)",
+   "verdict": "approved standard after rev 3 (the previous Dexter standard; v111 MONSTER is newer)",
    "owner_quotes": [
     "I'd like for you to make a text edit using the song attached above. I want this edit to be the best text edit you've ever created ... roughly the 49-second mark and onward ... any custom graphics, animations, and transitions.",
     "I like the general style of this edit ... I don't like the splatter transition at the end ... the loop is really poor ... I'm losing power text ... more as a beat drop ... most of the transitions right now are kind of lackluster ... the doorway transition that appears at 16 seconds ... the lines transition at 17 seconds.",
@@ -774,6 +774,36 @@
    },
    "folder": "repo/v110 (voidfx dev/pipeline-v2)",
    "handoff": "sync/handoffs/2026-11-09_dexter_v110_SLEEPWALKER_standard.md"
+  },
+  {
+   "id": "v111",
+   "studio": 2,
+   "title": "MONSTER",
+   "show": "Dexter",
+   "song": "Kanye West \"Monster\"",
+   "tempo": "93.7 BPM (drum stem, snare and full mix agree; the first map's 125 BPM was a 3:4 alias)",
+   "window": "the Bon Iver intro and the drop: padded file h2-h90 (28.18 s), the drop at 20.8 s ('...I'm a monster'), ending on 'rumbles'",
+   "hero_moment": "0-3.5 s LIGHTS OUT (the city's lights shot out, sparks); 12-15 s THE MOON becomes the kill lamp; 20.8 s THE PASSENGER (the day opens from the edges behind him); THE TRACER loop",
+   "concept": "I SHOOT THE LIGHTS OUT: he lives in the dark; a flow of light from the lights shot out to the shot that blows the first of them",
+   "look": "NIGHTSHADE: teal-navy shadows, warm practicals, the day golden; harder and redder after the drop",
+   "engine": "v110 base + the v111 toolkit; the new Dexter scaffold base (--base v111)",
+   "transitions": "25 + the loop in 28.2 s: emerge111, doorslide111, dolly, fence111, daybreak111, brightout111, tear110, nightfall111, lookup111, moon111, light_sweep108, plasticroll110, underlight111, lightmatch111, passenger111, dolly, slide111, bleed111, (downbeat cut), flicker109, siren111, whip, fronds108, bokeh110, dolly, shot111 (THE TRACER)",
+   "verdict": "approved standard after rev 1 (the newest Dexter standard; 'adequate', not praised)",
+   "owner_quotes": [
+    "I would like for you to create an edit using the attached song. I want this edit to be high quality and I want it to be the best edit you have created ... really cool and unique transitions, graphics and animations ... the best dexter edit ... completed with efficiency and quality.",
+    "I generally like this edit but I would like for you to change a couple things. Firstly, I dislike the graphic/animation that appeared around the 23 second mark the forensics one. I would like for you to also implement a new more creative loop. I want more custom graphics and animations to be implemented.",
+    "This edit is adequate make it a standard"
+   ],
+   "gripe": "the forensic luminol graphic; the first loop not creative enough; wanted more custom graphics and animations; 'adequate'",
+   "measured": {
+    "qc": "12/12",
+    "loudness": "-13.1 LUFS / -2.6 dBTP after AAC",
+    "loop_seam": 0.16,
+    "dead_spans": 1,
+    "effects": 13
+   },
+   "folder": "v111/ on dev/pipeline-v2",
+   "handoff": "sync/handoffs/2026-11-11_dexter_v111_MONSTER_standard.md"
   }
  ]
 }
