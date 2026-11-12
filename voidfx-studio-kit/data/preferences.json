@@ -414,6 +414,21 @@
    "id": "no_render_during_sr_v111",
    "rule": "never render while sr_prep runs (OOM kills a worker and the pool hangs); clear frame caches when the disk runs low",
    "since": "v111"
+  },
+  {
+   "id": "symbol_acts_v17",
+   "rule": "an emblem or symbol transition shows the object acting (lifts off, turns, transforms); lighting it in place is not enough",
+   "since": "v17 round 1"
+  },
+  {
+   "id": "attention_grabber_v17",
+   "rule": "a signature transition with its own physics and sound in the first ~1.5 s",
+   "since": "v17 round 2"
+  },
+  {
+   "id": "check_sources_ai_v17",
+   "rule": "check every source at full size for AI processing or distortion; never recolour clothing on a face",
+   "since": "v17 round 2"
   }
  ],
  "style": {
@@ -455,7 +470,9 @@
   "a graphic where the cut needs none (v110 rev 2: the window-light panes, 'isn't really necessary')",
   "stripe/line transitions and after-images in a dark, smooth edit (v110 rev 1: the 16 s after-image, the 17 s 'lines' frost)",
   "drawn blood-spatter sweeps as transitions (v110 rev 1-2: 'smoother and more seamless', 'smoother or more cinematic')",
-  "forensic or lab graphics as transitions: luminol glow, UV, spatter-analysis overlays (v111 rev 1: 'I dislike the graphic/animation ... the forensics one'; luminol108 rejected)"
+  "forensic or lab graphics as transitions: luminol glow, UV, spatter-analysis overlays (v111 rev 1: 'I dislike the graphic/animation ... the forensics one'; luminol108 rejected)",
+  "block or slice wipes (v17 round 1: 'the block transition with the three block lines'; split_slide rejected)",
+  "full-frame sky or storm footage as a cover (v17 round 2; cloud_break rejected)"
  ],
  "style_bank_used": {
   "v1": "warm cinematic, blood red",

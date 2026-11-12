@@ -804,6 +804,34 @@
    },
    "folder": "v111/ on dev/pipeline-v2",
    "handoff": "sync/handoffs/2026-11-11_dexter_v111_MONSTER_standard.md"
+  },
+  {
+   "id": "v17",
+   "studio": 1,
+   "title": "MR. BLUE SKY",
+   "show": "The Flash",
+   "song": "Electric Light Orchestra \"Mr. Blue Sky\"",
+   "tempo": "175 BPM (drum stem)",
+   "window": "h177-h321 (30.51-55.21 s, 24.69 s), 'Hey, running down the avenue' to '...hide away for so long'",
+   "hero_moment": "1.4 s SONIC BOOM; 4.8-7 s THE SUN halo; 17.8-19.5 s EMBLEM IGNITE; LIGHTNING ASCENT loop",
+   "concept": "AFTER THE STORM: the day after the storm that made him; the sun as the hero",
+   "look": "BLUE SKY: high-key, cerulean skies, sunny gold highlights",
+   "engine": "v12 + v17/work/sec17.py",
+   "transitions": "33 designed + the loop in 24.7 s, 0% generic",
+   "verdict": "approved standard after round 3 (the newest Flash standard)",
+   "owner_quotes": [
+    "I like this edit make it a standard"
+   ],
+   "gripe": "round 1: the emblem not acting, a block wipe, Wally and XS; round 2: a doubling shot, an AI-distorted pack, a cloud cover, an attention-grabber, the loop",
+   "measured": {
+    "qc": "11/11",
+    "loudness": "-13.0 LUFS / -4.5 dBTP after AAC",
+    "loop_seam": 0.09,
+    "dead_spans": 0,
+    "effects": 12
+   },
+   "folder": "v17/ on claude/gallant-planck-pqpczp (merged into dev/pipeline-v2)",
+   "handoff": "sync/handoffs/2026-11-12_flash_v17_MR_BLUE_SKY_standard.md"
   }
  ]
 }
